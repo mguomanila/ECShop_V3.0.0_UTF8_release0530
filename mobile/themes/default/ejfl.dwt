@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>详细分类</title>
+	<meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+	<link rel="stylesheet" media="screen and (max-width:750px)" href="__TPL__/css/mobile.css" type="text/css" />
+	<link rel="stylesheet" href="__TPL__/css/mobile.css">
+	<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/font-awesome.min.css">
+<link rel="stylesheet" href="{$ectouch_css_path}">
+<link rel="stylesheet" href="__TPL__/css/photoswipe.css">
+</head>
+<body>
+	<div class="max">
+
+		<div class="header">
+			<div class="mobile_top">
+				<a href="javascript:history.go(-1);" class="back"></a>
+				<span>{$category_name.cat_name}</span>
+				<a href="javascript:openSearch();" class="search1">
+				</a>
+			</div>
+		</div>
+		
+
+
+		<div class="section">
+
+					
+					<div class="section_bot">
+						<ul>
+							<!--{foreach from=$category item=cat name=no}-->
+							<li>
+								<a href="{:url('category/index',array('id'=>$this->_var['cat']['id']))}">
+									<img src="{$cat.cat_image}" alt="" width="75"height="75"/>
+									<p>{$cat.name|escape:html}</p>
+								</a>
+							</li>
+							<!--{/foreach}-->
+							<div class="cl"></div>
+						</ul>
+						
+						
+					</div>
+
+		</div>
+	</div>
+	<!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem -->
+	
+</body>
+</html>
+<script src="__TPL__/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js" ></script> 
+<script type="text/javascript" src="__PUBLIC__/js/jquery.json.js" ></script> 
+<script type="text/javascript" src="__PUBLIC__/js/common.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/jquery.more.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/utils.js" ></script> 
+<script src="__TPL__/js/TouchSlide.1.1.js"></script> 
+<script src="__TPL__/js/ectouch.js"></script> 
+<script src="__TPL__/js/simple-inheritance.min.js"></script> 
+<script src="__TPL__/js/code-photoswipe-1.0.11.min.js"></script> 
+<script src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script> 
+<script src="__TPL__/js/jquery.scrollUp.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/validform.js" ></script> 
+<script type="text/javascript">
+	function openSearch(){
+		if($(".max").is(":visible")){
+			$(".max").hide();	
+			$(".search").show();
+		}
+	}
+	function closeSearch(){
+		if($(".max").is(":hidden")){
+			$(".max").show();	
+			$(".search").hide();
+		}
+	}
+</script>

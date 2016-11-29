@@ -1,0 +1,112 @@
+
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.cl{
+	clear: both;
+}
+
+
+
+
+/*.header{
+	border-bottom:1px solid #e3e3e3;
+	box-sizing: border-box;
+	padding:10px;
+	height: 65px;
+	background: #1bae5d;
+}*/
+.max{
+	max-width: 640px;
+	margin: 0 auto;
+	background: #e7f3f2;
+}
+.mobile_top{
+	
+	text-align: center;
+	position: relative;
+	top: 5px;
+}
+.mobile_top span{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	display: inline-block;
+	text-align: center;
+	position: relative;
+	top: 3px;
+	font-size: 24px;
+	color: #fff;
+}
+.back{
+	background: url(../images/iconall.png) no-repeat -96px -52px;
+	background-size: 324px;
+	width: 45px;
+	height: 45px;
+	display: inline-block;
+	float: left;
+}
+.search{	
+	float: right;
+	background: url(../images/iconall.png) no-repeat -188px -52px;
+	background-size: 324px;
+	width: 45px;
+	height: 45px;
+	display: inline-block;
+}
+
+
+.shang_img{
+	-padding-top: 15px;
+	margin: 8px 20px;
+	
+}
+
+.shang_img img{
+	width: 100%;
+}
+
+.shang_xq{
+	padding:7px 20px;
+	margin: 18px 0;
+	background: #fff;
+}
+.shang_xq a{
+	font-size: 20px;
+
+}
+.shang_xq p{
+	padding-top: 15px;
+	font-size: 18px;
+	color: #333;
+	box-sizing: border-box;
+	border-bottom:1px solid #ccc;
+	padding-bottom: 8px;
+}
+
+#map{
+	max-width: 640px;
+	height: 480px; 
+}
+
+
+.BMapLib_nav_tab_content tbody tr td:last-child{
+		width: 110px!important;
+	}
+.swiper-pagination-bullet{
+	background: #fff!important;
+	opacity: 1!important;
+}
+
+.swiper-pagination-bullet-active{
+	background: #e87e04!important;
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,116 @@
+<!-- #BeginLibraryItem "/library/user_header.lbi" --><!-- #EndLibraryItem -->
+<ul class="nav nav-tabs" role="tablist">
+    <li><a href="{:url('User/account_detail')}" >{$lang.add_surplus_log}</a></li>
+    <li><a href="{:url('User/account_log')}" >{$lang.view_application}</a></li>
+
+	<li><a href="{:url('User/account_raply')}" >{$lang.surplus_type_1}</a></li>
+	<li class="active"><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_2}</a></li>
+	<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>
+	
+	<li><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
+  </ul>
+<form action="{:url('user/act_account')}" method="post" name="theForm" onSubmit="return submitSurplus()">
+  <div class="ect-bg-colorf flow-consignee">
+    <ul class="o-info">
+      <li>
+        <div class="input-text"><b class="pull-left">{$lang.repay_integral}：</b><span>
+          <input name="integral" id="zuidijifen" onblur="zuidi()" placeholder="{$lang.repay_integral}" type="text" class="inputBg_touch" value="" />
+          </span></div>
+      </li>
+     <li>
+        <div class="input-text"><b class="pull-left">{$lang.user_bank}：</b><span>
+          <input name="user_bank" placeholder="{$lang.user_bank}" type="text" class="inputBg_touch" value="" />
+          </span></div>
+      </li>
+      <li>
+        <div class="input-text"><b class="pull-left">{$lang.bank_name}：</b><span>
+          <input name="bank_name" placeholder="{$lang.bank_name}" type="text" class="inputBg_touch" value="" />
+          </span></div>
+      </li>
+      <li>
+        <div class="input-text"><b class="pull-left">{$lang.user_bank_name}：</b><span>
+          <input name="user_bank_name" placeholder="{$lang.user_bank_name}" type="text" class="inputBg_touch" value="" />
+          </span></div>
+      </li>
+      <li class="input-text"><b class="pull-left">{$lang.process_notic}：</b>
+        <textarea name="user_note" placeholder="" type="text">{$order.user_note|escape}</textarea>
+      </li>
+    </ul>
+  </div>
+  <div class="two-btn ect-padding-tb ect-padding-lr ect-margin-tb text-center">
+  <input type="hidden" name="surplus_type" value="2" />
+    <input type="submit" name="submit"  class="btn btn-info"  value="{$lang.submit_request}"/>
+    <input type="reset" name="submit"  class="btn btn-info ect-bg-colory"  value="{$lang.button_reset}"/>
+  </div>
+</form>
+<script type="text/javascript">
+        	function zuidi(){
+        		var zdjf=$('#zuidijifen').val();
+        		if(zdjf<100){
+        			$('#zuidijifen').val(0);
+        			alert('提现积分最低为100');
+        		}
+        	}
+	        	/*******************************************************************************
+ * 会员余额申请
+ */
+function submitSurplus() {
+
+	var frm = document.forms['theForm'];
+	var surplus_type = frm.elements['surplus_type'].value;
+var user_bank  = frm.elements['user_bank'].value;
+  	var user_bank_name  = frm.elements['user_bank_name'].value;
+	var surplus_integral = frm.elements['integral'].value;
+	var process_notic = frm.elements['user_note'].value;
+	var payment_id = 0;
+	var msg = '';
+
+	
+	if (surplus_integral.length == 0) {
+		alert('请输入您要操作的金额数量');
+		return false;
+	} else {
+		var reg = /^[\.0-9]+/;
+		if (!reg.test(surplus_integral)) {
+			msg += '请输入金额的正确格式' + '\n';
+		}
+	}
+	
+	if(user_bank.length == 0 )
+	{
+		msg += '请输入银行账户' +"\n";
+	}
+	if(user_bank_name.length == 0 )
+	{
+		msg += '请输入账户姓名' +"\n";
+	}
+
+	
+
+	if (msg.length > 0) {
+		alert(msg);
+		return false;
+	}
+
+	return true;
+}
+        </script>
+</div>
+<!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem --> <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem --> 
+<script type="text/javascript" src="__PUBLIC__/js/region.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/shopping_flow.js"></script> 
+<script type="text/javascript">
+	region.isAdmin = false;
+	{foreach from=$lang.flow_js item=item key=key}
+	var {$key} = "{$item}";
+	{/foreach}
+	{literal}
+	onload = function() {
+	      if (!document.all)
+	      {
+	        document.forms['theForm'].reset();
+	      }
+	}
+	{/literal}
+</script>
+</body></html>

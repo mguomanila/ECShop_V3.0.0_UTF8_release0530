@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>沃尔迅免费易购</title>
+    <style>
+        body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0; padding:0;}
+        table{border-collapse:collapse;border-spacing:0; }
+        fieldset,img {border:0;}
+        address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:normal;}
+        ol,ul {list-style:none;}
+        capation,th{text-align:left;}
+        h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
+        q:before, q:after{content:''}
+        abbr,acronym{border:0;}
+        a{ text-decoration:none;}
+        body{ font-size:12px; font-family:微软雅黑;  color:#666; line-height:24px; background:#fff;}
+        body p{ margin-bottom:10px;}
+        body a{color:#666;outline:none;blr:expression(this.onFocus=this.blur()); cursor:pointer;}
+        body input,body select{outline:none;blr:expression(this.onFocus=this.blur());}
+        html, body {
+            height: 100%;
+        }
+    </style>
+    <style>
+        .head{ width: 1920px; height: 60px; background: #0ea850; position: fixed; z-index: 1000;}
+        .head .logo{float: left; margin-left: 32px; width: 196px; height: 32px; margin-top: 4px;}
+        .head ul{ float: left; margin-left: 152px; height: 60px;}
+        .head ul li{float: left; height: 60px; line-height: 60px; margin-right: 120px;font-size: 18px;}
+        .head ul li a{ color: #fff;}
+        .head dl{width: 1420px; height: 40px; border-top: 1px #fff solid; background: #0ea850;position: fixed;top: 60px; left: 0; padding-left: 500px; display: none;}
+        .head dl dd{ float: left; width:100px; height: 40px; text-align: center; line-height: 40px; font-size: 14px;}
+        .head dl dd a{color: #fff;}
+    </style>
+    <link rel="stylesheet" type="text/css" href="themes/default/css/styles.css">
+
+    <script src="themes/default/js/jquery-1.8.3.min.js"></script>
+    <script src="themes/default/js/banner.js"></script>
+</head>
+<body>
+<div class="head" id="nav">
+    <div class="logo"><a href="index1.php"><img src="themes/default/images/logo.png"></a></div>
+    
+        <ul id="nav_list">
+        <li><a href="index1.php">网站首页</a></li>
+        <!--{foreach from=$categories item=cat}-->
+    
+        <li><a href="javascript:;">{$cat.name|escape:html}</a>
+        	<!--{if $cat.cat_id }-->
+            <dl>
+            	<!--{foreach from=$cat.cat_id item=child}-->
+                <dd><a href="prodcut_list.php?id={$child.id}">{$child.name|escape:html}</a></dd>
+                 <!--{/foreach}-->
+                
+            </dl>
+			<!-- {/if} -->
+        </li>
+        <!--{/foreach}-->
+        
+    </ul>
+
+    
+    
+    
+</div>
+<div style="margin: 0 auto; width: 1920px; height: 60px;"></div>
+<div id="main">
+    <!--全屏滚动-->
+    <div class="banner" >
+        <div class="b-img"><a href="#" style="background:url(images/banner0.jpg) center no-repeat;"></a><a href="#" style="background:url(images/banner1.jpg) center no-repeat;"></a><a href="#" style="background:url(images/banner2.jpg) center no-repeat;"></a></div>
+        <div class="b-list"></div>
+        <a class="bar-left" href="#"><em></em></a><a class="bar-right" href="#"><em></em></a> </div>
+    <!--end 全屏滚动-->
+</div>
+</body>
+
+<script>
+    window.onload=function () {
+        var oHomeDiv=document.getElementById('nav');
+        var aHomeDl= oHomeDiv. getElementsByTagName('dl');
+        var oHomeUl=document.getElementById('nav_list');
+        var aHomeLi= oHomeUl. getElementsByTagName('li');
+        var oHomeMain=document.getElementById('main');
+        for(var i=0; i<aHomeLi.length;i++){
+            aHomeLi[i].index=i;
+            aHomeLi[i].onclick=function () {
+                for(var i=0; i<aHomeDl.length;i++){
+                    aHomeDl[i].style.display='none'
+                }
+                aHomeDl[this.index-1].style.display='block'
+            }
+        }
+        oHomeMain.onclick=function () {
+            for(var i=0; i<aHomeDl.length;i++){
+                aHomeDl[i].style.display='none'
+            }
+        }
+    }
+</script>
+</html>

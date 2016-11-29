@@ -1,0 +1,101 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="foot-body">
+  <div class="bads"><img src="images/bottom.jpg"></div>
+  <div class="clear10"></div>
+  <!--底部导航 start-->
+ <!--{if $helps}-->
+    <div class="foot-help">
+      <!-- {foreach from=$helps item=help_cat name=foo} -->
+        {if $smarty.foreach.foo.iteration < 5}
+        <dl>
+          <dt class="xs-{$smarty.foreach.foo.iteration}">{$help_cat.cat_name}</dt>
+            <!-- {foreach from=$help_cat.article item=item} -->
+          <dd><a href="{$item.url}" target="_blank" title="{$item.title|escape:html}">{$item.short_title}</a></dd>
+          <!-- {/foreach} --> 
+        </dl>
+        {/if} 
+        <!-- {/foreach} --> 
+        <div class="foot-weixin">
+          <div class="weixin-txt">关注沃尔迅微信</div>
+          <div class="weixin-pic">
+            <img src="images/weixin.jpg" width="88px">
+          </div>
+        </div>
+    </div>
+    <!--{/if}--> 
+    
+   
+  <!--底部导航 end-->
+
+  <div class="blank"></div>
+  <!--版权 start-->
+<div class="footer_info"> {$copyright}
+      {$shop_address} {$shop_postcode}<br />
+
+      <br />
+      联系客服：
+      <!-- QQ 号码 {foreach from=$qq item=im} -->
+      <!-- {if $im} -->
+      <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$im}&site=qq&menu=yes">
+      	<img border="0" src="http://wpa.qq.com/pa?p=2:{$im}:41" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+      <!-- {/if} -->
+      <!-- {/foreach} 结束QQ号码 -->
+      <br />
+      <!-- ICP 证书{if $icp_number} -->
+  {$lang.icp_number}:<a href="http://www.miibeian.gov.cn/" target="_blank">{$icp_number}</a><br />
+  <!-- 结束ICP 证书{/if} -->
+      {if $stats_code}
+      <div >{$stats_code}</div>
+      {/if}
+    </div>
+  <div class="clear10"></div>
+</div>
+
+<link rel="stylesheet" href="themes/default/css/sucaijiayuan.css" />
+<script>
+$(function() {
+	// 悬浮窗口
+	$(".yb_conct li").hover(function() {
+		$(this).css("right", "122px");
+		
+	}, function() {
+		$(this).css("right", "0px");
+		
+	});
+	
+	$(".yb_bar .yb_ercode").hover(function(){
+		$(this).css('height', '200px');
+	},function(){
+		$(this).css('height', '53px');
+	})
+	
+
+
+});
+// 返回顶部
+
+	function pageScroll(){
+
+		window.scrollBy(0,-40);
+		scrolldelay=setTimeout('pageScroll()',1);
+
+		if(document.body.scrollTop==0)clearTimeout(scrolldelay);
+	}
+</script>
+ <div class="yb_conct">
+  <div class="yb_bar">
+  	
+    <ul>
+      
+      <li class="yb_phone">028-8761-0179</li>
+      <li class="yb_QQ">
+      	<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=417407904&amp;site=qq&amp;menu=yes&amp;from=message&amp;isappinstalled=0" title="即刻发送您的需求">在线咨询</a>
+      </li>
+      <li class="yb_ercode" style="height:53px;">微信二维码 <br>
+        <img class="hd_qr" src="images/weixin.jpg" width="125" alt="关注你附近"> 
+      </li>
+      <li onclick="pageScroll();" class="yb_top">返回顶部</li>
+    </ul>
+  </div>
+</div>
+

@@ -1,0 +1,18 @@
+/* CSS Document */
+@charset "utf-8";
+
+a,img{border:0;}
+
+a{color:#333;text-decoration:none;}
+
+
+
+/* scrolltext */
+.scrolltext{color:red;z-index:9999;position:absolute;right:0px;  top:13%;  width:120px;padding:57px 15px 0 14px;background:url(../images/h1-bg02.gif) no-repeat;width:189px;height:259px;overflow:hidden;margin:20px auto 0 auto;}
+.scrolltext ol li{padding-left:7px;width:182px;height:25px;font-size:13px;line-height:25px;border-bottom:2px solid #fff;}
+.scrolltext ol li a{color:#6f746e;display:block;width:172px;white-space:nowrap;text-overflow:ellipsis;-o-text-overflow:ellipsis;overflow: hidden;}
+.scrolltext ol li a:hover{color:#ef9b11;text-decoration:none;}
+.scrolltext .part{width:100%;padding-top:20px;}
+.scrolltext .part span{margin-left:26px;cursor:pointer;}
+#breakNews{padding:0 0 0px 2px;}
+#breakNews .list6{height:200px;overflow:hidden;width:100%;}

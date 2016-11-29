@@ -1,0 +1,163 @@
+<!-- $Id: account_list.htm 14928 2008-10-06 09:25:48Z testyang $ -->
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jQuery.print.js"></script>
+
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<div class="form-div">
+<form method="post" action="account_log.php?act=user_account_list" name="searchForm">
+  
+  <tr>
+      <td  class="label">{$lang.start_date}</td>
+      <td>
+        &nbsp;&nbsp;时间起点&nbsp;&nbsp;<input name="start_time" type="text" id="start_time" size="22" value='{if $start_time}{$start_time}{/if}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">{$lang.end_date}</td>
+      <td>
+        &nbsp;&nbsp;时间末点&nbsp;&nbsp;<input name="end_time" type="text" id="end_time" size="22" value='{if $end_time}{$end_time}{/if}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>
+      </td>
+    </tr>
+   	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="搜索"/>
+  </form>
+ 
+
+  
+</div>
+<!--startprint-->
+<form id="shangfen" method="post" action="" name="listForm">
+<div  class="list-div" id="listDiv">
+
+{/if}
+
+  <table cellpadding="3" cellspacing="1">
+    <tr>
+      <th width="20%">{$lang.change_time}</th>
+      <th width="20%">{$lang.change_desc}</th>
+      <th>{$lang.admin_name}</th>
+      <th>{$lang.user_name}</th>
+      <th>{$lang.user_money}</th>
+      <th>{$lang.frozen_money}</th>
+      <th>{$lang.rank_points}</th>
+      <th>{$lang.pay_points}</th>
+      <th>{$lang.vr_points}</th>
+    </tr>
+    {foreach from=$account_list item=account}
+    <tr>
+      <td>{$account.change_time}</td>
+      <td>{$account.change_desc|escape:html}</td>
+      <td>{$account.admin_name}</td>
+      <td><a href="account_log.php?act=list&user_id={$account.user_id}">{$account.user_name}</a></td>
+      <td align="right">
+        {if $account.user_money gt 0}
+          <span style="color:#0000FF">+{$account.user_money}</span>
+        {elseif $account.user_money lt 0}
+          <span style="color:#FF0000">{$account.user_money}</span>
+        {else}
+          {$account.user_money}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.frozen_money gt 0}
+          <span style="color:#0000FF">+{$account.frozen_money}</span>
+        {elseif $account.frozen_money lt 0}
+          <span style="color:#FF0000">{$account.frozen_money}</span>
+        {else}
+          {$account.frozen_money}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.rank_points gt 0}
+          <span style="color:#0000FF">+{$account.rank_points}</span>
+        {elseif $account.rank_points lt 0}
+          <span style="color:#FF0000">{$account.rank_points}</span>
+        {else}
+          {$account.rank_points}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.pay_points gt 0}
+          <span style="color:#0000FF">+{$account.pay_points}</span>
+        {elseif $account.pay_points lt 0}
+          <span style="color:#FF0000">{$account.pay_points}</span>
+        {else}
+          {$account.pay_points}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.vr_points gt 0}
+          <span style="color:#0000FF">+{$account.vr_points}</span>
+        {elseif $account.vr_points lt 0}
+          <span style="color:#FF0000">{$account.vr_points}</span>
+        {else}
+          {$account.vr_points}
+        {/if}
+      </td>
+    </tr>
+    {foreachelse}
+    <tr><td class="no-records" colspan="6">{$lang.no_records}</td></tr>
+    {/foreach}
+  </table>
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+</form>
+<!--endprint-->
+ <script type="text/javascript">   
+    function doPrint() {    
+        bdhtml=window.document.body.innerHTML;    
+        sprnstr="<!--startprint-->";    
+        eprnstr="<!--endprint-->";    
+        prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17);    
+        prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));   
+        window.document.body.innerHTML=prnhtml; 
+        window.print();    
+}    
+</script>
+
+<script type="text/javascript">
+	/**
+ * 搜索用户
+ */
+function searchUser()
+{
+
+
+    listTable.filter['start_time'] = document.forms['searchForm'].elements['start_time'].value;
+    listTable.filter['end_time'] = document.forms['searchForm'].elements['end_time'].value;
+
+    listTable.filter['page'] = 1;
+    listTable.loadList();
+}
+</script>
+<script type="text/javascript" language="javascript">
+  <!--
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+
+  {foreach from=$filter item=item key=key}
+  listTable.filter.{$key} = '{$item}';
+  {/foreach}
+
+  {literal}
+  onload = function()
+  {
+      // 开始检查订单
+      startCheckOrder();
+  }
+  {/literal}
+  //-->
+</script>
+{include file="pagefooter.htm"}
+{/if}
