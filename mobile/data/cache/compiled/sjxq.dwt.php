@@ -29,7 +29,7 @@
 
           <p>联系人：<span><?php echo $this->_var['alliance_user_list']['101']; ?></span></p>
 
-          <p>联系电话：<span><?php echo $this->_var['alliance_user_list']['mobile_phone']; ?></span></p>
+          <p>联系电话：<span><?php echo $this->_var['alliance_user_list']['office_phone']; ?></span></p>
 
           <p>店铺地址：<span><?php echo $this->_var['alliance_list']['suppliers_site']; ?></span></p>
           <p style="overflow: hidden;border-bottom: none 0;">
