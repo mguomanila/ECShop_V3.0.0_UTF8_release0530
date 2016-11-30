@@ -32,7 +32,7 @@
     <!--组合搜索 开始-->
     <!--{if $brands.1 || $price_grade.1 || $filter_attr_list || $str}-->
     <div class="guige">
-    	<!--{if $str}-->
+    	<!--{if $str.1}-->
       <div class="screeBox"> <strong>分类：</strong>
         <!--{foreach from=$str item=str}-->
         <!-- {if $str.selected} -->
