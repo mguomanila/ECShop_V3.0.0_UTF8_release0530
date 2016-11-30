@@ -47,6 +47,17 @@ $_LANG['batch_drop_no'] = '批量删除失败';
 $_LANG['suppliers_edit_fail'] = '名称修改失败';
 $_LANG['no_record_selected'] = '没有选择任何记录';
 
+
+
+$_LANG['invalid_goods_img'] = '商品图片格式不正确！';
+$_LANG['invalid_goods_thumb'] = '商品缩略图格式不正确！';
+$_LANG['invalid_img_url'] = '商品相册中第%s个图片格式不正确!';
+
+$_LANG['goods_img_too_big'] = '商品图片文件太大了（最大值：%s），无法上传。';
+$_LANG['goods_thumb_too_big'] = '商品缩略图文件太大了（最大值：%s），无法上传。';
+$_LANG['img_url_too_big'] = '商品相册中第%s个图片文件太大了（最大值：%s），无法上传。';
+
+
 /* JS提示 */
 $_LANG['js_languages']['no_suppliers_name'] = '没有填供货商名称';
 ?>
