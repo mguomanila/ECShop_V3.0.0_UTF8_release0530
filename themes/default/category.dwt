@@ -30,8 +30,24 @@
   <!--right start-->
   <div class="Area">
     <!--组合搜索 开始-->
-    <!--{if $brands.1 || $price_grade.1 || $filter_attr_list}-->
+    <!--{if $brands.1 || $price_grade.1 || $filter_attr_list || $str}-->
     <div class="guige">
+    	<!--{if $str}-->
+      <div class="screeBox"> <strong>分类：</strong>
+        <!--{foreach from=$str item=str}-->
+        <!-- {if $str.selected} -->
+        <div style="float: left;">
+        	<span>{$str.cat_name}</span>
+        </div>    
+        <!-- {else} -->
+        	<li style="float: left;">
+        			<a href="{$str.url}" style="white-space:pre-wrap">{$str.cat_name}</a>
+        	</li>
+        <!-- {/if} -->
+        <!--{/foreach}-->
+        <div style="clear: both;"></div>
+      </div>
+      <!--{/if}-->
       <!--{if $brands.1}-->
       <div class="screeBox"> <strong>{$lang.brand}：</strong>
         <!--{foreach from=$brands item=brand}-->

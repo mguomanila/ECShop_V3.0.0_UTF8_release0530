@@ -1542,6 +1542,10 @@ function build_uri($app, $params, $append = '', $page = 0, $keywords = '', $size
                 if ($rewrite)
                 {
                     $uri = 'category-' . $cid;
+                    if (isset($cat_id))
+                    {
+                        $uri .= '-c' . $cat_id;
+                    }
                     if (isset($bid))
                     {
                         $uri .= '-b' . $bid;
@@ -1574,6 +1578,10 @@ function build_uri($app, $params, $append = '', $page = 0, $keywords = '', $size
                 else
                 {
                     $uri = 'category.php?id=' . $cid;
+                    if (!empty($cat_id))
+                    {
+                        $uri .= '&amp;cat_id=' . $cat_id;
+                    }
                     if (!empty($bid))
                     {
                         $uri .= '&amp;brand=' . $bid;
