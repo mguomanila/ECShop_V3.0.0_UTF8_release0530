@@ -1,6 +1,7 @@
 /* $Id : common.js 4865 2007-01-31 14:04:10Z paulgao $ */
 
 function get_asynclist(url, src) {
+	
     $('#J_ItemList').more({'address': url, 'spinner_code': '<div style="text-align:center; margin:10px;"><img src="' + src + '" /></div>'})
 
     $(window).scroll(function() {

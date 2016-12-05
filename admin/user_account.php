@@ -190,9 +190,20 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
         if ($process_type == 1)
         {
             $amount = (-1) * $amount;
+            $integral=0;
+        }elseif($process_type == 2){
+        	$integral=(-1) * $amount;
+        	$amount=0;
+        }elseif($process_type == 3){
+        	$integral=$amount;
+
+        	$amount=0;
+        }else{
+        	$integral=0;
         }
+
         $sql = "INSERT INTO " .$ecs->table('user_account').
-               " VALUES ('', '$user_id', '$_SESSION[admin_name]', '$amount', '".gmtime()."', '".gmtime()."', '$admin_note', '$user_note', '$process_type', '$payment', '$is_paid')";
+               " VALUES ('', '$user_id', '$_SESSION[admin_name]', '$amount', '".gmtime()."', '".gmtime()."', '$admin_note', '$user_note', '$process_type', '$payment', '$is_paid','$integral','0')";
         $db->query($sql);
         $id = $db->insert_id();
     }
@@ -207,12 +218,22 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
         $db->query($sql);
     }
 
+	
     // 更新会员余额数量
     if ($is_paid == 1)
     {
         $change_desc = $amount > 0 ? $_LANG['surplus_type_0'] : $_LANG['surplus_type_1'];
         $change_type = $amount > 0 ? ACT_SAVING : ACT_DRAWING;
-        log_account_change($user_id, $amount, 0, 0, 0, $change_desc, $change_type);
+        if($process_type == 3){
+        	log_account_change_vr($user_id, $amount, 0, 0, 0,$integral, $change_desc, $change_type);	
+        }else{
+        	log_account_change_vr($user_id, $amount, 0, 0, $integral,0, $change_desc, $change_type);       	
+        }
+
+    }
+    if(($process_type == 2||$process_type == 1) && $is_paid == 0){
+        log_account_change_vr($user_id, $amount, 0, 0, $integral,0, $change_desc, $change_type);
+    	
     }
 
     //如果是预付款并且未确认，向pay_log插入一条记录

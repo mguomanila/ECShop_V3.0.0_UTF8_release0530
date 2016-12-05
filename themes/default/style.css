@@ -109,6 +109,7 @@ visibility:hidden;
   background-color:#edf8fe;  overflow:hidden;
   }
   .boxCenterList{padding: 35px;}
+  #com_v{padding: 0;}
   /*模块标题*/
 /*  h3{height:38px; line-height:38px; font-size:12px; background:url(images/bgbr_01.gif) repeat-x left top; text-align:right;
   padding:0px; font-weight:100; color:#FFFFFF; padding-right:10px;

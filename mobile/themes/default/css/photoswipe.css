@@ -165,9 +165,10 @@ div.ps-toolbar-play div.ps-toolbar-content
 
 .huadong{
 	overflow: hidden;
-	position: fixed;
+	position: fixed!important;
 	max-width: 640px;
-	z-index: 100;
+	z-index: 100!important;
+	width: 100%;
 }
 .huadong ul{
 	transition: .5s;
@@ -185,3 +186,4 @@ div.ps-toolbar-play div.ps-toolbar-content
 	display: block;
 	color: #fff;
 }
+

@@ -28,7 +28,19 @@
 	</script>
 	<tr>
 	    <td class="label">供货商分类：</td>
-	    <td><select name="supp_cat_id" id="select" >{$cat_list}</select></td>
+	    <td>
+
+	    	{foreach from=$cat_list item=list}
+
+	    	{if $list.checked eq 1}
+	    	<input type="checkbox" name="supp_cat_id[]" checked="checked"  value="{$list.cat_id}"/>{$list.cat_name}
+	    	{else}
+	    	<input type="checkbox" name="supp_cat_id[]"  value="{$list.cat_id}"/>{$list.cat_name}
+	    	
+	    	{/if}
+
+	    	{/foreach}
+	    </td>
 	  </tr>
 		<tr>
 	    <td class="label">{$lang.label_trade_name}</td>

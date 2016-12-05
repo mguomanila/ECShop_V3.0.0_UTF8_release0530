@@ -619,7 +619,7 @@
          <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
           <tr>
             <td align="right" bgcolor="#ffffff">
-            	<a href="user.php?act=account_deposit" class="f6">{$lang.surplus_type_0}</a> |
+            	<!--<a href="user.php?act=account_deposit" class="f6">{$lang.surplus_type_0}</a> |-->
             	<a href="user.php?act=account_raply" class="f6">{$lang.surplus_type_1}</a>| 
             	<a href="user.php?act=integral_raply" class="f6">{$lang.surplus_type_2}</a> | 
             	<a href="user.php?act=integral_deposit" class="f6">{$lang.surplus_type_3}</a> | 
@@ -643,7 +643,7 @@
           </tr>
           <tr>
             <td bgcolor="#ffffff">{$lang.bank_name}:</td>
-            <td bgcolor="#ffffff" align="left"><input type="text" name="user_bank_name" value="" class="inputBg" size="30" /></td>
+            <td bgcolor="#ffffff" align="left"><input type="text" name="bank_name" value="" class="inputBg" size="30" /></td>
           </tr>
           <tr>
             <td bgcolor="#ffffff">{$lang.user_bank_name}:</td>

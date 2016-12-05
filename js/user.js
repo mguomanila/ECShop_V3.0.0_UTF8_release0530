@@ -538,7 +538,7 @@ var recomme  = Utils.trim(frm.elements['recomme'].value);
   {
 
   	
-    var reg = /^[1][356789][0-9]{9}$/;
+    var reg = /^[1][3456789][0-9]{9}$/;
     if (!reg.test(mobile_phone))
     {
       msg += mobile_phone_invalid + '\n';

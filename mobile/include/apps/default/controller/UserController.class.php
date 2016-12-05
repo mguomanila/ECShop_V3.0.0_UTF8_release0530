@@ -1944,7 +1944,7 @@ class UserController extends CommonController {
 			
 			if(!empty($other['mobile_phone']))
 			{
-				$preg_mobile_phone="/^[1][356789][0-9]{9}$/";
+				$preg_mobile_phone="/^[1][3456789][0-9]{9}$/";
 				$static=preg_match($preg_mobile_phone,$other['mobile_phone']);
 				if($static == 0 )
 				{

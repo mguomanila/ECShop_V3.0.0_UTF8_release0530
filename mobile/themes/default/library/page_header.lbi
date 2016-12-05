@@ -13,5 +13,7 @@
 <link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="__PUBLIC__/bootstrap/css/font-awesome.min.css">
 <link rel="stylesheet" href="{$ectouch_css_path}">
+
 <link rel="stylesheet" href="__TPL__/css/photoswipe.css">
+<link rel="stylesheet" href="__TPL__/css/swiper.min.css">
 </head><body>

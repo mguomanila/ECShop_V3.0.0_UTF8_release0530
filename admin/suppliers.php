@@ -346,13 +346,14 @@ elseif (in_array($_REQUEST['act'], array('add', 'edit')))
                 WHERE agency_id = 0
                 AND action_list <> 'all'";
         $suppliers['admin_list'] = $db->getAll($sql);
-
+$suppliers['cat_id']=explode('|',$suppliers['cat_id']);
+        $smarty->assign('supp_cat', $suppliers['cat_id']);
         $smarty->assign('ur_here', $_LANG['add_suppliers']);
         $smarty->assign('action_link', array('href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']));
 		$smarty->assign('user_list',$user_list);
         $smarty->assign('form_action', 'insert');
         $smarty->assign('suppliers', $suppliers);
-    $smarty->assign('cat_list', cat_list(0, $suppliers['cat_id']));
+    $smarty->assign('cat_list', cat_list(0, $suppliers['cat_id'],false,1));
         assign_query_info();
 
         $smarty->display('suppliers_info.htm');
@@ -373,6 +374,7 @@ elseif (in_array($_REQUEST['act'], array('add', 'edit')))
         $facade_img=explode('|',$suppliers['facade_img']);
         $smarty->assign('facade_img', $facade_img);
         
+       
 //		print_r($suppliers);
         /* 取得所有管理员，*/
         /* 标注哪些是该供货商的('this')，哪些是空闲的('free')，哪些是别的供货商的('other') */
@@ -391,8 +393,25 @@ elseif (in_array($_REQUEST['act'], array('add', 'edit')))
 		$smarty->assign('user_list',$user_list);
         $smarty->assign('form_action', 'update');
         $smarty->assign('suppliers', $suppliers);
+ 	$suppliers['cat_id']=explode('|',$suppliers['cat_id']);
 
-    $smarty->assign('cat_list', cat_list(0, $suppliers['cat_id']));
+        $smarty->assign('supp_cat', $suppliers['cat_id']);
+		$cat_list=cat_list(0, $suppliers['cat_id'],false,1);
+
+
+		foreach ($cat_list as $key => $value) {
+				if(in_array($value['cat_id'],$suppliers['cat_id'])){
+			$cat_list[$key]['checked']=1;
+
+				}else{
+			$cat_list[$key]['checked']=0;
+					
+				}
+			
+
+		}
+
+    $smarty->assign('cat_list',$cat_list);
         assign_query_info();
 
         $smarty->display('suppliers_info.htm');
@@ -409,6 +428,8 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update')))
     admin_priv('suppliers_manage');
     if ($_REQUEST['act'] == 'insert')
     {
+    	$supp_cat_id=$_POST['supp_cat_id']?'|'.implode('|',$_POST['supp_cat_id']).'|':'';
+
         /* 提交值 */
         $suppliers = array('suppliers_name'   => trim($_POST['suppliers_name']),
         					'trade_name'   => trim($_POST['trade_name']),
@@ -416,7 +437,7 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update')))
         					'X_coord'   => trim($_POST['X_coord']),
         					'Y_coord'   => trim($_POST['Y_coord']),
                            'suppliers_desc'   => trim($_POST['suppliers_desc']),
-                           'cat_id'   => trim($_POST['supp_cat_id']),
+                           'cat_id'   => trim($supp_cat_id),
                            'parent_id'        => 0
                            );
 
@@ -552,13 +573,13 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update')))
     {
         /* 提交值 */
         $suppliers = array('id'   => trim($_POST['id']));
-
+    	$supp_cat_id=$_POST['supp_cat_id']?'|'.implode('|',$_POST['supp_cat_id']).'|':'';
         $suppliers['new'] = array('suppliers_name'   => trim($_POST['suppliers_name']),
         							'trade_name'   => trim($_POST['trade_name']),
         					'suppliers_site'   => trim($_POST['suppliers_site']),
         					'X_coord'   => trim($_POST['X_coord']),
         					'Y_coord'   => trim($_POST['Y_coord']),
-                           'cat_id'   => trim($_POST['supp_cat_id']),
+                           'cat_id'   => trim($supp_cat_id),
         					
                            'suppliers_desc'   => trim($_POST['suppliers_desc'])
                            );

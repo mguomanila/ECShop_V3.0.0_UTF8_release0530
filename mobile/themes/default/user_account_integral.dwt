@@ -5,7 +5,7 @@
 
 	<li><a href="{:url('User/account_raply')}" >{$lang.surplus_type_1}</a></li>
 	<li class="active"><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_2}</a></li>
-	<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>
+	<!--<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
 	
 	<li><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
   </ul>

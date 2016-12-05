@@ -65,9 +65,17 @@ $this->assign('category', model('CategoryBase')->get_categories_tree());
 
         // 开始工作
         $this->parameter();
-        $asyn_last = intval(I('post.last')) + 1;
+$get_catid=isset($_GET['cat_id'])?$_GET['cat_id']:0;
+
+
+	        $asyn_last = intval(I('post.last')) + 1;
+
+
+
+
         $this->size = I('post.amount');
-//      $this->page = ($asyn_last > 0) ? ceil($asyn_last / $this->size) : 1;
+        $this->page = ($asyn_last > 0) ? ceil($asyn_last / $this->size) : 1;
+
         $list = model('Alliance')->get_brands('brand', $this->size, $this->page,$_GET['cat_id']);
 		if($list){
 	        foreach ($list as $key => $value) {

@@ -5,6 +5,7 @@
     var variables = {
         'last'      :    0        
     } 
+
     var settings = {
         'amount'      :   '10',          
         'address'     :   'comments.php',
@@ -17,6 +18,7 @@
     }
     
     var methods = {
+    	
         init  :   function(options){
             return this.each(function(){
               
@@ -26,7 +28,8 @@
                 template = $(this).children(settings.template).wrap('<div/>').parent();
                 template.css('display','none')
                 $(this).append('<div class="more_loader_spinner">'+settings.spinner_code+'</div>')
-                $(this).children(settings.template).remove()   
+                $(this).children(settings.template).remove()  
+
                 target = $(this);
                 if(settings.scroll == 'false'){                    
                     $(this).find(settings.trigger).bind('click.more',methods.get_data);
@@ -63,7 +66,9 @@
             var root = target       
          //   alert(root.attr('id'))
             var counter = 0;
+
             if(data){
+            	
                 $(data).each(function(){
                     counter++
                     var t = template                    
@@ -80,11 +85,11 @@
                           root.children(settings.trigger).before(t.html())  
 
                     }
-
+					
                     root.children(settings.template+':last').attr('id', 'more_element_'+ ((variables.last++)+1))  
-                 
+						
                 })
-                
+	
                 
             }            
             else  methods.remove()
@@ -102,7 +107,7 @@
             else {
                 ile = settings.amount;              
             }
-			
+
             $.post(settings.address, {
                 last : variables.last, 
                 amount : ile                
@@ -115,11 +120,12 @@
         }
     };
     $.fn.more = function(method){
+    	
         if(methods[method])
             return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
         else if(typeof method == 'object' || !method) 
             return methods.init.apply(this, arguments);
         else $.error('Method ' + method +' does not exist!');
-
+		
     }    
 })(jQuery)

@@ -16,7 +16,7 @@
 <script type="text/javascript" src="__PUBLIC__/js/jquery.json.js" ></script> 
 <script type="text/javascript" src="__PUBLIC__/js/common.js"></script> 
 <script type="text/javascript" src="__PUBLIC__/js/user.js"></script> 
-<script type="text/javascript" src="__PUBLIC__/js/jquery.more.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/jquery.more.js" id="morejs"></script> 
 <script type="text/javascript" src="__PUBLIC__/js/utils.js" ></script> 
 <script src="__TPL__/js/TouchSlide.1.1.js"></script> 
 <script src="__TPL__/js/ectouch.js"></script> 

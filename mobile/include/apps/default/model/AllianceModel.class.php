@@ -137,10 +137,10 @@ class AllianceModel extends BaseModel {
         if($cat_id == 0){
         	$where = 1;
         }else{
-        	$where = $cat_str ;
+        	$where = "g.cat_id LIKE '%|$cat_id|%'" ;
         }
         
-        $sql = "SELECT g.* FROM " . $this->pre . "suppliers g  "  . "WHERE  $where  GROUP BY g.suppliers_id  DESC LIMIT $start , $size";
+        $sql = "SELECT g.* FROM " . $this->pre . "suppliers g  "  . "WHERE $where   GROUP BY g.suppliers_id  DESC LIMIT $start , $size";
 
         $res = $this->query($sql);
         

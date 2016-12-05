@@ -115,6 +115,59 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
     {
         $brand_name = '';
     }
+    
+  
+    
+     /* 品牌筛选 */
+	if($str_cat_id1 != ''){
+	
+		 $sql = "SELECT b.brand_id, b.brand_name, COUNT(*) AS goods_num ".
+	            "FROM " . $GLOBALS['ecs']->table('brand') . "AS b, ".
+	                $GLOBALS['ecs']->table('goods') . " AS g LEFT JOIN ". $GLOBALS['ecs']->table('goods_cat') . " AS gc ON g.goods_id = gc.goods_id " .
+	            "WHERE g.brand_id = b.brand_id AND ($str_cat_id OR " . 'gc.cat_id ' . db_create_in(array_unique(array_merge(array($str_cat_id1), array_keys(cat_list($str_cat_id1, 0, false))))) . ") AND b.is_show = 1 " .
+	            " AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 ".
+	            "GROUP BY b.brand_id HAVING goods_num > 0 ORDER BY b.sort_order, b.brand_id ASC";
+	
+	}else{
+	
+		 $sql = "SELECT b.brand_id, b.brand_name, COUNT(*) AS goods_num ".
+	            "FROM " . $GLOBALS['ecs']->table('brand') . "AS b, ".
+	                $GLOBALS['ecs']->table('goods') . " AS g LEFT JOIN ". $GLOBALS['ecs']->table('goods_cat') . " AS gc ON g.goods_id = gc.goods_id " .
+	            "WHERE g.brand_id = b.brand_id AND ($children OR " . 'gc.cat_id ' . db_create_in(array_unique(array_merge(array($cat_id), array_keys(cat_list($cat_id, 0, false))))) . ") AND b.is_show = 1 " .
+	            " AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 ".
+	            "GROUP BY b.brand_id HAVING goods_num > 0 ORDER BY b.sort_order, b.brand_id ASC";
+	
+	}
+
+    $brands = $GLOBALS['db']->getAll($sql);
+	$i=0;
+    foreach ($brands AS $key => $val)
+    {
+        $temp_key = $key + 1;
+        $brands[$temp_key]['brand_name'] = $val['brand_name'];
+        $brands[$temp_key]['url'] = build_uri('category', array('cid' => $cat_id,'cat_id'=>$str_cat_id1, 'bid' => $val['brand_id'], 'price_min'=>$price_min, 'price_max'=> $price_max, 'filter_attr'=>$filter_attr_str), $cat['cat_name']);
+
+        /* 判断品牌是否被选中 */
+        if ($brand == $brands[$key]['brand_id'])
+        {
+        	$i+=1;
+            $brands[$temp_key]['selected'] = 1;
+        }
+        else
+        {
+            $brands[$temp_key]['selected'] = 0;
+        }
+    }
+    if($i==0){
+    	$brand=0;
+    }
+
+    $brands[0]['brand_name'] = $_LANG['all_attribute'];
+    $brands[0]['url'] = build_uri('category', array('cid' => $cat_id, 'cat_id'=>$str_cat_id1,'bid' => 0, 'price_min'=>$price_min, 'price_max'=> $price_max, 'filter_attr'=>$filter_attr_str), $cat['cat_name']);
+    $brands[0]['selected'] = empty($brand) ? 1 : 0;
+
+    $smarty->assign('brands', $brands);
+    
 
     /* 获取价格分级 */
     if ($cat['grade'] == 0  && $cat['parent_id'] != 0)
@@ -246,39 +299,7 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
 
 
     $smarty->assign('str', $str);
-    /* 品牌筛选 */
-
-    $sql = "SELECT b.brand_id, b.brand_name, COUNT(*) AS goods_num ".
-            "FROM " . $GLOBALS['ecs']->table('brand') . "AS b, ".
-                $GLOBALS['ecs']->table('goods') . " AS g LEFT JOIN ". $GLOBALS['ecs']->table('goods_cat') . " AS gc ON g.goods_id = gc.goods_id " .
-            "WHERE g.brand_id = b.brand_id AND ($children OR " . 'gc.cat_id ' . db_create_in(array_unique(array_merge(array($cat_id), array_keys(cat_list($cat_id, 0, false))))) . ") AND b.is_show = 1 " .
-            " AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 ".
-            "GROUP BY b.brand_id HAVING goods_num > 0 ORDER BY b.sort_order, b.brand_id ASC";
-
-    $brands = $GLOBALS['db']->getAll($sql);
-
-    foreach ($brands AS $key => $val)
-    {
-        $temp_key = $key + 1;
-        $brands[$temp_key]['brand_name'] = $val['brand_name'];
-        $brands[$temp_key]['url'] = build_uri('category', array('cid' => $cat_id,'cat_id'=>$str_cat_id1, 'bid' => $val['brand_id'], 'price_min'=>$price_min, 'price_max'=> $price_max, 'filter_attr'=>$filter_attr_str), $cat['cat_name']);
-
-        /* 判断品牌是否被选中 */
-        if ($brand == $brands[$key]['brand_id'])
-        {
-            $brands[$temp_key]['selected'] = 1;
-        }
-        else
-        {
-            $brands[$temp_key]['selected'] = 0;
-        }
-    }
-
-    $brands[0]['brand_name'] = $_LANG['all_attribute'];
-    $brands[0]['url'] = build_uri('category', array('cid' => $cat_id, 'bid' => 0, 'price_min'=>$price_min, 'price_max'=> $price_max, 'filter_attr'=>$filter_attr_str), $cat['cat_name']);
-    $brands[0]['selected'] = empty($brand) ? 1 : 0;
-
-    $smarty->assign('brands', $brands);
+   
 
 
     /* 属性筛选 */
