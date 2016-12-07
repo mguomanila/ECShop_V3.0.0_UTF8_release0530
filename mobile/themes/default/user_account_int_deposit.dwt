@@ -13,7 +13,7 @@
   <div class="ect-bg-colorf flow-consignee">
     <ul class="o-info">
       <li>
-        <div class="input-text"><b class="pull-left">{$lang.deposit_money}：</b><span>
+        <div class="input-text"><b class="pull-left">消费金额：</b><span>
           <input id="vr" name="amount"  placeholder="1元人民币等于100金元宝" type="text" class="inputBg_touch" value="{$order.amount|escape}" />
           </span></div>
       </li>

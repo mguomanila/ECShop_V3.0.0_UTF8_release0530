@@ -30,6 +30,7 @@
       <td>{$lang.affiliate_lever}</td>
       <td>{$lang.label_username}</td>
 			<td>注册时间</td>
+			<td>总收益</td>
 
     </tr>
     <!-- {foreach from=$aff_arr key=level item=val name=affdb} -->
@@ -37,6 +38,7 @@
       <td>{$lang.user_type.$val.user_type}</td>
       <td>{$val.user_name}</td>
 			<td>{$val.reg_time}</td>
+			<td>{$val.integral_amount}</td>
 
     </tr>
     <!-- {/foreach} -->
@@ -73,7 +75,7 @@
 						$(".earnings").remove()
 					}else{
 						$(".earnings").remove()
-						$(obj).after("<tr align='center' class='earnings' id='s"+user_id+"'><td>"+user_name+"今日充值</td><td colspan='2'>"+result['recharge']+"金元宝</td></tr><tr align='center' class='earnings' id='s"+user_id+"'><td>您今日的收益</td><td colspan='2'>"+result['earnings']+"金元宝</td></tr>");		
+						$(obj).after("<tr align='center' class='earnings' id='s"+user_id+"'><td>"+user_name+"今日充值</td><td colspan='3'>"+result['recharge']+"金元宝</td></tr><tr align='center' class='earnings' id='s"+user_id+"'><td>您今日的收益</td><td colspan='3'>"+result['earnings']+"金元宝</td></tr>");		
 						
 					}
 				}

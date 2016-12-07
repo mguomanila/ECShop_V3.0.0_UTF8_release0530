@@ -1,0 +1,111 @@
+
+html{
+	overflow: hidden;
+}
+.fdl{
+	text-align: center;
+	overflow: scroll;
+	background: #eff2f5 ;
+}
+.fdl::-webkit-scrollbar{
+	 background-color: rgba(0, 0, 0, 0); 
+	 width: 0;
+}
+.fdl::-moz-scrollbar{
+	 background-color: rgba(0, 0, 0, 0);
+	 width: 0; 
+}
+.fdl::-ms-scrollbar{
+	 background-color: rgba(0, 0, 0, 0); 
+	 width: 0;
+}
+.fdl::-o-scrollbar{
+	 background-color: rgba(0, 0, 0, 0); 
+	 width: 0;
+}
+.fdl li{
+	padding: 0 8px;
+}
+.fdl li a{
+	display: inline-block;
+	padding: 5px 0;
+	border-bottom: 1px solid #e1e1e1;
+	box-sizing: border-box;
+}
+.fdl li:last-child a{
+	border-bottom:0 none;
+}
+.fdl li a p{
+	font-size: 14px;
+	padding-top: 3px;
+}
+.ejfl .ejfl_top a{
+	position: relative;
+	left: 8%;
+}
+.ejfl .ejfl_top a:before{
+	content: "";
+	background: #838383;
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	top:34%;
+	left: -45%;
+}
+.ejfl .ejfl_top i{
+	width: 15px;
+	height: 15px;
+	background: url(../images/back.png) no-repeat center /cover;
+	position: relative;
+	right: 3%;
+	top:10px;
+}
+.ejfl_top{
+	overflow: hidden;
+	line-height: 34px;
+	background: #fcfcfc;
+}
+.ejfl_li{
+	overflow: hidden;
+	width: 100%;
+	background: #fff;
+	padding-bottom: 25px;
+}
+.ejfl{
+	overflow: scroll;
+	margin-right: 5px;
+}
+.ejfl::-webkit-scrollbar{
+	 background-color: rgba(0, 0, 0, 0); 
+	 width: 0;
+}
+.ejfl::-moz-scrollbar{
+	 background-color: rgba(0, 0, 0, 0); 
+	 width: 0;
+}
+.ejfl::-ms-scrollbar{
+	 background-color: rgba(0, 0, 0, 0);
+	 width: 0; 
+}
+.ejfl::-o-scrollbar{
+	 background-color: rgba(0, 0, 0, 0); 
+	 width: 0;
+}
+.ejfl_li li{
+	float:left;
+	width: 8rem;
+	margin-left: 0.6rem;
+	line-height: 2.96rem;
+	padding: 0.4rem;
+}
+.fdl li .syfl_activate{
+	color: #0094de;
+	border-bottom: 0.1rem solid #0094de;
+}
+.fdbox{
+	overflow: hidden;
+}
+.max{
+	overflow: hidden;
+}

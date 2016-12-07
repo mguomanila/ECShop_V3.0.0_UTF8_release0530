@@ -88,6 +88,11 @@ class UserController extends CommonController {
             $sel_question = I('post.sel_question');
             $passwd_answer = I('post.passwd_answer');
 
+			$sql = 'SELECT * FROM ' . M()->pre . 'users' . " WHERE mobile_phone = '$other[mobile_phone]'";
+				$arr=M()->getRow($sql);
+					if(!empty($arr)){
+		        		show_message('手机号已存在');
+				}
             // 读出所有扩展字段的id
             $where['type'] = 0;
             
@@ -1394,6 +1399,19 @@ class UserController extends CommonController {
 
 					$sql="SELECT user_id,user_type,user_name,from_unixtime(reg_time) AS reg_time FROM " . $this->model->pre .'users' ." WHERE parent_id = $this->user_id ORDER BY reg_time DESC";
 					$aff_arr=$this->model->query($sql);
+					foreach ($aff_arr as $key => $value) {
+						$sql="SELECT user_id,sum(integral_amount) AS integral_amount FROM " . $this->model->pre ."user_account WHERE friend_id = $value[user_id] AND process_type = 3 AND is_paid = 1";
+    					$res = $this->model->getRow($sql);
+    					$res['integral_amount']=$res['integral_amount']?$res['integral_amount']:0;
+    					if($value['user_type'] == '1'){
+		    				$res['integral_amount'] = $res['integral_amount'] * 0.05;
+		    			}elseif($value['user_type'] == '2') {
+		    				$res['integral_amount'] = $res['integral_amount'] * 0.1;
+		    			}elseif($value['user_type'] == '3'){
+		    				$res['integral_amount'] = $res['integral_amount'] * 0.1;
+		    			}
+						$aff_arr[$key]['integral_amount']=$res['integral_amount'];
+					}
 					$this->assign('aff_arr', $aff_arr);
 					
 

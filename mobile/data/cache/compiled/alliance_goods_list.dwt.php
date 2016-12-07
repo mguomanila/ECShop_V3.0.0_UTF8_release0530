@@ -1,10 +1,10 @@
-<!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
+<?php echo $this->fetch('library/page_header.lbi'); ?>
 
 <div class="con">
 <div style="height:4.2em;"></div>
   <header>
     <nav class="ect-nav ect-bg icon-write">
-      <!-- #BeginLibraryItem "/library/page_menu.lbi" --><!-- #EndLibraryItem -->
+      <?php echo $this->fetch('library/page_menu.lbi'); ?>
     </nav>
   </header>
   
@@ -15,11 +15,13 @@
   			<li class="swiper-slide color_0 set_color">
   				<a href="javascript:select1(0)">全部分类</a>
   			</li>
-  			<!-- {foreach from=$category item=cat} --> 
-  			<li  class="swiper-slide color_{$cat.id}">
-  						<a href="javascript:select({$cat.id})">{$cat.name}</a>
+  			<?php $_from = $this->_var['category']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'cat');if (count($_from)):
+    foreach ($_from AS $this->_var['cat']):
+?> 
+  			<li  class="swiper-slide color_<?php echo $this->_var['cat']['id']; ?>">
+  						<a href="javascript:select(<?php echo $this->_var['cat']['id']; ?>)"><?php echo $this->_var['cat']['name']; ?></a>
   			</li>
-  			<!--{/foreach}--> 
+  			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?> 
   			
   	</ul>
   	
@@ -32,17 +34,17 @@
     <a href="javascript:;" class="get_more"></a> </div>
 </div>
 
-<!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem -->
-<!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
+<?php echo $this->fetch('library/search.lbi'); ?>
+<?php echo $this->fetch('library/page_footer.lbi'); ?>
 
 <script type="text/javascript">
 window.onload=function(){
 	
 //	alert(window.location.host);
-	get_asynclist("{:url('alliance/asynclist', array('page'=>$this->_var['page'], 'sort'=>$this->_var['sort'], 'order'=>$this->_var['order'],'cat_id'=>0))}" , '__TPL__/images/loader.gif');
+	get_asynclist("<?php echo url('alliance/asynclist', array('page'=>$this->_var['page'], 'sort'=>$this->_var['sort'], 'order'=>$this->_var['order'],'cat_id'=>0));?>" , '__TPL__/images/loader.gif');
 	 var head = $("head").remove("script[id='morejs']");
 
-   $("<scri" + "pt>" + "</scr" + "ipt>").attr({ role: 'reload', src: '__PUBLIC__/js/jquery.more.js', type: 'text/javascript' }).appendTo(head);
+   $("<scri" + "pt>" + "</scr" + "ipt>").attr({role: 'reload', src: '__PUBLIC__/js/jquery.more.js', type: 'text/javascript'}).appendTo(head);
 
 }
 function select(id){
@@ -68,7 +70,7 @@ function select(id){
   	get_asynclist(url_str, '__TPL__/images/loader.gif');
   	 var head = $("head").remove("script[id='morejs']");
   	 
-   $("<scri" + "pt>" + "</scr" + "ipt>").attr({ role: 'reload', src: '__PUBLIC__/js/jquery.more.js', type: 'text/javascript' }).appendTo(head);
+   $("<scri" + "pt>" + "</scr" + "ipt>").attr({role: 'reload', src: '__PUBLIC__/js/jquery.more.js', type: 'text/javascript'}).appendTo(head);
 	
 
 }
@@ -85,9 +87,9 @@ function select1(id){
 
 	}
 
-  get_asynclist("{:url('alliance/asynclist', array('page'=>$this->_var['page'], 'sort'=>$this->_var['sort'], 'order'=>$this->_var['order'],'dianji'=>1,'cat_id'=>0))}" , '__TPL__/images/loader.gif');
+  get_asynclist("<?php echo url('alliance/asynclist', array('page'=>$this->_var['page'], 'sort'=>$this->_var['sort'], 'order'=>$this->_var['order'],'dianji'=>1,'cat_id'=>0));?>" , '__TPL__/images/loader.gif');
  var head = $("head").remove("script[id='morejs']");
-   $("<scri" + "pt>" + "</scr" + "ipt>").attr({ role: 'reload', src: '__PUBLIC__/js/jquery.more.js', type: 'text/javascript' }).appendTo(head);
+   $("<scri" + "pt>" + "</scr" + "ipt>").attr({role: 'reload', src: '__PUBLIC__/js/jquery.more.js', type: 'text/javascript'}).appendTo(head);
 	
 
 }

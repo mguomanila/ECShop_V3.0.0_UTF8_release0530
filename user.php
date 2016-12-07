@@ -545,6 +545,12 @@ elseif ($action == 'act_edit_profile')
     $sel_question = empty($_POST['sel_question']) ? '' : compile_str($_POST['sel_question']);
     $passwd_answer = isset($_POST['passwd_answer']) ? compile_str(trim($_POST['passwd_answer'])) : '';
 
+
+$sql = 'SELECT * FROM '. $ecs->table('users') . " WHERE mobile_phone = '$other[mobile_phone]'";
+				$arr=$db->getRow($sql);
+					if(!empty($arr)){
+		        		show_message('手机号已存在');
+				}
     /* 更新用户扩展字段的数据 */
     $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 ORDER BY dis_order, id';   //读出所有扩展字段的id
     $fields_arr = $db->getAll($sql);

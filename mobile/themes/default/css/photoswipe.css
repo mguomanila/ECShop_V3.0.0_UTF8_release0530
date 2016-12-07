@@ -187,3 +187,14 @@ div.ps-toolbar-play div.ps-toolbar-content
 	color: #fff;
 }
 
+#J_ItemList{
+	padding-top: 2em;
+}
+
+.set_color{
+	background-color: #fff!important;
+	
+}
+.set_color>a{
+	color: #e57a00!important;
+}

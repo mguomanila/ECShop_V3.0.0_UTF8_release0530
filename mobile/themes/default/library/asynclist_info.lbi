@@ -34,7 +34,12 @@
 <!--{if $alliance}-->
 
 <li>
-  <p><a href="{$alliance.url}"><img src="../../{$alliance.suppliers_img}" style=" height: 160px;"></a><span>{$alliance.trade_name}</span></p>
+  <p>
+  	<a href="{$alliance.url}">
+  		<img src="../../{$alliance.suppliers_img}" style=" height: 160px;">
+  	</a>
+  	<span>{$alliance.trade_name}</span>
+  </p>
 </li>
 
 <!-- {/if}--> 
