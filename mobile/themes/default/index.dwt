@@ -1,9 +1,7 @@
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
 <div class="con"> 
-  <header class="ect-header ect-margin-tb ect-margin-lr"> <a href="{:url('category/top_all')}" class="pull-left ect-icon ect-icon1 ect-icon-cate1"></a>
-    <div class="ect-header-div">
-      <button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;{$lang.no_keywords}</button>
-    </div>
+  <header class="ect-header "> 
+  	<img src="images/title_img.jpg" style="width: 100%;"/>
   </header>
   <!--banner滚动图片s-->
   <div id="focus" class="focus ect-margin-tb">

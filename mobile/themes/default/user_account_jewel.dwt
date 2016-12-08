@@ -5,39 +5,27 @@
 
 	<li><a href="{:url('User/account_raply')}" >{$lang.surplus_type_1}</a></li>
 	<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_2}</a></li>
-	<!--<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
+	<!--<li class="active"><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
 	
-	<li class="active"><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
-	<li><a href="{:url('User/account_jewel')}" >{$lang.surplus_type_4}</a></li>
+	<li><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
+	<li  class="active"><a href="{:url('User/account_jewel')}" >{$lang.surplus_type_4}</a></li>
 	
   </ul>
 <form action="{:url('user/act_account')}" method="post" name="theForm" onSubmit="return submitSurplus()">
   <div class="ect-bg-colorf flow-consignee">
     <ul class="o-info">
+    	<li>
+        <div class="input-text"><b class="pull-left">升级类型：</b><span>
+          <p>金钻</p>
+          </span></div>
+      </li>
       <li>
-        <div class="input-text"><b class="pull-left">消费金额：</b><span>
-          <input id="vr" name="amount"  placeholder="1元人民币等于100金元宝" type="text" class="inputBg_touch" value="{$order.amount|escape}" />
+        <div class="input-text"><b class="pull-left">应付金额：</b><span>
+          <p>￥1280元</p>
+          <input type="hidden" name="amount" value="1280" readonly/>
           </span></div>
       </li>
-      <li id="vr_user_tr" style="display: none;" >
-              <div class="input-text"><b class="pull-left">实际金额：</b><span>
-              <input id="vr_user" readonly name="amount_user" placeholder="实际金额" type="text" class="inputBg_touch" value="{$order.amount|escape}" />
-          </span></div>
-      </li>
-     <!-- {if $user_type eq 2|| $user_type eq 3} -->
-     <li>
-        <div class="input-text"><b class="pull-left">充值对象：</b><span>
-          	<input type="radio" id="anniu1" checked="checked" name="user_type" value="1"/>给自己充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       		<input type="radio" id="anniu2" name="user_type" value="2"/>给好友充
-          </span></div>
-      </li>
-       <li id="content_text" style="display: none;">
-       	<div class="input-text"><b class="pull-left">好友账户：</b><span>
-       		<input type="text" placeholder="请输入好友账户"  name="rest_user_name" value=""/>
-       	</li>
-      <!-- {else} -->
-            <input type="hidden"  name="user_type" value="1"/>
-            <!-- {/if} -->
+     
       <li class="input-text"><b class="pull-left">{$lang.process_notic}：</b>
         <textarea name="user_note" placeholder="{$lang.process_notic}" type="text">{$order.user_note|escape}</textarea>
       </li>
@@ -67,40 +55,13 @@
             <!-- {/foreach} -->
             </table>
   <div class="two-btn ect-padding-tb ect-padding-lr ect-margin-tb text-center">
-   <input type="hidden" name="surplus_type" value="3" />
+   <input type="hidden" name="surplus_type" value="4" />
           <input type="hidden" name="rec_id" value="{$order.id}" />
           <input type="hidden" name="act" value="act_account" />
     <input type="submit" name="submit"  class="btn btn-info"  value="{$lang.submit_request}"/>
     <input type="reset" name="submit"  class="btn btn-info ect-bg-colory"  value="{$lang.button_reset}"/>
   </div>
 </form>
-<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js" ></script> 
-<script type="text/javascript">
-
-		    var aAnniu1=document.getElementById('anniu1');
-		    var aAnniu2=document.getElementById('anniu2');
-		    var aContent=document.getElementById('content_text');
-		    var vr=document.getElementById('vr');
-		    var vr_user=document.getElementById('vr_user');
-		    var vr_user_tr=document.getElementById('vr_user_tr');
-		    aAnniu1.onclick=function () {
-		        aContent.style.display='none';
-		        vr_user_tr.style.display='none';
-		        vr.name='amount'
-		        vr_user.name='amount_user'
-		    }
-		    aAnniu2.onclick=function () {
-		        aContent.style.display='';
-		         vr_user_tr.style.display='';
-		        vr.name='amount_user'
-		        vr_user.name='amount'
-		    }
-			$("#vr").keyup(function(){
-				var a= $("#vr").val()*0.15;
-				var b=a.toFixed(2);
-  				$("#vr_user").val(b)
-			});
-        </script>
 <script type="text/javascript">
 		        	/*******************************************************************************
  * 会员余额申请

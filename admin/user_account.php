@@ -319,9 +319,13 @@ elseif ($_REQUEST['act'] == 'check')
     {
         $process_type = $_LANG['surplus_type_2'];
     }
-    else
+    elseif($account['process_type'] == 3)
     {
         $process_type = $_LANG['surplus_type_3'];
+    }
+    else
+    {
+    	$process_type = $_LANG['surplus_type_4'];
     }
 
     $sql = "SELECT user_name FROM " .$ecs->table('users'). " WHERE user_id = '$account[user_id]'";
@@ -414,6 +418,22 @@ elseif ($_REQUEST['act'] == 'action')
             //更新会员余额数量
             log_account_change($account['user_id'], $amount, 0, 0, 0, $_LANG['surplus_type_0'], ACT_SAVING);
 
+        }elseif($is_paid == '1' && $account['process_type'] == '4'){
+        	$sql='SELECT * FROM '. $ecs->table('users') ." WHERE user_id = '$account[user_id]'" ;
+			$userinfo=$db->getRow($sql);
+			if($userinfo['user_type'] == 1)
+			{
+				$sql='SELECT * FROM '. $ecs->table('users') ." WHERE user_id = $userinfo[parent_id]";
+				$parentinfo=$db->getRow($sql);
+				$set='';
+				if($parentinfo['user_type'] == 1){
+					$set=',parent_id = '.$parentinfo['ancestor_id'];
+				}
+			}
+        	//如果是预付款，并且已完成, 更新此条记录，增加相应的余额
+            update_user_account($id, $amount, $admin_note, $is_paid,0);
+            $sql="UPDATE ". $GLOBALS['ecs']->table('users') . "SET user_type = 2".$set." WHERE user_id = $account[user_id]";
+            $GLOBALS['db']->query($sql);
         }
         elseif($is_paid == '1' && $account['process_type'] == '3'){
         	$affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
@@ -691,7 +711,7 @@ function account_list()
         }
         else
         {
-            $where .= " AND ua.process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE));
+            $where .= " AND ua.process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL));
         }
         if(!empty($filter['start_time']) )
         {

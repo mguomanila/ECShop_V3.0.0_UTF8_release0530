@@ -66,6 +66,7 @@ define('OS_SPLITING_PART', 6); // 部分分单
 define('PAY_ORDER', 0); // 订单支付
 define('PAY_SURPLUS', 1); // 会员预付款
 define('PAY_INTEGRAL', 2); // 会员预付款
+define('PAY_JEWEL', 4); // 会员升级
 
 /* 配送状态 */
 define('SS_UNSHIPPED', 0); // 未发货
@@ -95,7 +96,8 @@ define('OOS_CONSULT', 2); // 与店主协商
 define('SURPLUS_SAVE', 0); // 为帐户冲值
 define('SURPLUS_RETURN', 1); // 从帐户提款
 define('INTEGRAL_RETURN', 2); // 从帐户提积分
-define('INTEGRAL_SAVE', 3); // 从帐户提积分
+define('INTEGRAL_SAVE', 3); // 为帐户冲值元宝
+define('SURPLUS_JEWEL', 4); // 升级金钻
 
 /* 评论状态 */
 define('COMMENT_UNCHECKED', 0); // 未审核

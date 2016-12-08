@@ -26,8 +26,6 @@
   	</ul>
   	
   </div>
-
-  
   <div class="bran_list" id="J_ItemList" style="opacity:1;">
     <ul class="single_item">
     </ul>
@@ -38,6 +36,7 @@
 <?php echo $this->fetch('library/page_footer.lbi'); ?>
 
 <script type="text/javascript">
+  
 window.onload=function(){
 	
 //	alert(window.location.host);

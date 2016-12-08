@@ -182,7 +182,46 @@ class PaymentModel extends BaseModel {
                             model('ClipsBase')->log_account_change($order['user_id'], 0, 0, intval($integral['rank_points']), intval($integral['custom_points']), sprintf(L('order_gift_integral'), $order['order_sn']));
                         }
                     }
-                }elseif($pay_log['order_type'] == PAY_INTEGRAL)
+                }
+                elseif($pay_log['order_type'] == PAY_JEWEL)
+                {
+                	$sql = 'SELECT `id` FROM ' . $this->pre . "user_account WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
+                    $res = $this->row($sql);
+                    $res_id = $res['id'];
+                    if (empty($res_id)) {
+                        /* 更新会员预付款的到款状态 */
+                        $sql = 'UPDATE ' . $this->pre .
+                                "user_account SET paid_time = '" . gmtime() . "', is_paid = 1" .
+                                " WHERE id = '$pay_log[order_id]' LIMIT 1";
+                        $this->query($sql);
+
+
+						
+                        /* 取得添加预付款的用户以及金额 */
+                        $sql = "SELECT user_id, amount FROM " . $this->pre .
+                                "user_account WHERE id = '$pay_log[order_id]'";
+                        $arr = $this->row($sql);
+                        
+                        $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[user_id]'" ;
+						$userinfo=$this->row($sql);
+						if($userinfo['user_type'] == 1)
+						{
+							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $userinfo[parent_id]";
+							$parentinfo=$this->row($sql);
+							$set='';
+							if($parentinfo['user_type'] == 1){
+								$set=',parent_id = '.$parentinfo['ancestor_id'];
+							}
+						}
+                        
+                        
+						$sql='UPDATE ' . $this->pre .
+                                "users SET user_type = 2" .$set.
+                                " WHERE user_id = '$arr[user_id]'";
+						$this->query($sql);
+                        }
+                }
+                elseif($pay_log['order_type'] == PAY_INTEGRAL)
                 {
                 	$sql = 'SELECT `id` FROM ' . $this->pre . "user_account WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
                     $res = $this->row($sql);

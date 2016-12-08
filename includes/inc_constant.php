@@ -107,6 +107,7 @@ define('SURPLUS_SAVE',              0); // 为帐户冲值
 define('SURPLUS_RETURN',            1); // 从帐户提款
 define('SURPLUS_INTEGRAL',          2); // 从帐户提款
 define('SURPLUS_INTEGRAL_SAVE',     3); // 从帐户提款
+define('SURPLUS_JEWEL',     		4); // 升级金钻
 
 /* 评论状态 */
 define('COMMENT_UNCHECKED',         0); // 未审核

@@ -198,3 +198,36 @@ div.ps-toolbar-play div.ps-toolbar-content
 .set_color>a{
 	color: #e57a00!important;
 }
+
+.bran_list ul li .lmjbox_img{
+	width: 100%;
+}
+.bran_list ul li .lmjbox{
+	background: #fff;
+	padding: 4px;
+	overflow: hidden;
+}
+.bran_list ul li .lmjbox .lmjbox_a{
+	float: left;
+	width: 30%;
+	padding: 6px;
+	box-sizing: border-box;
+}
+.lxdz{
+	padding-left: 25px;
+	float: left;
+}
+.lxdz .lxdz_a{
+	font-size: 18px;
+	display: inline-block;
+	margin-top: 10px;
+	max-width: 200px;
+	white-space:nowrap;
+	 overflow:hidden; 
+	 text-overflow:ellipsis;
+}
+.lxdz p{
+	font-size: 14px;
+	margin-top: 14px;
+	color: #999;
+}

@@ -8,6 +8,8 @@
 	<!--<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
 	
 	<li><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
+	<li><a href="{:url('User/account_jewel')}" >{$lang.surplus_type_4}</a></li>
+	
   </ul>
 <table width="100%" class="table table-bordered">
           <tr>

@@ -153,6 +153,7 @@ class AllianceModel extends BaseModel {
             $arr[$row['suppliers_id']]['facade_img'] = get_banner_path($row['facade_img']);
             $arr[$row['suppliers_id']]['suppliers_desc'] = $row['suppliers_desc'];
             $arr[$row['suppliers_id']]['suppliers_site'] = $row['suppliers_site'];
+            $arr[$row['suppliers_id']]['suppliers_name'] = $row['suppliers_name'];
         }
         return $arr;
         

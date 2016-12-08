@@ -546,7 +546,7 @@ elseif ($action == 'act_edit_profile')
     $passwd_answer = isset($_POST['passwd_answer']) ? compile_str(trim($_POST['passwd_answer'])) : '';
 
 
-$sql = 'SELECT * FROM '. $ecs->table('users') . " WHERE mobile_phone = '$other[mobile_phone]'";
+$sql = 'SELECT * FROM '. $ecs->table('users') . " WHERE mobile_phone = '$other[mobile_phone]'  AND user_id <> '$user_id'";
 				$arr=$db->getRow($sql);
 					if(!empty($arr)){
 		        		show_message('手机号已存在');

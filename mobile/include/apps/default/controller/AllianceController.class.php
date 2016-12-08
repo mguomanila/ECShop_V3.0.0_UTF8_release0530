@@ -77,15 +77,20 @@ $get_catid=isset($_GET['cat_id'])?$_GET['cat_id']:0;
         $this->page = ($asyn_last > 0) ? ceil($asyn_last / $this->size) : 1;
 
         $list = model('Alliance')->get_brands('brand', $this->size, $this->page,$_GET['cat_id']);
+
 		if($list){
 	        foreach ($list as $key => $value) {
 	
 	        	if($value['suppliers_img'] == C('no_picture')){
 	        		$value['suppliers_img'] = 'mobile/data/common/images/'.basename($value['suppliers_img']);
 	        	}
+				$alliance_user_list = model('Alliance')->get_alliance_user($value['suppliers_name']);
+	        	$value[101]=$alliance_user_list[101];
+	        	$value['office_phone']=$alliance_user_list['office_phone'];
 	            $this->assign('alliance', $value);
-				
-	
+
+
+
 	            $sayList [] = array(
 	                'single_item' => ECTouch::view()->fetch('library/asynclist_info.lbi')
 	            );

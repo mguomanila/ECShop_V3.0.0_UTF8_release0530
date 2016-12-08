@@ -88,7 +88,7 @@ class UserController extends CommonController {
             $sel_question = I('post.sel_question');
             $passwd_answer = I('post.passwd_answer');
 
-			$sql = 'SELECT * FROM ' . M()->pre . 'users' . " WHERE mobile_phone = '$other[mobile_phone]'";
+			$sql = 'SELECT * FROM ' . M()->pre . 'users' . " WHERE mobile_phone = '$other[mobile_phone]'  AND user_id <> $this->user_id";
 				$arr=M()->getRow($sql);
 					if(!empty($arr)){
 		        		show_message('手机号已存在');
@@ -269,7 +269,7 @@ class UserController extends CommonController {
     
         $size = I(C('page_size'), 5);
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
-        $count = $this->model->table('user_account')->field('COUNT(*)')->where("user_id = $this->user_id AND process_type ". db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE)))->getOne();
+        $count = $this->model->table('user_account')->field('COUNT(*)')->where("user_id = $this->user_id AND process_type ". db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL)))->getOne();
         $this->pageLimit(url('user/account_log'), $size);
         $this->assign('pager', $this->pageShow($count));    
     
@@ -360,6 +360,24 @@ class UserController extends CommonController {
         $this->assign('payment', model('ClipsBase')->get_online_payment_list(false));
         $this->assign('order',   $account);
         $this->display('user_account_deposit.dwt');
+    }
+    
+    
+    /**
+     *  会员升级金钻界面 
+     */
+    public function account_jewel(){
+        $this->assign('title', L('label_user_surplus'));
+        $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $account    = model('ClipsBase')->get_surplus_info($surplus_id);
+		$user_type=get_user_type();
+		if($user_type==2){
+			 show_message('您已是金钻会员，无需再次升级');
+		}
+		$this->assign('user_type', $user_type);
+        $this->assign('payment', model('ClipsBase')->get_online_payment_list(false));
+        $this->assign('order',   $account);
+        $this->display('user_account_jewel.dwt');
     }
     
     /**
@@ -548,6 +566,64 @@ class UserController extends CommonController {
     
             //记录支付log
             $order['log_id'] = model('ClipsBase')->insert_pay_log($surplus['rec_id'], $order['order_amount'], $type=PAY_INTEGRAL, 0);
+    
+            /* 调用相应的支付方式文件 */
+            include_once (ROOT_PATH . 'plugins/payment/' . $payment_info ['pay_code'] . '.php');
+    
+            /* 取得在线支付方式的支付按钮 */
+            $pay_obj = new $payment_info ['pay_code'] ();
+            $payment_info['pay_button'] = $pay_obj->get_code($order, $payment);
+    
+            /* 模板赋值 */
+            $this->assign('payment', $payment_info);
+            $this->assign('pay_fee', price_format($payment_info['pay_fee'], false));
+            $this->assign('amount',  price_format($amount, false));
+            $this->assign('order',   $order);
+            $this->display('user_act_account.dwt');
+        }
+        elseif($surplus['process_type'] == 4)
+        {
+        	if ($surplus['payment_id'] <= 0)
+            {
+                show_message(L('select_payment_pls'));
+            }
+    		if($amount == 0 || empty($amount)||$amount != 1280){
+    			show_message('请输入正确金额', L('back_page_up'), '', 'info');
+    		}
+    
+            //获取支付方式名称
+            $payment_info = array();
+            $payment_info = model('Order')->payment_info($surplus['payment_id']);
+            $surplus['payment'] = $payment_info['pay_name'];
+    
+            if ($surplus['rec_id'] > 0)
+            {
+                //更新会员账目明细
+                $surplus['rec_id'] = model('ClipsBase')->update_user_account($surplus);
+            }
+            else
+            {
+                //插入会员账目明细
+                $surplus['rec_id'] = model('ClipsBase')->insert_user_account($surplus, $amount);
+            }
+    
+            //取得支付信息，生成支付代码
+            $payment = unserialize_config($payment_info['pay_config']);
+    
+            //生成伪订单号, 不足的时候补0
+            $order = array();
+            $order['order_sn']       = $surplus['rec_id'];
+            $order['user_name']      = $_SESSION['user_name'];
+            $order['surplus_amount'] = $amount;
+    
+            //计算支付手续费用
+            $payment_info['pay_fee'] = pay_fee($surplus['payment_id'], $order['surplus_amount'], 0);
+    
+            //计算此次预付款需要支付的总金额
+            $order['order_amount']   = $amount + $payment_info['pay_fee'];
+    
+            //记录支付log
+            $order['log_id'] = model('ClipsBase')->insert_pay_log($surplus['rec_id'], $order['order_amount'], $type=PAY_JEWEL, 0);
     
             /* 调用相应的支付方式文件 */
             include_once (ROOT_PATH . 'plugins/payment/' . $payment_info ['pay_code'] . '.php');

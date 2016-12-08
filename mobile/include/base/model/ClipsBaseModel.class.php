@@ -467,7 +467,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
     public function get_account_log($user_id, $num, $start) {
         $account_log = array();
         $sql = 'SELECT * FROM ' . $this->pre . "user_account WHERE user_id = '$user_id'" .
-                " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE)) .
+                " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL)) .
                 " ORDER BY add_time DESC limit " . $start . ',' . $num;
 
         $list = $this->query($sql);
@@ -492,7 +492,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
                 }elseif($vo['process_type'] == 2){
                 	$vo['type'] = L('surplus_type_2');
 					$vo['amount'] = abs($vo['integral_amount']).'积分';
-                }else{
+                }elseif($vo['process_type'] == 3){
                 	if(empty($vo['friend_id'])){
                 		$vo['type'] = L('surplus_type_3').':自己';          		
                 	}else{
@@ -500,6 +500,9 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
                 	}
 
 					$vo['amount'] = abs($vo['integral_amount']).'积分';
+                }else{
+                    $vo['type'] = L('surplus_type_4');
+                	
                 }
 
                 /* 支付方式的ID */

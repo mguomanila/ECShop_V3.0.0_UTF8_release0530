@@ -35,11 +35,20 @@
 <?php if ($this->_var['alliance']): ?>
 
 <li>
-  <p>
-  	<a href="<?php echo $this->_var['alliance']['url']; ?>">
-  		<img src="../<?php echo $this->_var['alliance']['suppliers_img']; ?>" style=" height: 160px;">
+	<a href="<?php echo $this->_var['alliance']['url']; ?>">
+  <div class="lmjbox">
+  	
+	  	<div class="lmjbox_a">
+	  		<img src="../<?php echo $this->_var['alliance']['suppliers_img']; ?>" style=" height: 100px;width: 100px;" class="lmjbox_img">
+	  	</div>
+	  	<div class="lxdz">
+	  	<div class="lxdz_a"><?php echo $this->_var['alliance']['trade_name']; ?></div>
+	  		<p>联系人:<?php echo $this->_var['alliance']['101']; ?></p>
+	  		<p>联系电话:<?php echo $this->_var['alliance']['office_phone']; ?></p>
+	  	</div>
+  
+  </div>
   	</a>
-  </p>
 </li>
 
 <?php endif; ?> 

@@ -24,8 +24,6 @@
   	</ul>
   	
   </div>
-
-  
   <div class="bran_list" id="J_ItemList" style="opacity:1;">
     <ul class="single_item">
     </ul>
@@ -36,6 +34,7 @@
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
 
 <script type="text/javascript">
+  
 window.onload=function(){
 	
 //	alert(window.location.host);

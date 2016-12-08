@@ -1,4 +1,4 @@
-<?php exit;?>a:3:{s:8:"template";a:2:{i:0;s:81:"D:\wamp64\www\ECShop_V3.0.0_UTF8_release0530\mobile/themes/default/category_3.dwt";i:1;s:85:"D:\wamp64\www\ECShop_V3.0.0_UTF8_release0530\mobile/themes/default/library/search.lbi";}s:7:"expires";i:1481012093;s:8:"maketime";i:1481008493;}<!DOCTYPE html>
+<?php exit;?>a:3:{s:8:"template";a:2:{i:0;s:81:"D:\wamp64\www\ECShop_V3.0.0_UTF8_release0530\mobile/themes/default/category_3.dwt";i:1;s:85:"D:\wamp64\www\ECShop_V3.0.0_UTF8_release0530\mobile/themes/default/library/search.lbi";}s:7:"expires";i:1481093984;s:8:"maketime";i:1481090384;}<!DOCTYPE html>
 <html lang="en">
 	<head>
 <meta name="Generator" content="ECTouch 1.0" />
@@ -91,15 +91,17 @@
 								<p>测试</p>
 							</a>
 						</li>
-						
+												
+						<div style="height: 25px;"></div>
 					</ul>
 				</div>
 				<div class="ejfl fr">
 					<ul class="ejfl_li">
-						<li>
-							<a href="javascript:">T恤</a>
+												<li>
+							<a href="/ecshop_v3.0.0_utf8_release0530/mobile/index.php?m=default&c=category&a=index&id=27">
+								大家电							</a>
 						</li>
-					</ul>
+											</ul>
 				</div>
 			</div>
 		</div>
@@ -153,16 +155,17 @@
 	var w = document.documentElement.clientWidth;
 	var b = w - $(".fdl").width();
 	var a = h - $(".header").height();
-	//$(".fdl").height(a);
-	$(".fdl").css({
-			"maxHeight": a
-		})
-		//$(".ejfl").height(a);
-	$(".ejfl").css({
-		"maxHeight": a
-	})
-	$(".ejfl").width(b);
+	$(".fdl").height(a);
+//	$(".fdl").css({
+//			"maxHeight": a
+//		})
+		$(".ejfl_li").height(a);
+//	$(".ejfl").css({
+//		"maxHeight": a
+//	})
+	$(".ejfl").width(b-10);
 	$(".fdbox").width(w);
+	$(".max").height(h);
 	$(".fdl li").on("click", $(".fdl li a"), function() {
 		$(".fdl li a").removeClass("syfl_activate");
 		$(this).find("a").addClass("syfl_activate");
@@ -174,12 +177,16 @@
 			type: "get",
 			url: "/ecshop_v3.0.0_utf8_release0530/mobile/index.php?m=default&c=category&a=all",
 			async: true,
-			data: "cat_id=" + id + "&ajax=ajax",
+			data: "id=" + id + "&ajax=ajax",
 			dataType: "Json",
 			success: function(result, status) {
 				if(status) {
-					location.reload(true);
+					$(".ejfl_li li").remove();
+				 for(var o in result){   
+					$(".ejfl_li").append("<li><a href='"+result[o]['url']+"'>"+result[o]['name']+"</a></li>")
+			      }  
 				}
+				
 			}
 		});
 	}

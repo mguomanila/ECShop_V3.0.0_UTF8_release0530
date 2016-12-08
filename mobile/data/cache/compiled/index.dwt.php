@@ -1,9 +1,7 @@
 <?php echo $this->fetch('library/page_header.lbi'); ?>
 <div class="con"> 
-  <header class="ect-header ect-margin-tb ect-margin-lr"> <a href="<?php echo url('category/top_all');?>" class="pull-left ect-icon ect-icon1 ect-icon-cate1"></a>
-    <div class="ect-header-div">
-      <button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;<?php echo $this->_var['lang']['no_keywords']; ?></button>
-    </div>
+  <header class="ect-header "> 
+  	<img src="themes/default/images/title_img.jpg" style="width: 100%;"/>
   </header>
   
   <div id="focus" class="focus ect-margin-tb">

@@ -105,11 +105,11 @@ if ($this->_foreach['no']['total'] > 0):
 	var w = document.documentElement.clientWidth;
 	var b = w - $(".fdl").width();
 	var a = h - $(".header").height();
-	$(".fdl_li").height(a);
+	$(".fdl").height(a);
 //	$(".fdl").css({
 //			"maxHeight": a
 //		})
-		$(".ejfl").height(a);
+		$(".ejfl_li").height(a);
 //	$(".ejfl").css({
 //		"maxHeight": a
 //	})

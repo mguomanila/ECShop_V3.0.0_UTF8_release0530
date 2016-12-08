@@ -8,6 +8,8 @@
 	<!--<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
 	
 	<li><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
+	<li><a href="{:url('User/account_jewel')}" >{$lang.surplus_type_4}</a></li>
+	
   </ul>
  <div class="user-account-detail">
   	<ul class=" ect-bg-colorf">
@@ -20,7 +22,7 @@
 			
 			</p>
 			<p class="content"><span class="remark pull-left">{$lang.admin_notic}:{if $item.admin_note}{$item.admin_note}{else}N/A{/if}</span> <span class="pull-right text-right type">{$lang.is_paid}:{$item.pay_status}</p>
-			<p class="content">{$lang.handle}：{$item.handle}&nbsp;&nbsp;<!-- {if ($item.is_paid eq 0 && ($item.process_type eq 1 ||$item.process_type eq 2 ||$item.process_type eq 3)) || $item.handle} -->
+			<p class="content">{$lang.handle}：{$item.handle}&nbsp;&nbsp;<!-- {if ($item.is_paid eq 0 && ($item.process_type eq 1 ||$item.process_type eq 2 ||$item.process_type eq 3||$item.process_type eq 4)) || $item.handle} -->
 			<a href="{:url('user/cancel',array('id'=>$this->_var['item']['id']))}" onclick="if (!confirm('{$lang.confirm_remove_account}')) return false;" class="btn btn-default">{$lang.is_cancel}</a>
               <!-- {/if} -->
 			  </p>

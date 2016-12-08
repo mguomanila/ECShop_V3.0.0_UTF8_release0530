@@ -8,6 +8,8 @@
 	<!--<li><a href="<?php echo url('User/account_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_0']; ?></a></li>-->
 	
 	<li><a href="<?php echo url('User/integral_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_3']; ?></a></li>
+	<li><a href="<?php echo url('User/account_jewel');?>" ><?php echo $this->_var['lang']['surplus_type_4']; ?></a></li>
+	
   </ul>
  <div class="user-account-detail">
   	<ul class=" ect-bg-colorf">
@@ -22,7 +24,7 @@
 			
 			</p>
 			<p class="content"><span class="remark pull-left"><?php echo $this->_var['lang']['admin_notic']; ?>:<?php if ($this->_var['item']['admin_note']): ?><?php echo $this->_var['item']['admin_note']; ?><?php else: ?>N/A<?php endif; ?></span> <span class="pull-right text-right type"><?php echo $this->_var['lang']['is_paid']; ?>:<?php echo $this->_var['item']['pay_status']; ?></p>
-			<p class="content"><?php echo $this->_var['lang']['handle']; ?>：<?php echo $this->_var['item']['handle']; ?>&nbsp;&nbsp;<?php if (( $this->_var['item']['is_paid'] == 0 && ( $this->_var['item']['process_type'] == 1 || $this->_var['item']['process_type'] == 2 || $this->_var['item']['process_type'] == 3 ) ) || $this->_var['item']['handle']): ?>
+			<p class="content"><?php echo $this->_var['lang']['handle']; ?>：<?php echo $this->_var['item']['handle']; ?>&nbsp;&nbsp;<?php if (( $this->_var['item']['is_paid'] == 0 && ( $this->_var['item']['process_type'] == 1 || $this->_var['item']['process_type'] == 2 || $this->_var['item']['process_type'] == 3 || $this->_var['item']['process_type'] == 4 ) ) || $this->_var['item']['handle']): ?>
 			<a href="<?php echo url('user/cancel',array('id'=>$this->_var['item']['id']));?>" onclick="if (!confirm('<?php echo $this->_var['lang']['confirm_remove_account']; ?>')) return false;" class="btn btn-default"><?php echo $this->_var['lang']['is_cancel']; ?></a>
               <?php endif; ?>
 			  </p>

@@ -34,12 +34,20 @@
 <!--{if $alliance}-->
 
 <li>
-  <p>
-  	<a href="{$alliance.url}">
-  		<img src="../../{$alliance.suppliers_img}" style=" height: 160px;">
+	<a href="{$alliance.url}">
+  <div class="lmjbox">
+  	
+	  	<div class="lmjbox_a">
+	  		<img src="../../{$alliance.suppliers_img}" style=" height: 100px;width: 100px;" class="lmjbox_img">
+	  	</div>
+	  	<div class="lxdz">
+	  	<div class="lxdz_a">{$alliance.trade_name}</div>
+	  		<p>联系人:{$alliance.101}</p>
+	  		<p>联系电话:{$alliance.office_phone}</p>
+	  	</div>
+  
+  </div>
   	</a>
-  	<span>{$alliance.trade_name}</span>
-  </p>
 </li>
 
 <!-- {/if}--> 
