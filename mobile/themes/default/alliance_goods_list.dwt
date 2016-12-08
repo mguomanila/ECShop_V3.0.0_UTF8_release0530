@@ -24,7 +24,7 @@
   	</ul>
   	
   </div>
-  <div class="bran_list" id="J_ItemList" style="opacity:1;">
+  <div class="bran_list" id="J_ItemList" style="opacity:1; padding-top: 2em;">
     <ul class="single_item">
     </ul>
     <a href="javascript:;" class="get_more"></a> </div>

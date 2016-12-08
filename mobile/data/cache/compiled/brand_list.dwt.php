@@ -7,8 +7,8 @@
     </nav>
   </header>
   
-  <div class="bran_list" id="J_ItemList" style="opacity:1; overflow: hidden;" >
-    <ul class="single_item" style="width: 190px;height: 190px; float: left;margin:5px 7px;">
+  <div class="bran_list ppjbox" id="J_ItemList" style="opacity:1;" >
+    <ul class="single_item" >
     </ul>
     <a href="javascript:;" class="get_more"></a> </div>
 </div>

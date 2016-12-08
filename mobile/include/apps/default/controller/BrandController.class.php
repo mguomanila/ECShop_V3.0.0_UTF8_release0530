@@ -18,7 +18,7 @@ defined('IN_ECTOUCH') or die('Deny Access');
 class BrandController extends CommonController {
 
     private $brand = 0;
-    private $size = 10;
+    private $size = 12;
     private $page = 1;
     private $sort = 'last_update';
     private $order = 'ASC';
@@ -46,6 +46,7 @@ class BrandController extends CommonController {
         $this->assign('pager', $this->pageShow($count));
         
         $list = model('Brand')->get_brands('brand', $this->size, $this->page);
+        
         $this->assign('list', $list);
         
         $this->display('brand_list.dwt');
@@ -62,6 +63,7 @@ class BrandController extends CommonController {
         $this->size = I('post.amount');
         $this->page = ($asyn_last > 0) ? ceil($asyn_last / $this->size) : 1;
         $list = model('Brand')->get_brands('brand', $this->size, $this->page);
+
         foreach ($list as $key => $value) {
             $this->assign('brand', $value);
             $sayList [] = array(

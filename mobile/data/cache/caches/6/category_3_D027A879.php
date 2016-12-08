@@ -1,4 +1,4 @@
-<?php exit;?>a:3:{s:8:"template";a:2:{i:0;s:81:"D:\wamp64\www\ECShop_V3.0.0_UTF8_release0530\mobile/themes/default/category_3.dwt";i:1;s:85:"D:\wamp64\www\ECShop_V3.0.0_UTF8_release0530\mobile/themes/default/library/search.lbi";}s:7:"expires";i:1481093984;s:8:"maketime";i:1481090384;}<!DOCTYPE html>
+<?php exit;?>a:3:{s:8:"template";a:2:{i:0;s:81:"D:\wamp64\www\ECShop_V3.0.0_UTF8_release0530\mobile/themes/default/category_3.dwt";i:1;s:85:"D:\wamp64\www\ECShop_V3.0.0_UTF8_release0530\mobile/themes/default/library/search.lbi";}s:7:"expires";i:1481166916;s:8:"maketime";i:1481163316;}<!DOCTYPE html>
 <html lang="en">
 	<head>
 <meta name="Generator" content="ECTouch 1.0" />

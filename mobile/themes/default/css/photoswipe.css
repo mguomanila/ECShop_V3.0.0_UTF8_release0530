@@ -187,9 +187,6 @@ div.ps-toolbar-play div.ps-toolbar-content
 	color: #fff;
 }
 
-#J_ItemList{
-	padding-top: 2em;
-}
 
 .set_color{
 	background-color: #fff!important;
@@ -230,4 +227,84 @@ div.ps-toolbar-play div.ps-toolbar-content
 	font-size: 14px;
 	margin-top: 14px;
 	color: #999;
+}
+
+
+
+
+
+
+
+.ppjbox{
+	overflow: hidden;
+	padding-top: 0.3em!important;
+}
+.ppjbox ul{
+	width: 30%;
+	float: left;
+	margin: 1% 1.5%;
+	background: #fff;
+	height: auto;
+}
+.ppjbox ul li{
+	margin: 0;
+}
+.ppjbox ul li p{
+		margin: 10px 10px 0;
+}
+.ppjbox ul li span{
+	position: static;
+	display: block;
+	font-size: 14px;
+	text-align: center;
+	background: rgba(255,255,255,1);
+	color: #333;
+	margin-top: 4px;
+}
+.ppjbox ul li img{
+	height: 60px;
+}
+
+
+
+
+
+
+.tjsp{
+	text-align: center;
+}
+.tjspbox{
+	position: relative;
+}
+.tjspbox span{
+	color: #999;
+	display: block;
+	background: rgba(0,0,0,.4);
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	color: #fff;
+}
+.tjspbox img{
+	width: 100%;
+}
+.tjcp_name{
+	padding-left: 5%;
+	background: #fff;
+	border-bottom: 1px solid #e1e1e1;
+}
+.tjcp_name h3{
+	font-size: 17px;
+	line-height: 28px;
+	position: relative;
+}
+.tjcp_name h3:before{
+	content: "";
+	position: absolute;
+	left: -2%;
+	top: 12%;
+	width: 3px;
+	height: 80%;
+	background: red;
 }

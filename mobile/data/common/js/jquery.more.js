@@ -7,7 +7,7 @@
     } 
 
     var settings = {
-        'amount'      :   '10',          
+        'amount'      :   '15',          
         'address'     :   'comments.php',
         'format'      :   'json',
         'template'    :   '.single_item',

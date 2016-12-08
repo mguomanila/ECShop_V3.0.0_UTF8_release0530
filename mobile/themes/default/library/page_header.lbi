@@ -9,7 +9,7 @@
 {if $auto_redirect}
 
 {/if}
-<title>{$page_title} 触屏版</title>
+<title>{$page_title}</title>
 <link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="__PUBLIC__/bootstrap/css/font-awesome.min.css">
 <link rel="stylesheet" href="{$ectouch_css_path}">
