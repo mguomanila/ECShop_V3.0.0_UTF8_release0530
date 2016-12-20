@@ -30,10 +30,10 @@ $back_act='';
 
 // 不需要登录的操作或自己验证是否登录（如ajax处理）的act
 $not_login_arr =
-array('login','act_login','register','act_register','act_edit_password','get_password','send_pwd_email','password', 'signin', 'add_tag', 'collect', 'return_to_cart', 'logout', 'email_list', 'validate_email', 'send_hash_mail', 'order_query', 'is_registered', 'check_email','clear_history','qpassword_name', 'get_passwd_question', 'check_answer');
+array('login','get_code_sms','act_login','check_sms', 'get_mobile_sms','get_password_sms','register','act_register','act_edit_password','get_password','send_pwd_email','password', 'signin', 'add_tag', 'collect', 'return_to_cart', 'logout', 'email_list', 'validate_email', 'send_hash_mail', 'order_query', 'is_registered', 'check_email','clear_history','qpassword_name', 'get_passwd_question', 'check_answer');
 
 /* 显示页面的action列表 */
-$ui_arr = array('register', 'login', 'profile', 'order_list', 'order_detail', 'address_list', 'collection_list',
+$ui_arr = array('register','get_code_sms','check_sms', 'get_mobile_sms','get_password_sms','login', 'profile', 'order_list', 'order_detail', 'address_list', 'collection_list',
 'message_list', 'tag_list', 'get_password', 'reset_password', 'booking_list', 'add_booking', 'account_raply','integral_raply','integral_deposit',
 'account_deposit', 'account_log', 'account_detail', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list','validate_email','track_packages', 'transform_points','qpassword_name', 'get_passwd_question', 'check_answer','delivery_info');
 
@@ -396,6 +396,27 @@ elseif ($action == 'act_login')
         }
     }
 
+//	if(is_email($username))
+//	{
+//	
+//	    $sql ="select user_name from ".$ecs->table('users')." where email='".$username."'";
+//	
+//	    $username_e = $db->getOne($sql);
+//	
+//	    if($username_e) $username=$username_e;
+//	
+//	}
+	
+	if(is_telephone($username))
+	{
+	
+	    $sql ="select user_name from ".$ecs->table('users')." where mobile_phone='".$username."'";
+	
+	    $username_e = $db->getOne($sql);
+	
+	    if($username_e) $username=$username_e;
+	
+	}
     if ($user->login($username, $password,isset($_POST['remember'])))
     {
         update_user_info();
@@ -667,6 +688,76 @@ elseif ($action == 'get_password')
 elseif ($action == 'qpassword_name')
 {
     //显示输入要找回密码的账号表单
+    $smarty->display('user_passport.dwt');
+}
+
+/* 密码找回-->输入用户名界面 */
+elseif ($action == 'get_password_sms')
+{
+    //显示输入要找回密码的账号表单
+    $smarty->display('user_passport.dwt');
+}
+
+/* 密码找回-->根据注册用户名取得手机号界面 */
+elseif ($action == 'get_mobile_sms')
+{
+	 if (empty($_POST['user_name']))
+    {
+        show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
+    }
+    else
+    {
+        $user_name = trim($_POST['user_name']);
+    }
+
+    //取出会员密码问题和答案
+    $sql = 'SELECT user_id,mobile_phone, user_name, passwd_question, passwd_answer FROM ' . $ecs->table('users') . " WHERE user_name = '" . $user_name . "'";
+    $user_question_arr = $db->getRow($sql);
+    if (empty($user_question_arr['mobile_phone']))
+    {
+        show_message($_LANG['no_passwd_mobile'], $_LANG['back_home_lnk'], './', 'info');
+    }
+    $_SESSION['temp_user'] = $user_question_arr['user_id'];  //设置临时用户，不具有有效身份
+    $_SESSION['temp_user_name'] = $user_question_arr['user_name'];  //设置临时用户，不具有有效身份
+    $_SESSION['temp_user_mobile'] = $user_question_arr['mobile_phone'];   //存储密码问题答案，减少一次数据库访问
+    $smarty->assign('mobile_phone',$user_question_arr['mobile_phone']);
+    //显示输入要找回密码的账号表单
+    $smarty->display('user_passport.dwt');
+}
+elseif($action == 'get_code_sms'){
+	$_SESSION['sms_code'] = $sms_code = mt_rand(1000, 9999);
+	$_SESSION['sms_time'] =time();
+	$mobile_phone = isset($_POST['mobile_phone']) ? $_POST['mobile_phone'] : '';
+	$content="【成都沃尔迅科技有限公司】你好，您的短信验证码是".$sms_code."，请您及时输入，短信5分钟内有效。";
+	$message = iconv("UTF-8","GB2312",$content);
+	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$message);
+//	echo $re;
+}
+/* 密码找回-->根据提交的手机验证码进行相应处理 */
+elseif ($action == 'check_sms')
+{
+	$mobile_phone = isset($_POST['mobile_phone']) ? $_POST['mobile_phone'] : '';
+	$mobile_code = isset($_POST['mobile_code']) ? $_POST['mobile_code'] : '';
+	
+	if($mobile_phone != $_SESSION['temp_user_mobile']){
+		show_message('手机号不正确', $_LANG['back_page_up'],'user.php?get_password_sms', 'error');
+	}
+	if(time() - $_SESSION['sms_time'] >300000){
+		unset($_SESSION['sms_code']);
+		unset($_SESSION['sms_time']);
+		show_message('验证码已过期', $_LANG['back_page_up'], 'user.php?get_password_sms', 'error');
+	}
+	if($mobile_code != $_SESSION['sms_code']){
+		show_message('验证码错误', $_LANG['back_page_up'], 'user.php?get_password_sms', 'error');
+	}
+
+	$_SESSION['user_id'] = $_SESSION['temp_user'];
+    $_SESSION['user_name'] = $_SESSION['temp_user_name'];
+    unset($_SESSION['temp_user']);
+    unset($_SESSION['temp_user_name']);
+    $smarty->assign('uid',    $_SESSION['user_id']);
+	$smarty->assign('title', $_LANG['get_password']);
+    $smarty->assign('action', 'reset_password');
     $smarty->display('user_passport.dwt');
 }
 
@@ -1665,6 +1756,10 @@ elseif ($action == 'act_account')
     	
         $sur_amount = get_user_integral($user_id);
 		$integral=isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
+		if($integral<100 || $integral%100!=0){
+    		$content='提现金积分最低为100,提现金积分必须为100的倍数';
+            show_message($content, $_LANG['back_page_up'], '', 'info');
+    	}
         if ($integral > $sur_amount)
         {
             $content = $_LANG['surplus_amount_error'];

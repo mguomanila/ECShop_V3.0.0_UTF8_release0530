@@ -356,7 +356,7 @@ function is_registered( username )
         document.getElementById('username_notice').innerHTML = msg_un_format;
         var submit_disabled = true;
     }
-    if ( unlen < 3 )
+    if ( unlen < 2 )
     { 
         document.getElementById('username_notice').innerHTML = username_shorter;
         var submit_disabled = true;
@@ -465,7 +465,7 @@ var recomme  = Utils.trim(frm.elements['recomme'].value);
   {
     msg += username_invalid + '\n';
   }
-  else if (username.length < 3)
+  else if (username.length < 2)
   {
       msg += username_shorter + '\n';
   }
@@ -616,6 +616,7 @@ function saveOrderAddress(id)
  */
 function submitSurplus()
 {
+	alert(123);
   var frm            = document.forms['formSurplus'];
   var surplus_type   = frm.elements['surplus_type'].value;
   var surplus_amount = frm.elements['amount'].value;

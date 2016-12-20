@@ -1,63 +1,83 @@
 <!-- #BeginLibraryItem "/library/user_header.lbi" --><!-- #EndLibraryItem -->
 <link rel="stylesheet" type="text/css" href="__TPL__/css/common.css"/>
 <!--<div class="demo" id="demo2">alert</div>-->
-<div class="user-info">
-  <div class="user-img pull-rights"><i class="glyphicon glyphicon-user"></i></div>
-  <dl class="pull-left">
+<div class="user-info {if $info.user_type eq '普通会员'}pthy_bg{/if}">
+  <div class="user-img" >
+  	<!--<i class="glyphicon glyphicon-user"></i>-->
+  	<img src="images/tx.png" alt="" width="130"/>
+  	<dd> {$info.username}</dd>
+  	<dd> <a class="{if $info.user_type eq '金钻会员'}jzhy{elseif $info.user_type eq '铂金会员'}bjhy{/if}">
+  		
+  		{$info.user_type}
+  		<!--{if $info.user_type eq '普通会员'}-->
+  		&nbsp;&nbsp;&nbsp;<a href="{:url('user/account_jewel')}" style="color: #e87e04;font-weight:0!important;">升级金钻
+  		<!--{/if}-->
+  		</a></dd>
+  	 <dd> <a >{$lang.share_id}：{$share_id}</a></dd>
+  </div>
+		<!--<p class="yhm">{$info.username}&nbsp;&nbsp;&nbsp;<a href="{:url('user/account_jewel')}" style="color: #fff;font-weight:0!important;">立即升级</a></p>-->
+   <h4 class="out"><a href="{:url('user/logout')}" class="ect-colorf"><img src="images/out.png" alt="" width="35"/></a></h4>
+  <!--<dl class="pull-left" style="width: 70%;">
     <dt>
       <h4>{$info.username} | <a href="{:url('user/logout')}" class="ect-colorf">{$lang.label_logout}</a></h4>
     </dt>
-    <dd class="fl">{$info.integral}</dd>
-    <dd class="fl">{$info.vr_points}</dd>
-    <dd>{$lang.share_id} {$share_id}</dd> 
-    <dd>{$lang.usertype} {$info.user_type}</dd>
-    <dd>{$lang.love}<img src="__TPL__/images/love.png" width="15px">×{$info.love}</dd>
-  </dl>
+  </dl>-->
   
-
+ 
 
 </div>
+
+<ul class="money">
+    	<li class="fl"><span>{$info.integral}</span><p>金积分</p><li>
+	    <li class="fl"><span>{$info.vr_points}</span><p>金元宝</p></li>
+	    <li><span>{$info.love}</span><p>{$lang.love}</p></li>
+    </ul>
+    
+    
+    
 <section class="container-fluid user-nav">
   <ul class="row ect-row-nav text-center">
     <a href="{:url('user/not_pay_order_list')}">
-    <li class="col-sm-3 col-xs-3"> <i class="glyphicon glyphicon-credit-card"></i>
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/not_pay_list.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.not_pay_list}</p>
     </li>
     </a> <a href="{:url('user/order_list')}">
-    <li class="col-sm-3 col-xs-3"> <i class="fa fa-file-text"></i>
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/order_list_lnk.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.order_list_lnk}</p>
     </li>
     </a> <a href="{:url('user/address_list')}">
-    <li class="col-sm-3 col-xs-3"><i class="glyphicon glyphicon-map-marker"></i>
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_address.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.label_address}</p>
     </li>
     </a> <a href="{:url('user/account_detail')}">
-    <li class="col-sm-3 col-xs-3"><i class="glyphicon glyphicon-usd"></i>
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_user_surplus.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.label_user_surplus}</p>
     </li>
     </a> <a href="{:url('user/profile')}">
-    <li class="col-sm-3 col-xs-3"><i class="fa fa-user"></i>
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/profile.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.profile}</p>
     </li>
     </a> <a href="{:url('user/edit_password')}">
-    <li class="col-sm-3 col-xs-3"><i class="fa fa-shield"></i>
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/edit_password.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.edit_password}</p>
     </li>
-    </a> <a href="{:url('user/service')}">
+    </a> 
+    <!--<a href="{:url('user/service')}">
     <li class="col-sm-3 col-xs-3"><i><img src="__TPL__/images/u-kefu.png"  style="height: 69px;width: 59px;"></i>
       <p class="text-center">{$lang.user_service}</p>
     </li>
-    </a> <a href="{:url('user/share')}">
-    <li class="col-sm-3 col-xs-3"><i class="fa fa-share-alt"></i>
+    </a>-->
+    <a href="{:url('user/share')}">
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_share.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.label_share}</p>
     </li>
     </a>
-     <a href="{:url('user/tag_list')}">
-    <li class="col-sm-3 col-xs-3"><i class="glyphicon glyphicon-tags"></i>
-      <p class="text-center">{$lang.label_tag}</p>
+     <a href="{:url('user/my_vip')}">
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/my_vip.png" style="height: 54px;width: 54px;">
+      <p class="text-center">我的会员</p>
     </li>
     </a>
-    <a href="{:url('user/bonus')}">
+    <!--<a href="{:url('user/bonus')}">
     <li class="col-sm-3 col-xs-3"><i class="glyphicon glyphicon-gift"></i>
       <p class="text-center">{$lang.label_bonus}</p>
     </li>
@@ -69,7 +89,7 @@
     </a>
     <a href="{:url('user/msg_list')}">
     <li class="col-sm-3 col-xs-3"><i ><img src="__TPL__/images/xiaoxi.png" style="height: 69px;width: 59px;"></i>
-      <p class="text-center">我的消息</p>
+      <p class="text-center">我的消息</p>-->
     </li>
     </a>
 	
@@ -151,7 +171,12 @@
   </div>
 </section>
 </div>
-<!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem --> <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem --> 
+
+
+<!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
+	
+<!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem --> 
 <script type="text/javascript">
     $(function(){
         $(".del").click(function(){
@@ -185,8 +210,8 @@
 <script type="text/javascript">
 //	$(function(){
 //		$('#demo2').on('click', function(){
-			var neirong='欢迎登陆沃尔迅全返系统，在本商城消费的商品都将全额返回给你。<br />返现规则：<br />1：购买多少金额的商品就会得到相应金额的金元宝<br />2：用户获得的金元宝将每天按照万分之六兑换成现金分返回给用户，1现金分=1元<br />3：用户积累到100现金分即可申请提现<br />4：提现会扣除相应金额的6%【税收及相关费用】<br />5：用户购买产品返回的金元宝将扣除千分之五作为爱心公益基金捐助';
-			popTipShow.alert('沃尔迅全返系统',neirong, ['知道了'],
+			var neirong='欢迎登陆沃尔迅积分奖励系统，在本商城消费的商品都将以金元宝的形式回赠到您的个人账户</br>系统规则：</br>1：购买多少金额的商品系统即回赠相应比例的金元宝到您的个人账户</br>2：用户获得的金元宝将每天按照万分之六左右的比例兑换成金积分，1金积分=1元</br>3：金积分可用于商城购买商品消费</br>4：提现会扣除相应金额的6%【税收及相关:手续费】</br>5：用户购买商品回赠的金元宝都将扣除千分之五作为爱心公益基金捐助';
+			popTipShow.alert('沃尔迅积分奖励系统',neirong, ['知道了'],
 				function(e){
 				  //callback 处理按钮事件		  
 				  var button = $(e.target).attr('class');

@@ -1,11 +1,12 @@
 <?php echo $this->fetch('library/page_header.lbi'); ?>
 <div class="con">
-<div style="height:4.2em;"></div>
-  <header>
-    <nav class="ect-nav ect-bg icon-write">
-      <?php echo $this->fetch('library/page_menu.lbi'); ?>
-    </nav>
-  </header>
+
+  <header class="ect-header ect-margin-tb ect-margin-lr">
+		 <a href="javascript:history.go(-1)" class="pull-left ect-icon ect-icon1 ect-icon-history"></a>
+		<div class="ect-header-div">
+			<button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;双12疯狂抢购中</button>
+		</div>
+	</header>
   
   <div class="bran_list ppjbox" id="J_ItemList" style="opacity:1;" >
     <ul class="single_item" >

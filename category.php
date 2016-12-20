@@ -423,7 +423,7 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
         $smarty->assign('vote_id',     $vote['id']);
         $smarty->assign('vote',        $vote['content']);
     }
-
+//print_r(get_category_recommend_goods('best', $children, $brand, $price_min, $price_max, $ext));
     $smarty->assign('best_goods',      get_category_recommend_goods('best', $children, $brand, $price_min, $price_max, $ext));
     $smarty->assign('promotion_goods', get_category_recommend_goods('promote', $children, $brand, $price_min, $price_max, $ext));
     $smarty->assign('hot_goods',       get_category_recommend_goods('hot', $children, $brand, $price_min, $price_max, $ext));

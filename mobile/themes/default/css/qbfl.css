@@ -4,7 +4,7 @@ html{
 }
 .fdl{
 	text-align: center;
-	overflow: scroll;
+	overflow: hidden;
 	background: #eff2f5 ;
 }
 .fdl::-webkit-scrollbar{
@@ -24,7 +24,7 @@ html{
 	 width: 0;
 }
 .fdl li{
-	padding: 0 8px;
+	padding: 0 13px;
 }
 .fdl li a{
 	display: inline-block;
@@ -37,21 +37,23 @@ html{
 }
 .fdl li a p{
 	font-size: 14px;
-	padding-top: 3px;
+	padding-top: 7px;
 }
 .ejfl .ejfl_top a{
 	position: relative;
-	left: 8%;
+	left: 10%;
+	display: block;
+	width: 90%;
+	background: #fff;
 }
-.ejfl .ejfl_top a:before{
-	content: "";
+.ejfl .ejfl_top span{
 	background: #838383;
 	position: absolute;
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
-	top:34%;
-	left: -45%;
+	top: 37%;
+	left: 4%;
 }
 .ejfl .ejfl_top i{
 	width: 15px;
@@ -60,21 +62,28 @@ html{
 	position: relative;
 	right: 3%;
 	top:10px;
+	transform: rotateY(180deg);
+	transition: .5s;
 }
 .ejfl_top{
 	overflow: hidden;
 	line-height: 34px;
 	background: #fcfcfc;
+	box-sizing: border-box;
+	border-top:1px solid #eff2f5;
+	border-bottom:1px solid #eff2f5;
+	position: relative;
 }
 .ejfl_li{
 	overflow: hidden;
 	width: 100%;
 	background: #fff;
-	padding-bottom: 25px;
+	-padding-bottom: 15px;
 }
 .ejfl{
-	overflow: scroll;
-	margin-right: 5px;
+	overflow: hidden;
+	-margin-right: 5px;
+	background: #fff;
 }
 .ejfl::-webkit-scrollbar{
 	 background-color: rgba(0, 0, 0, 0); 
@@ -101,12 +110,28 @@ html{
 	text-align: center;
 }
 .fdl li .syfl_activate{
-	color: #0094de;
-	border-bottom: 0.1rem solid #0094de;
+	color: #e57a00;
+	border-bottom: 0.1rem solid #e57a00;
 }
 .fdbox{
 	overflow: hidden;
 }
 .max{
 	overflow: hidden;
+}
+.swiper-slide{
+	margin-top: 1px;
+}
+.swiper-slide:first-child{
+	margin-top: 2px;
+}
+.ejflbox{
+	background: #fff;
+	overflow: hidden;
+}
+.ejflnone{
+	display: none;
+}
+.ejfl .ejflul{
+	padding-bottom: 26px;
 }

@@ -13,6 +13,16 @@
  * $Id: agency.php 15013 2008-10-23 09:31:42Z testyang $
  */
 
+
+$_LANG['label_user_name'] = '会员名称';
+$_LANG['label_realname'] = '真实姓名';
+$_LANG['label_mobilephone'] = '手机';
+$_LANG['label_pay_points_gt'] = '会员积分大于';
+$_LANG['label_pay_points_lt'] = '会员积分小于';
+$_LANG['label_rank_name'] = '会员等级';
+$_LANG['all_option'] = '所有等级';
+
+
 /* 菜单 */
 $_LANG['add_suppliers'] = '添加供货商';
 $_LANG['edit_suppliers'] = '编辑供货商';

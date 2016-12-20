@@ -33,7 +33,13 @@ class UserController extends CommonController {
         $this->check_login();
         // 用户信息
         $info = model('ClipsBase')->get_user_default($this->user_id);
-        $info['user_type']=L('user_type')[$info['user_type']];
+        if($info['user_type']==3){
+        	$info['user_type']='铂金会员';
+        }elseif($info['user_type']==2){
+        	$info['user_type']='金钻会员';
+        }else{
+        	$info['user_type']='普通会员';
+        }
 
         // 如果是显示页面，对页面进行相应赋值
         assign_template();
@@ -45,7 +51,6 @@ class UserController extends CommonController {
      * 会员中心欢迎页
      */
     public function index() {
-
         // 用户等级
         if ($rank = model('ClipsBase')->get_rank_info()) {
             $this->assign('rank_name', sprintf(L('your_level'), $rank['rank_name']));
@@ -79,20 +84,107 @@ class UserController extends CommonController {
      * 账户中心
      */
     public function profile() {
+    	
         // 修改个人资料的处理
         if (IS_POST) {
+        	$user_info = model('Users')->get_profile($this->user_id);
+        	
             $email = I('post.email');
             $other['qq'] = $qq = I('post.extend_field2');
             $other['office_phone'] = $office_phone = I('post.extend_field3');
             $other['mobile_phone'] = $mobile_phone = I('post.extend_field5');
             $sel_question = I('post.sel_question');
             $passwd_answer = I('post.passwd_answer');
-
-			$sql = 'SELECT * FROM ' . M()->pre . 'users' . " WHERE mobile_phone = '$other[mobile_phone]'  AND user_id <> $this->user_id";
-				$arr=M()->getRow($sql);
+            
+            if($other['mobile_phone'] != $user_info['mobile_phone']){
+            	$code=$_POST['mobile_code']?$_POST['mobile_code']:'';
+            	$mobile_session=$_POST['session1']?$_POST['session1']:'';
+            	
+            	if(!empty($other['mobile_phone']))
+				{
+					$preg_mobile_phone="/^[1][3456789][0-9]{9}$/";
+					$static=preg_match($preg_mobile_phone,$other['mobile_phone']);
+					if($static == 0 )
+					{
+						show_message('手机格式不正确');
+					}
+					$sql = 'SELECT * FROM ' . M()->pre . 'users' . " WHERE mobile_phone = '$other[mobile_phone]'";
+					$arr=M()->getRow($sql);
 					if(!empty($arr)){
 		        		show_message('手机号已存在');
+					}
+				}else{
+					show_message('- 手机号不能为空');
 				}
+				
+				
+            	if(empty($code)){
+	        		show_message('请输入验证码', L('back_page_up'), url('profile'), 'error');
+	        	}
+	        	if($_SESSION[$mobile_session]['mobile_phone'] != $user_info['mobile_phone']){
+					show_message('手机号不正确', L('back_page_up'), url('profile'), 'error');
+				}
+				if(time() - $_SESSION[$mobile_session]['sms_time'] >300000){
+					unset($_SESSION[$mobile_session]['sms_code']);
+					unset($_SESSION[$mobile_session]['sms_time']);
+				unset($_SESSION[$mobile_session]['mobile_phone']);
+					
+					show_message('验证码已过期', L('back_page_up'), url('profile'), 'error');
+				}
+				if($code != $_SESSION[$mobile_session]['sms_code']){
+					show_message('验证码错误', L('back_page_up'), url('profile'), 'error');
+				}
+				unset($_SESSION[$mobile_session]['sms_code']);
+				unset($_SESSION[$mobile_session]['sms_time']);
+				unset($_SESSION[$mobile_session]['mobile_phone']);
+				
+            }
+	        $ex_where = "user_id =".$this->user_id." AND reg_field_id IN (103,104,105)";
+	        $extend_info_arr123 = $this->model->table('reg_extend_info')
+	                ->field('reg_field_id, content')
+	                ->where($ex_where)
+	                ->select();
+            foreach ($extend_info_arr123 as $key => $value) {
+            	$list[$value['reg_field_id']]=$value;
+            }
+            $user_bank = I('post.extend_field103');
+            $bank_name = I('post.extend_field105');
+            $user_bank_name = I('post.extend_field104');
+            
+            if(($list['103']['content'] != $user_bank) || ($list['104']['content'] != $user_bank_name) || ($list['105']['content'] != $bank_name)){
+            	$code=$_POST['bank_code']?$_POST['bank_code']:'';
+            	$bank_session=$_POST['session2']?$_POST['session2']:'';
+            	
+            	if(empty($code)){
+	        		show_message('请输入验证码', L('back_page_up'), url('profile'), 'error');
+	        	}
+	        	if($_SESSION[$bank_session]['mobile_phone'] != $user_info['mobile_phone']){
+					show_message('手机号不正确', L('back_page_up'), url('profile'), 'error');
+				}
+				if(time() - $_SESSION[$bank_session]['sms_time'] >300000){
+					unset($_SESSION[$bank_session]['sms_code']);
+					unset($_SESSION[$bank_session]['sms_time']);
+				unset($_SESSION[$bank_session]['mobile_phone']);
+					
+					show_message('验证码已过期', L('back_page_up'), url('profile'), 'error');
+				}
+				if($code != $_SESSION[$bank_session]['sms_code']){
+					show_message('验证码错误', L('back_page_up'), url('profile'), 'error');
+				}
+				unset($_SESSION[$bank_session]['sms_code']);
+				unset($_SESSION[$bank_session]['sms_time']);
+				unset($_SESSION[$bank_session]['mobile_phone']);
+				
+            }
+
+			
+			
+			
+			$sql = 'SELECT * FROM ' . M()->pre . 'users' . " WHERE mobile_phone = '$other[mobile_phone]'  AND user_id <> $this->user_id";
+			$arr=M()->getRow($sql);
+				if(!empty($arr)){
+	        		show_message('手机号已存在');
+			}
             // 读出所有扩展字段的id
             $where['type'] = 0;
             
@@ -180,6 +272,7 @@ class UserController extends CommonController {
             }
             exit();
         }
+        
         // 用户资料
         $user_info = model('Users')->get_profile($this->user_id);
         // 取出注册扩展字段
@@ -220,11 +313,24 @@ class UserController extends CommonController {
                 case 5:
                     $extend_info_list[$key]['content'] = $user_info['mobile_phone'];
                     break;
+                case 103:
+                    $extend_info_list[$key]['content'] = $temp_arr[$val['id']];
+                    $arr[$key]=$extend_info_list[$key];
+                    break;
+                case 104:
+                    $extend_info_list[$key]['content'] = $temp_arr[$val['id']];
+                    $arr[$key]=$extend_info_list[$key];
+                    break;
+                case 105:
+                    $extend_info_list[$key]['content'] = $temp_arr[$val['id']];
+                    $arr[$key]=$extend_info_list[$key];
+                    break;
                 default:
                     $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']];
             }
         }
-
+//print_r($arr);
+        $this->assign('arr', $arr);
         $this->assign('title', L('profile'));
         $this->assign('extend_info_list', $extend_info_list);
         // 密码提示问题
@@ -327,6 +433,67 @@ class UserController extends CommonController {
 
         // 获取剩余余额
         $surplus_amount = model('ClipsBase')->get_user_surplus($this->user_id);
+                 // 用户资料
+        $user_info = model('Users')->get_profile($this->user_id);
+        // 取出注册扩展字段
+        $where = 'type < 2';
+        $extend_info_list = $this->model->table('reg_fields')
+                ->where($where)
+                ->order('dis_order, id')
+                ->select();
+
+        $condition['user_id'] = $this->user_id;
+        $extend_info_arr = $this->model->table('reg_extend_info')
+                ->field('reg_field_id, content')
+                ->where($condition)
+                ->select();
+        if (empty($extend_info_arr)) {
+            $extend_info_arr = array();
+        }
+
+        $temp_arr = array();
+        foreach ($extend_info_arr as $val) {
+            $temp_arr[$val['reg_field_id']] = $val['content'];
+        }
+
+        foreach ($extend_info_list as $key => $val) {
+            switch ($val['id']) {
+                case 1:
+                    unset($extend_info_list[$key]);
+                    break;
+                case 2:
+                    $extend_info_list[$key]['content'] = $user_info['qq'];
+                    break;
+                case 3:
+                    $extend_info_list[$key]['content'] = $user_info['office_phone'];
+                    break;
+                case 4:
+                    unset($extend_info_list[$key]);
+                    break;
+                case 5:
+                    $extend_info_list[$key]['content'] = $user_info['mobile_phone'];
+                    break;
+                case 103:
+                    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
+                    $user_bank=$extend_info_list[$key];
+                    break;
+                case 104:
+                    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
+                    $bank_name=$extend_info_list[$key];
+                    break;
+                case 105:
+                    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
+                    $user_bank_name=$extend_info_list[$key];
+                    break;
+                default:
+                    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']];
+            }
+        }
+
+        $this->assign('user_bank', $user_bank);
+        $this->assign('bank_name', $bank_name);
+        
+        $this->assign('user_bank_name', $user_bank_name);
         if (empty($surplus_amount)) {
             $surplus_amount = 0;
         }
@@ -341,6 +508,68 @@ class UserController extends CommonController {
     public function integral_raply(){
         // 获取剩余余额
         $surplus_amount = model('ClipsBase')->get_user_surplus_points($this->user_id);
+         // 用户资料
+        $user_info = model('Users')->get_profile($this->user_id);
+        // 取出注册扩展字段
+        $where = 'type < 2';
+        $extend_info_list = $this->model->table('reg_fields')
+                ->where($where)
+                ->order('dis_order, id')
+                ->select();
+
+        $condition['user_id'] = $this->user_id;
+        $extend_info_arr = $this->model->table('reg_extend_info')
+                ->field('reg_field_id, content')
+                ->where($condition)
+                ->select();
+        if (empty($extend_info_arr)) {
+            $extend_info_arr = array();
+        }
+
+        $temp_arr = array();
+        foreach ($extend_info_arr as $val) {
+            $temp_arr[$val['reg_field_id']] = $val['content'];
+        }
+
+        foreach ($extend_info_list as $key => $val) {
+            switch ($val['id']) {
+                case 1:
+                    unset($extend_info_list[$key]);
+                    break;
+                case 2:
+                    $extend_info_list[$key]['content'] = $user_info['qq'];
+                    break;
+                case 3:
+                    $extend_info_list[$key]['content'] = $user_info['office_phone'];
+                    break;
+                case 4:
+                    unset($extend_info_list[$key]);
+                    break;
+                case 5:
+                    $extend_info_list[$key]['content'] = $user_info['mobile_phone'];
+                    break;
+                case 103:
+                    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
+                    $user_bank=$extend_info_list[$key];
+                    break;
+                case 104:
+                    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
+                    $bank_name=$extend_info_list[$key];
+                    break;
+                case 105:
+                    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
+                    $user_bank_name=$extend_info_list[$key];
+                    break;
+                default:
+                    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']];
+            }
+        }
+
+        $this->assign('user_bank', $user_bank);
+        $this->assign('bank_name', $bank_name);
+        
+        $this->assign('user_bank_name', $user_bank_name);
+       
         if (empty($surplus_amount)) {
             $surplus_amount = 0;
         }
@@ -1562,6 +1791,30 @@ class UserController extends CommonController {
     }
     
     
+    public function my_vip(){
+    	$sql="SELECT user_id,user_type,user_name,from_unixtime(reg_time) AS reg_time FROM " . $this->model->pre .'users' ." WHERE parent_id = $this->user_id ORDER BY reg_time DESC";
+		$aff_arr=$this->model->query($sql);
+		foreach ($aff_arr as $key => $value) {
+			$sql="SELECT user_id,sum(integral_amount) AS integral_amount FROM " . $this->model->pre ."user_account WHERE friend_id = $value[user_id] AND process_type = 3 AND is_paid = 1";
+			$res = $this->model->getRow($sql);
+			$res['integral_amount']=$res['integral_amount']?$res['integral_amount']:0;
+			if($value['user_type'] == '1'){
+				$res['integral_amount'] = $res['integral_amount'] * 0.05;
+			}elseif($value['user_type'] == '2') {
+				$res['integral_amount'] = $res['integral_amount'] * 0.1;
+			}elseif($value['user_type'] == '3'){
+				$res['integral_amount'] = $res['integral_amount'] * 0.1;
+			}
+			$aff_arr[$key]['integral_amount']=$res['integral_amount'];
+		}
+		$this->assign('aff_arr', $aff_arr);
+        $this->assign('title', '我的会员');
+        $this->display('user_vip.dwt');
+        
+    	
+    }
+    
+    
     public function select_earnings(){
     	if(IS_AJAX && !empty($_GET['user_id'])){
     		$user_id=$_GET['user_id'];
@@ -1573,11 +1826,11 @@ class UserController extends CommonController {
     		$res = $this->model->getRow($sql);
     		if($res){
     			$arr['recharge'] = $res['integral_amount']*1;
-    			if($_GET['user_type'] == '会员'){
+    			if($_GET['user_type'] == '普通会员'){
     				$arr['earnings'] = $res['integral_amount'] * 0.05;
-    			}elseif ($_GET['user_type'] == '金钻') {
+    			}elseif ($_GET['user_type'] == '金钻会员') {
     				$arr['earnings'] = $res['integral_amount'] * 0.1;
-    			}elseif($_GET['user_type'] == '铂金'){
+    			}elseif($_GET['user_type'] == '铂金会员'){
     				$arr['earnings'] = $res['integral_amount'] * 0.1;
     			}
     		}
@@ -1958,14 +2211,14 @@ class UserController extends CommonController {
 //          }
 
             // 用户名是手机格式
-//          if (is_mobile($username)) {
-//              $where['mobile_phone'] = $username;
-//              $username_try = $this->model->table('users')
-//                      ->field('user_name')
-//                      ->where($where)
-//                      ->getOne();
-//              $username = $username_try ? $username_try : $username;
-//          }
+            if (is_mobile($username)) {
+                $where['mobile_phone'] = $username;
+                $username_try = $this->model->table('users')
+                        ->field('user_name')
+                        ->where($where)
+                        ->getOne();
+                $username = $username_try ? $username_try : $username;
+            }
 
             if (self::$user->login($username, $password, isset($_POST['remember']))) {
                 model('Users')->update_user_info();
@@ -2345,6 +2598,95 @@ class UserController extends CommonController {
             $this->redirect(url('get_password_question'));
         }
     }
+    public function get_code(){
+		$session = isset($_POST['session']) ? $_POST['session'] : '';
+    	
+    	$_SESSION[$session]['sms_code'] = $sms_code = mt_rand(1000, 9999);
+    	$_SESSION[$session]['sms_time'] =time();
+
+    	
+		$mobile_phone = isset($_POST['mobile_phone']) ? in($_POST['mobile_phone']) : '';
+    	$_SESSION[$session]['mobile_phone'] =$mobile_phone;
+		
+    	$content="【成都沃尔迅科技有限公司】你好，您的短信验证码是".$sms_code."，请您及时输入，短信5分钟内有效。";
+    	$message = iconv("UTF-8","GB2312",$content);
+    	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$message);
+    	echo $re;
+    }
+    public function get_password_sms(){
+    	if(defined('SMS_NAME')){
+    		if (IS_POST) {
+				$user_name = isset($_POST['user_name']) ? $_POST['user_name'] : '';
+            	$this->assign('user_name', $user_name);
+				$mobile_phone = isset($_POST['mobile_phone']) ? $_POST['mobile_phone'] : '';
+				$session = isset($_POST['session']) ? $_POST['session'] : '';
+				
+				$mobile_code = isset($_POST['mobile_code']) ? $_POST['mobile_code'] : '';
+				if(!empty($user_name)){
+					$sql="SELECT user_id,mobile_phone FROM ". M()->pre . "users WHERE user_name = '$user_name'";
+					$user_info=M()->getRow($sql);
+				}
+    			$code = isset($_POST['code']) ? in($_POST['code']) : '';
+				if($_POST['step'] == 0){
+					if(empty($user_info)){
+						 show_message('未找到该用户名', L('back_page_up'), url('get_password_sms'), 'error');
+					}
+					if(empty($user_info['mobile_phone'])){
+						 show_message('该用户未设置手机号，请更换验证方式', L('back_page_up'), url('get_password_phone'), 'error');
+					}
+            		$this->assign('user_info', $user_info);
+            		$this->assign('sms', '1');
+            		$this->assign('title', L('get_password'));
+           			$this->display('user_get_sms.dwt');
+				}else{
+					if($_SESSION[$session]['mobile_phone'] != $user_info['mobile_phone']){
+						show_message('手机号不正确', L('back_page_up'), url('get_password_sms'), 'error');
+					}
+					if(time() - $_SESSION[$session]['sms_time'] >300000){
+						unset($_SESSION[$session]['sms_code']);
+						unset($_SESSION[$session]['sms_time']);
+					unset($_SESSION[$session]['mobile_phone']);
+						
+						show_message('验证码已过期', L('back_page_up'), url('get_password_sms'), 'error');
+					}
+					if($mobile_code != $_SESSION[$session]['sms_code']){
+						show_message('验证码错误', L('back_page_up'), url('get_password_sms'), 'error');
+					}
+					unset($_SESSION[$session]['sms_code']);
+					unset($_SESSION[$session]['sms_time']);
+					unset($_SESSION[$session]['mobile_phone']);
+					$where['mobile_phone'] = $user_info['mobile_phone'];
+	                $user_id = $this->model->table('users')
+	                        ->field('user_id')
+	                        ->where($where)
+	                        ->getOne();
+                	$this->assign('mobile', base64_encode(in($user_info['mobile_phone'])));
+                	$this->assign('uid', $user_id);
+            $this->assign('title', L('get_password'));
+					
+					$this->display('user_reset_password.dwt');
+                exit();			
+				}
+				exit();
+          	}
+            $this->assign('sms', '0');
+            $this->assign('title', L('get_password'));
+            $this->display('user_get_sms.dwt');
+    	}else{
+    		$this->redirect(url('get_password_phone'));
+    	}
+    }
+    
+    
+    
+    
+    
+    
+
+
+
+
+
 
     /**
      * 邮件找回密码
@@ -2499,6 +2841,7 @@ class UserController extends CommonController {
             }
 
             $user_info = self::$user->get_profile_by_id($user_id); // 论坛记录
+            
             // 短信找回，邮件找回，问题找回，登录修改密码
             if ((!empty($mobile) && $user_info['mobile'] == $mobile) || ($user_info && (!empty($code) && md5($user_info['user_id'] . C('hash_code') . $user_info['reg_time']) == $code)) || (!empty($question) && $user_info['passwd_question'] == $question) || ($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && self::$user->check_user($_SESSION['user_name'], $old_password))) {
 
@@ -2515,11 +2858,14 @@ class UserController extends CommonController {
                             ->update();
 
                     self::$user->logout();
-                    show_message(L('edit_password_success'), L('relogin_lnk'), url('login'), 'info');
+                    show_message(L('edit_password_success'), L('relogin_lnk'), url('login'));
+
                 } else {
+                	
                     show_message(L('edit_password_failure'), L('back_page_up'), '', 'info');
                 }
             } else {
+            	
                 show_message(L('edit_password_failure'), L('back_page_up'), '', 'info');
             }
         }
@@ -2581,7 +2927,11 @@ class UserController extends CommonController {
         $without = array(
             'login',
             'register',
+            'get_code',
+            'sendSMS',
+            'postSMS',
             'get_password_phone',
+            'get_password_sms',
             'get_password_email',
             'get_password_question',
             'pwd_question_name',

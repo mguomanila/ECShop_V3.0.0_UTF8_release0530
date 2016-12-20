@@ -128,7 +128,7 @@
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive1">
         <p><b> {$lang.use_integral} </b></p>
         <i class="fa fa-angle-down"></i> </a>
-        <div id="collapseFive1" class="panel-collapse collapse in"> {$lang.can_use_integral}:{$your_integral|default:0} 现金分，{$lang.noworder_can_integral}{$order_max_integral}  {$points_name}.<br />
+        <div id="collapseFive1" class="panel-collapse collapse in"> {$lang.can_use_integral}:{$your_integral|default:0} 金积分，{$lang.noworder_can_integral}{$order_max_integral}  {$points_name}.<br />
           <span id="ECS_INTEGRAL_NOTICE" class="notice"></span>
           <input name="integral" type="text" class="input" id="ECS_INTEGRAL" onblur="changeIntegral(this.value)" value="{$order.integral|default:0}" size="10" />
         </div>

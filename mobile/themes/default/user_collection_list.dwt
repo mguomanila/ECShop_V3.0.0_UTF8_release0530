@@ -38,5 +38,6 @@ var btn_buy = "{$lang.btn_buy}";
 var is_cancel = "{$lang.is_cancel}";
 var select_spe = "{$lang.select_spe}";
 </script>
+<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
 </body>
 </html>

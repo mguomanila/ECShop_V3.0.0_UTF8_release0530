@@ -195,10 +195,14 @@ class cls_template
                         {
                             mkdir($hash_dir);
                         }
-                        if (file_put_contents($hash_dir . '/' . $cachename . '.php', '<?php exit;?>' . $data . $out, LOCK_EX) === false)
-                        {
-                            trigger_error('can\'t write:' . $hash_dir . '/' . $cachename . '.php');
-                        }
+
+						 if (file_put_contents($hash_dir . '/' . $cachename . '.php','<?php exit;?>' . $data . $out, LOCK_EX) === false)
+						
+			            {
+			
+			                trigger_error('can\'t write:' . $hash_dir . '/' . $cachename . '.php');
+			
+			             }
                         $this->template = array();
                     }
                 }

@@ -788,7 +788,18 @@ function suppliers_list()
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'suppliers_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
 
+        $filter['suppliers_name'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);
+        $filter['trade_name'] = empty($_REQUEST['trade_name']) ? '' : trim($_REQUEST['trade_name']);
+        
+//      $filter['mobilephone'] = empty($_REQUEST['mobilephone']) ? '' : trim($_REQUEST['mobilephone']);
+        
         $where = 'WHERE 1 ';
+        if($filter['suppliers_name']){
+        	$where .= " AND suppliers_name LIKE '%" . mysql_like_quote($filter['suppliers_name']) ."%'";
+        }
+        if($filter['trade_name']){
+        	$where .= " AND trade_name LIKE '%" . mysql_like_quote($filter['trade_name']) ."%'";
+        }
 
         /* 分页大小 */
         $filter['page'] = empty($_REQUEST['page']) || (intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);

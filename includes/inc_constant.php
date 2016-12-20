@@ -18,6 +18,12 @@ if (!defined('IN_ECS'))
     die('Hacking attempt');
 }
 
+/* sendSMS短信信息 */
+define('SMS_NAME', '243559568');
+define('SMS_PWD', '137935DD6F982EC645FFEE023A5F5F55');
+define('SMS_ID', '64');
+
+
 /* 图片处理相关常数 */
 define('ERR_INVALID_IMAGE',         1);
 define('ERR_NO_GD',                 2);

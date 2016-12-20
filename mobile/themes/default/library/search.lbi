@@ -1,5 +1,5 @@
 <div class="search" style="display:none;">
-  <div class="ect-bg">
+  <div class="ect-bg sous">
     <header class="ect-header ect-margin-tb ect-margin-lr text-center"><span>{$lang.search}</span><a href="javascript:;" onClick="closeSearch();"><i class="icon-close pull-right"></i></a></header>
   </div>
   <div class="ect-padding-lr">

@@ -54,5 +54,7 @@ jQuery(function($){
 	}
 })
 </script>
+<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
 </body>
+
 </html>

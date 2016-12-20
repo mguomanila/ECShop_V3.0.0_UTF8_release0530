@@ -23,10 +23,34 @@ class IndexController extends CommonController {
     public function index() {
         // 自定义导航栏
         $navigator = model('Common')->get_navigator();
+
         $this->assign('navigator', $navigator['middle']);
         $this->assign('best_goods', model('Index')->goods_list('best', C('page_size')));
-        $this->assign('new_goods', model('Index')->goods_list('new', C('page_size')));
-        $this->assign('hot_goods', model('Index')->goods_list('hot', C('page_size')));
+        $this->assign('new_goods', model('Index')->goods_list('new', 1000));
+        $this->assign('hot_goods', model('Index')->goods_list('hot', 1000));
+		$cat_arr=model('CategoryBase')->get_categories_tree();
+
+
+/**
+ *	分类下的推荐商品 
+ */
+//      foreach ($cat_arr as $key => $value) {
+//      	$best_list=model('Category')->get_category_recommend_goods('best',get_children($value['id']),0,0,0,'',4);
+//      	$new_list=model('Category')->get_category_recommend_goods('new',get_children($value['id']),0,0,0,'',4);
+//      	
+//      	if(!empty($best_list)){
+//	        	$reclist['best'][$key]['name']=$value['name'];
+//	        	$reclist['best'][$key]['list']=$best_list;
+//      	}
+//      	if(!empty($new_list)){
+//	        	$reclist['new'][$key]['name']=$value['name'];
+//	        	$reclist['new'][$key]['list']=$new_list;
+//      	}
+//      }
+//      $this->assign('cat_best', $reclist['best']);
+//      $this->assign('cat_new', $reclist['new']);
+        
+
         //首页推荐分类
         $cat_rec = model('Index')->get_recommend_res();
         $this->assign('cat_best', $cat_rec[1]);
@@ -51,7 +75,10 @@ class IndexController extends CommonController {
             $type = I('get.type');
             $start = $_POST['last'];
             $limit = $_POST['amount'];
+
             $hot_goods = model('Index')->goods_list($type, $limit, $start);
+
+            
             $list = array();
             // 热卖商品
             if ($hot_goods) {

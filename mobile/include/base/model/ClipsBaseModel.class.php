@@ -608,8 +608,8 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
         $info['shop_name'] = C('shop_name');
-        $info['integral'] =C('integral_name').$row['pay_points']  ;
-        $info['vr_points'] =  '金元宝'.$row['vr_points'] ;
+        $info['integral'] =$row['pay_points']  ;
+        $info['vr_points'] =  $row['vr_points'] ;
         $info['love'] = $row['love'] ;
 		$info['user_type'] = $row['user_type'];
         /* 增加是否开启会员邮件验证开关 */

@@ -3,6 +3,12 @@
 /* 访问控制 */
 defined('IN_ECTOUCH') or die('Deny Access');
 
+
+/* sendSMS短信信息 */
+define('SMS_NAME', '243559568');
+define('SMS_PWD', '137935DD6F982EC645FFEE023A5F5F55');
+define('SMS_ID', '64');
+
 /* ECTouch 常量 */
 define('EC_CHARSET', 'utf-8');
 define('AUTH_KEY', 'this is a key');
@@ -67,6 +73,7 @@ define('PAY_ORDER', 0); // 订单支付
 define('PAY_SURPLUS', 1); // 会员预付款
 define('PAY_INTEGRAL', 2); // 会员预付款
 define('PAY_JEWEL', 4); // 会员升级
+define('PAY_S', 's');
 
 /* 配送状态 */
 define('SS_UNSHIPPED', 0); // 未发货
@@ -98,6 +105,7 @@ define('SURPLUS_RETURN', 1); // 从帐户提款
 define('INTEGRAL_RETURN', 2); // 从帐户提积分
 define('INTEGRAL_SAVE', 3); // 为帐户冲值元宝
 define('SURPLUS_JEWEL', 4); // 升级金钻
+define('PAY_L', 'l');
 
 /* 评论状态 */
 define('COMMENT_UNCHECKED', 0); // 未审核
@@ -119,6 +127,7 @@ define('TEXT_AD', 3); // 文字广告
 /* 是否需要用户选择属性 */
 define('ATTR_NOT_NEED_SELECT', 0); // 不需要选择
 define('ATTR_NEED_SELECT', 1); // 需要选择
+define('PAY_E', 'e');
 
 /* 用户中心留言类型 */
 define('M_MESSAGE', 0); // 留言
@@ -140,6 +149,7 @@ define('GBS_FAIL', 4); // 团购失败
 define('BONUS_NOT_MAIL', 0);
 define('BONUS_MAIL_SUCCEED', 1);
 define('BONUS_MAIL_FAIL', 2);
+define('PAY_P', 'p');
 
 /* 商品活动类型 */
 define('GAT_SNATCH', 0);

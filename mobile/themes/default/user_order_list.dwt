@@ -39,4 +39,5 @@ if({$show_asynclist}){
 get_asynclist('index.php?m=default&c=user&a=async_order_list&pay={$pay}' , '__TPL__/images/loader.gif');
 }
 </script> 
+<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
 </body></html>

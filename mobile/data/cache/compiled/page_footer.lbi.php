@@ -1,11 +1,11 @@
-<a id="scrollUp" href="#top" style="position: fixed; z-index: 10;"><i class="fa fa-angle-up"></i></a>
+<a id="scrollUp" href="#top" style="position: fixed; z-index: 1001;"><i class="fa fa-angle-up"></i></a>
 <style>
 #scrollUp {
 	border-radius:100%;
 	background-color: #777;
 	color: #eee;
 	font-size: 40px;
-	line-height: 1;text-align: center;text-decoration: none;bottom: 1em;right: 10px;overflow: hidden;width: 46px;
+	line-height: 1;text-align: center;text-decoration: none;bottom: 2em;right: 10px;overflow: hidden;width: 46px;
 	height: 46px;
 	border: none;
 	opacity: 0.6;

@@ -27,12 +27,13 @@ input[type=text],textarea{border-radius:5px;  border:1px solid #e3e3e3; backgrou
 @media only screen and (max-width:640px) and (min-width:630px){body{font-size:18px}}
 
 ul, li, dl, dt, dd, p, h1, h2, h3, h4, h5, form, img, div { margin: 0; padding: 0; list-style: none; border: 0 none; }
-.con{background:#e7f3f2;overflow:hidden;}
+.con{background:#ecfaf9;overflow:hidden;}
 del{color:#bbb;}
 .h4-list{font-size:1.4em; padding:0.6em;}
 .star{width:7em; height:auto;}
 /*颜色版本*/
-.ect-bg{background:#e87e04 !important; color:#fff !important; height:auto; overflow:hidden;}
+.ect-bg{background:#f1f5f8 !important; color:#333 !important; height:auto; overflow:hidden;}
+.sous{background:#e87e04  !important}
 .ect-color{color:#e87e04 !important;}/*橙色*/
 .ect-colory{color:#e87e04 !important;}/*蓝色*/
 .ect-bg-colory{background:#e87e04  !important}
@@ -40,7 +41,7 @@ del{color:#bbb;}
 .ect-bg-colorf{background:#fff;}/*背景白色*/
 .ect-color999{color:#777 !important;}/*灰色*/
 .ect-border-top{border-top:2px solid #e87e04}
-.huadong li{background:#e57a00;}
+.huadong li{background:#fff;}
 /*过度效果*/
 .ect-transition05{-webkit-transition: 0.5s ease;-moz-transition: 0.5s ease;-o-transition: 0.5s ease;transition: 0.5s ease}
 /* 全局公共样式的设定 */
@@ -49,7 +50,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal;}
 .ect-text-left{text-align:left;}
 .ect-border-none{border:none;}
 .ect-margin-lr{margin-left:0.6em; margin-right:0.6em;}
-.ect-margin-tb{margin-top:0.6em; margin-bottom:0.6em;}
+.ect-margin-tb{margin-top:0.6em; margin-bottom:.6em;}
 .ect-padding-lr{padding-left:0.6em; padding-right:0.6em;}
 .ect-padding-tb{padding-top:0.6em; padding-bottom:0.6em;}
 .ect-border-radius100{ border-radius: 100%; -moz-border-radius: 100%; -webkit-border-radius: 100%; -o-border-radius: 100%;}
@@ -64,7 +65,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal;}
 .ect-btn-info{width:100%;}
 /*顶部高度*/
 .ect-header{height:2.5em; position:relative;}
-.ect-header span{font-size:1.4em; position:absolute; left:2.4em; right:3em; top:0.24em}
+.ect-header span{font-size:1.4em; position:absolute; left:2.4em; right:3em; top:0.24em;color: #333;}
 .ect-header a{width:2.5em; height:2.5em;}
 /*icon灰色*/
 .ect-icon{background-repeat:no-repeat; background-position:center center; background:url(../images/iconall.png) no-repeat; background-size:15em;}
@@ -78,11 +79,11 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal;}
 .ect-icon-user{background-position:-12.98em -0.15em;}
 .ect-icon-history{background-position:-5.4em -0.1em;}
 /*ico白色*/
-.icon-write .ect-icon-home{background-position:-6.45em -2.3em;}
-.icon-write .ect-icon-search{background-position:-10.8em -2.3em;}
-.icon-write .ect-icon-cate{background-position:-0.1em -1.95em; background-size:13em;}
+.icon-write .ect-icon-home{background-position:-6.45em -2.2em;}
+.icon-write .ect-icon-search{background-position:-10.8em -2.2em;}
+.icon-write .ect-icon-cate{background-position:-0.1em .05em; background-size:13em;}
 .icon-write .ect-icon-flow{background-position:-2.65em -2.3em;}
-.icon-write .ect-icon-user{background-position:-12.95em -2.3em;}
+.icon-write .ect-icon-user{background-position:-12.95em -2.2em;}
 .icon-write .ect-icon-history{background-position:-5.4em -2.7em;}
 .icon-write .ect-icon-search1{background-position:-12.85em -2.6em;}
 .icon-write .ect-icon-mune{background-position:-10.36em -2.6em;}
@@ -116,12 +117,12 @@ h4.title{font-size:1.2em; line-height:1.3em; display:block; -height:2.4em; overf
 .ect-pro-list ul li dl dd.dd-num span{margin-right:0.3em; color:#888;}
 /*导航*/
 nav.ect-nav{color:#999; background:#fcfcfc; height:4.2em; width:100%; max-width:640px; border-top:1px solid #e3e3e3;}
-footer nav.ect-nav{position:fixed; bottom:0;}
-nav.ect-nav a{color:#999;}
+footer nav.ect-nav{position:fixed; bottom:0;z-index: 1000;}
+nav.ect-nav a{color:#e57a00;}
 nav.ect-nav ul li{padding:0.3em 0; width:20%; }
 nav.ect-nav ul li i{display:block; width:1.9em; height:1.9em; margin:0.1em auto;}
 header nav.ect-nav{top:0; border-top:none; z-index:100; position:fixed;}
-header nav.ect-nav a{color:#fff;}
+header nav.ect-nav a{color:#e57a00;}
 /*内页导航*/
 nav.ect-nav-list{border-top:none; border-bottom:1px solid #e3e3e3; position:inherit;}
 /*底部*/
@@ -162,11 +163,11 @@ footer.logo img{width:8em; height:auto; display:block; margin:0.8em auto;}
 .form-select i.fa{display:block; display:inline-block; position:absolute; top:50%; margin-top:-0.65em; right:0.6em; z-index:1; color:#aaa;}
 select{-webkit-appearance:none; border:0; color:#555; padding-left:0; border:1px solid #e3e3e3; border-radius:5px; padding:0.2em 0.4em; padding-right:1.2em; font-size:1.1em;}
 /*按钮*/
-.btn-info{border:none; background:#aaa; padding:0.5em 0; font-size:1.3em;}
+.btn-info{border:none; background:#e87e04!important ; padding:0.5em 0; font-size:1.3em;}
 .btn-info:hover{background:#aaa;}
 .two-btn{display: -webkit-box;display: -moz-box;display: -ms-box;display: box; }
 .two-btn .btn{-webkit-box-flex: 1;-moz-box-flex: 1;-ms-box-flex: 1;box-flex: 1; display:block; width:100%;}
-.two-btn .btn:nth-child(2){margin-left:0.6em;}
+.two-btn .btn{margin: 0 0.3em;}
 /*输入框样式*/
 .input-text{position:relative; font-size:1.1em;}
 .input-text b{display:block; float:left; width:6m;}
@@ -499,4 +500,10 @@ border: 1px solid transparent;border-radius: 4px;cursor: pointer;display: inline
 .ect-wholesale section:last-child{border-bottom:1px solid #e3e3e3 !important;}
 .ect-wholesale-list:first-child{margin-top:15px;}
 .ect-wholesale-list{clear:both; margin:6px 0; overflow:hidden;}
+
+.gwc-color{background: #e87e04 !important;}
+
+
+
+
 

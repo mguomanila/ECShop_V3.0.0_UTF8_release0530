@@ -6,16 +6,35 @@
 	  
 	</script>
 <form name="formEdit" action="{:url('user/profile')}" method="post" onSubmit="return userEdit();">
-  <section class="flow-consignee ect-bg-colorf">
-    <ul>
+	<div class="grbox">
+		<div class="grzl grjh">
+			<a>个人资料</a>
+		</div>
+		<div class="yhk">
+			<a>银行账户</a>
+		</div>
+	</div>
+  <section class="flow-consignee ect-bg-colorf" style="display: ;">
+    <ul class="grul grblock">
       <li>
         <div class="input-text"><b class="pull-left" >{$lang.email}：</b><span>
           <input name="email" type="text" placeholder="{$lang.no_emaill}"  value="{$profile.email}">
           </span></div>
       </li>
+      <li>
+        <div class="input-text"><b class="pull-left" >{$lang.sex}：</b><span>
+        	<input type="radio" name="sex" value="0" {if $profile.sex==0}checked="checked"{/if} />
+        	 {$lang.secrecy}&nbsp;&nbsp;
+          <input type="radio" name="sex" value="1" {if $profile.sex==1}checked="checked"{/if} />
+          {$lang.male}&nbsp;&nbsp;
+          <input type="radio" name="sex" value="2" {if $profile.sex==2}checked="checked"{/if} />
+        {$lang.female}&nbsp;&nbsp;  
+        </span></div>
+      </li>
+      
       {foreach from=$extend_info_list item=field} 
       <!-- {if $field.id eq 6} -->
-      <li>
+      <!--<li>
         <div class="form-select"> <i class="fa fa-sort"></i>
           <select name="sel_question">
             <option value='0'>{$lang.sel_question}</option>
@@ -26,26 +45,227 @@
         </div>
       </li>
       <li>
-        <div class="input-text"><b class="pull-left" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$lang.passwd_answer}:</b> <span>
+        <div class="input-text"><b class="pull-left"  {if $field.is_need} id="extend_field{$field.id}i"{/if}>{$lang.passwd_answer}:</b> <span>
           <input placeholder="{$lang.passwd_answer}" name="passwd_answer" type="text" value="{$profile.passwd_answer}" />
           </span></div>
-      </li>
+      </li>-->
+      <!-- {elseif $field.id eq 103 ||$field.id eq 104 ||$field.id eq 105} -->
       <!-- {else} -->
       <li>
         <div class="input-text"><b class="pull-left" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}:</b><span>
-          <input name="extend_field{$field.id}" type="text" value="{$field.content}" placeholder="{$field.reg_field_name}">
-          </span></div>
+          <input name="extend_field{$field.id}" type="text" {if $field.id eq 5}readonly id="mobile" class="ccc"{/if} value="{$field.content}" placeholder="{$field.reg_field_name}">
+          </span>
+        {if $field.id eq 5} <p style="float: right;position: relative;z-index: 100;" class="exph">更换手机</p>{/if}
+        </div>
       </li>
-      </li>
+ 			{if $field.id eq 5}
+			<li style="text-align: center;background: #e1e1e1;" class="none">
+				验证手机：{$profile.mobile_phone}
+			</li>
+			<style type="text/css">
+					.none{
+						display: none;
+					}
+					.none2{
+						display: none;
+					}
+					#mobile{
+						width: 50%;
+					}
+			</style>
+ 			<li class="none">
+ 				<div class="input-text">
+ 					<b class="pull-left">验证码:</b>
+ 					<span>
+ <input name="session1" type="hidden" value="mobile_code" />
+ 						
+           <input type="text" placeholder="" name="mobile_code"  id="" value="" style="width: 50%;"/>
+          </span>
+          {if $field.id eq 5} <p class="yazm" style="float: right;position: relative;z-index: 100;" onclick="dianji('mobile_code')">获取验证码</p>{/if}
+         
+ 				</div>
+ 			</li>
+ 			 
+ 			{/if}
       <!-- {/if} --> 
       {/foreach}
     </ul>
+    <ul class="yhkul">
+      {foreach from=$arr item=field} 
+    	
+    	<li>
+        <div class="input-text"><b class="pull-left" >{$field.reg_field_name}：</b><span>
+          <input name="extend_field{$field.id}" class="bank ccc" readonly type="text" placeholder="{$field.reg_field_name}"  value="{$field.content}">
+         </span></div>
+      </li>
+      {/foreach}
+      <p style="position: relative;z-index: 100;display: block;width: 100%;text-align: right;float: left;margin-top: 15px;" class="exph2"> 修改银行信息</p>
+
+      
+      <!--<input type="" name="bank_code" id="bank_code" value="" />-->
+      <li style="text-align: center;background: #e1e1e1;"  class="none2">
+				验证手机：{$profile.mobile_phone}
+			</li>
+			<li class="none2">
+ 				<div class="input-text">
+ 					<b class="pull-left" >验证码:</b>
+ 					<span>
+ <input name="session2" type="hidden" value="bank_code" />
+ 						
+           <input type="text" placeholder="" name="bank_code"  id="" value="" style="width: 50%;"/>
+          </span>
+         <p class="yazm2" style="float: right;position: relative;z-index: 100;" onclick="dianji2('bank_code')">获取验证码</p>
+         
+ 				</div>
+ 			</li>
+ 				
+    </ul>
   </section>
+
+ 
+ 
+
+  
   <input name="act" type="hidden" value="profile" />
   <div class="two-btn ect-padding-tb ect-padding-lr ect-margin-tb text-center">
     <input name="submit" type="submit" value="{$lang.confirm_edit}" class="btn btn-info" />
   </div>
 </form>
 </div>
+<script type="text/javascript" src="__TPL__/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+	$(".grzl").on("click",function(){
+		$(".grzl").addClass("grjh");
+		$(".yhk").removeClass("grjh");
+		$(".grul").addClass("grblock");
+		$(".yhkul").removeClass("grblock");
+	})
+	$(".yhk").on("click",function(){
+		$(".yhk").addClass("grjh");
+		$(".grzl").removeClass("grjh");
+		$(".yhkul").addClass("grblock");
+		$(".grul").removeClass("grblock");
+	})
+</script>
+<script type="text/javascript">
+
+	   var k = true;
+	   var seconds = 60;
+	    function getdate(){
+	    	k= false;
+	        seconds--;
+	         $(".yazm").text(seconds+"s后重新发送");
+	         $(".yazm").css({"background":"#ccc"});
+	    }
+	
+	   function sss(){
+	      if(seconds<=1){
+	      	k=true;
+	         $(".yazm").text("重新发送");
+	         $(".yazm").css({"background":"#fff"});
+	        return;
+	      }
+	     getdate();
+	     var set = setTimeout(sss,1000); 
+	   }
+	   function dianji(session){
+
+	  	if(k==true){
+	  		
+	  		$.ajax({
+				type:"post",
+				url:"{:url('user/get_code')}",
+				data:'mobile_phone='+{$profile.mobile_phone}+'&session='+session,
+				dataType:"text",
+				async:true
+			});
+	  		seconds =60;
+	  		sss(); 		
+	  	}else{  		
+	  		return;
+	  	}
+	  	 	
+	  }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   var f = true;
+	   var seconds2 = 60;
+	    function getdate2(){
+	    	f= false;
+	        seconds2--;
+	         $(".yazm2").text(seconds2+"s后重新发送");
+	         $(".yazm2").css({"background":"#ccc"});
+	    }
+	
+	   function sss2(){
+	      if(seconds2<=1){
+	      	f=true;
+	         $(".yazm2").text("重新发送");
+	         $(".yazm2").css({"background":"#fff"});
+	        return;
+	      }
+	     getdate2();
+	     var set2 = setTimeout(sss2,1000); 
+	   }
+	   function dianji2(session){
+
+	  	if(f==true){
+	  		
+	  		$.ajax({
+				type:"post",
+				url:"{:url('user/get_code')}",
+				data:'mobile_phone='+{$profile.mobile_phone}+'&session='+session,
+				dataType:"text",
+				async:true
+			});
+	  		seconds2 =60;
+	  		sss2(); 		
+	  	}else{  		
+	  		return;
+	  	}
+	  	 	
+	  }
+	   
+	   
+
+	
+	$(".exph").on("click",function(){
+		
+		
+//		$("#mobile").val("");
+//		$("#mobile").attr("placeholder","请填写新绑定手机号");
+		
+		if($(".none").css("display") == "block"){
+			$("#mobile").attr("readonly","");
+			$(".none").css("display","none");
+			$("#mobile").addClass("ccc");
+		}else{
+			$(".none").css("display","block");
+			$("#mobile").removeAttr("readonly");
+			$("#mobile").removeClass("ccc");
+		}
+	})
+	$(".exph2").on("click",function(){
+
+		if($(".none2").css("display") == "block"){
+			$(".bank").attr("readonly","");
+			$(".none2").css("display","none");
+			$(".bank").addClass("ccc");
+		}else{
+			$(".none2").css("display","block");
+		  $(".bank").removeAttr("readonly");
+		  $(".bank").removeClass("ccc");
+		}
+
+	})
+
+</script>
 <!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem --> <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
 </body></html>

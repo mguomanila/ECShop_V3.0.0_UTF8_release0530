@@ -48,7 +48,7 @@ $_LANG['money'] = '金额';
 $_LANG['integral'] = '积分';
 $_LANG['surplus_type_0'] = '充值';
 $_LANG['surplus_type_1'] = '提现';
-$_LANG['surplus_type_2'] = '现金分提现';
+$_LANG['surplus_type_2'] = '金积分提现';
 $_LANG['surplus_type_3'] = '金元宝充值';
 $_LANG['deposit_money'] = '充值金额';
 $_LANG['process_notic'] = '会员备注';
@@ -210,6 +210,7 @@ $_LANG['edit_password_success'] = '您的新密码已设置成功！';
 $_LANG['username_not_match_email'] = '用户名与电子邮件地址不匹配，请重新输入！';
 $_LANG['get_question_username'] = '请输入您注册的用户名以取得您的密码提示问题。';
 $_LANG['no_passwd_question'] = '您没有设置密码提示问题，无法通过这种方式找回密码。';
+$_LANG['no_passwd_mobile'] = '您没有设置手机号，无法通过这种方式找回密码。';
 $_LANG['input_answer'] = '请根据您注册时设置的密码问题输入设置的答案';
 $_LANG['wrong_passwd_answer'] = '您输入的密码答案是错误的';
 
@@ -392,6 +393,7 @@ $_LANG['virtual_card_info'] = '虚拟卡信息';
 $_LANG['back_home_lnk'] = '返回首页';
 $_LANG['get_password_lnk'] = '返回获取密码页面';
 $_LANG['get_password_by_question'] = '密码问题找回密码';
+$_LANG['get_password_by_mobile'] = '手机验证码找回密码';
 $_LANG['get_password_by_mail'] = '注册邮件找回密码';
 $_LANG['back_retry_answer'] = '返回重试';
 
@@ -463,7 +465,7 @@ $_LANG['credit_line'] = '信用额度';
 $_LANG['your_bonus'] = '红包';
 $_LANG['your_message'] = '留言';
 $_LANG['your_order'] = '订单';
-$_LANG['your_integral'] = '现金分';
+$_LANG['your_integral'] = '金积分';
 $_LANG['your_vr_points'] = '金元宝';
 $_LANG['your_love'] = '爱心公益';
 $_LANG['your_level'] = '您的等级是 %s ';
@@ -502,7 +504,7 @@ $_LANG['confirm_drop_tag'] = '您确认要删除此标签吗？';
 
 /* user_passport.dwt js语言文件 */
 $_LANG['passport_js']['username_empty'] = '- 用户名不能为空。';
-$_LANG['passport_js']['username_shorter'] = '- 用户名长度不能少于 3 个字符。';
+$_LANG['passport_js']['username_shorter'] = '- 用户名长度不能少于 2 个字符。';
 $_LANG['passport_js']['username_invalid'] = '- 用户名只能是由字母数字以及下划线组成。';
 $_LANG['passport_js']['recomme_empty'] = '- 推荐人不能为空。';
 $_LANG['passport_js']['idcard_error'] = '- 身份证格式不正确。';
@@ -601,7 +603,7 @@ $_LANG['affiliate_intro'][1] = '　　本网店为鼓励推荐新用户注册，
 　　６、您可以通过分成明细来查看您的介绍、分成情况。';
 
 $_LANG['level_point_all'] = '积分分成总额百分比';
-$_LANG['level_money_all'] = '现金分成总额百分比';
+$_LANG['level_money_all'] = '金积分成总额百分比';
 $_LANG['level_register_all'] = '注册积分分成数';
 $_LANG['level_register_up'] = '等级积分分成上限';
 
@@ -612,12 +614,12 @@ $_LANG['affiliate_stats'][3] = '已撤销';
 $_LANG['affiliate_stats'][4] = '等待买家付款';
 
 $_LANG['level_point'] = '积分分成百分比';
-$_LANG['level_money'] = '现金分成百分比';
+$_LANG['level_money'] = '金积分成百分比';
 
 $_LANG['affiliate_status'] = '分成状态';
 
 $_LANG['affiliate_point'] = '积分分成';
-$_LANG['affiliate_money'] = '现金分成';
+$_LANG['affiliate_money'] = '金积分成';
 
 $_LANG['affiliate_expire'] = '有效时间';
 

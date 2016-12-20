@@ -33,7 +33,7 @@
         <dd class="dd-price">
         	<span class="pull-left">
         		<strong>{$lang.price}：<b class="ect-colory">{$groupbuy.cur_price}</b></strong>
-        		<small class="ect-margin-lr">{$groupbuy.exchange_integral}现金分</small>
+        		<small class="ect-margin-lr">{$groupbuy.exchange_integral}金积分</small>
         	</span>
         	<span class="ect-pro-price"> <i class="label zk">{$groupbuy.spare_discount}{$lang.favourable_zk}</i> </span>
         </dd>

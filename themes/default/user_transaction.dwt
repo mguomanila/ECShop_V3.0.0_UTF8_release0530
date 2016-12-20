@@ -71,7 +71,7 @@
                 </tr>
 		{foreach from=$extend_info_list item=field}
 		<!-- {if $field.id eq 6} -->
-		<tr>
+		<!--<tr>
 		  <td width="28%" align="right" bgcolor="#FFFFFF">{$lang.passwd_question}：</td>
 		  <td width="72%" align="left" bgcolor="#FFFFFF">
 		  <select name='sel_question'>
@@ -81,11 +81,11 @@
 		  </td>
 		</tr>
 		<tr>
-		  <td width="28%" align="right" bgcolor="#FFFFFF" <!-- {if $field.is_need} -->id="passwd_quesetion"<!--{/if}-->>{$lang.passwd_answer}：</td>
+		  <td width="28%" align="right" bgcolor="#FFFFFF"  {if $field.is_need} id="passwd_quesetion"{/if}>{$lang.passwd_answer}：</td>
 		  <td width="72%" align="left" bgcolor="#FFFFFF">
-		  <input name="passwd_answer" type="text" size="25" class="inputBg" maxlengt='20' value="{$profile.passwd_answer}"/><!-- {if $field.is_need} --><span style="color:#FF0000"> *</span><!-- {/if} -->
+		  <input name="passwd_answer" type="text" size="25" class="inputBg" maxlengt='20' value="{$profile.passwd_answer}"/> {if $field.is_need} <span style="color:#FF0000"> *</span> {/if} 
 		  </td>
-		</tr>
+		</tr>-->
 		<!-- {else} -->
 		<tr>
 			<td width="28%" align="right" bgcolor="#FFFFFF" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}：</td>
@@ -701,9 +701,17 @@
         <script type="text/javascript">
         	function zuidi(){
         		var zdjf=$('#zuidijifen').val();
+        		var yu=zdjf%100;
+        		var msg='';
         		if(zdjf<100){
+        			msg +=' - 提现金积分最低为100 \n';
+        		}
+        		if(yu!=0){
+        			msg +=' - 提现金积分必须为100的倍数 \n';
+        		}
+        		if(msg){
         			$('#zuidijifen').val(0);
-        			alert('提现积分最低为100');
+        			alert(msg)
         		}
         	}
         </script>

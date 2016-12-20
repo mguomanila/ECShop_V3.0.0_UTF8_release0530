@@ -58,19 +58,19 @@ input[type=submit]{
 	font-size: 20px;
 }
 .back{
-	background: url(../images/iconall.png) no-repeat -96px -3px;
-	background-size: 324px;
-	width: 45px;
-	height: 45px;
+	background: url(../images/iconall.png) no-repeat -90px -2px;
+	background-size: 300px;
+	width: 35px;
+	height: 35px;
 	display: inline-block;
 	float: left;
 }
 .search1{	
 	float: right;
-	background: url(../images/iconall.png) no-repeat -231px -3px;
-	background-size: 324px;
-	width: 45px;
-	height: 45px;
+	background: url(../images/iconall.png) no-repeat -217px -2px;
+	background-size: 300px;
+	width: 35px;
+	height: 35px;
 	display: inline-block;
 }
 

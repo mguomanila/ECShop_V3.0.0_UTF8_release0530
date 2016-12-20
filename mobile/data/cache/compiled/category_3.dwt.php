@@ -29,7 +29,7 @@
 			</div>
 
 			<div class="fdbox">
-				<div class=" fl fdl">
+				<div class=" fl fdl" id="lftfd">
 					<ul>
 						<?php $_from = $this->_var['category']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'cat');$this->_foreach['no'] = array('total' => count($_from), 'iteration' => 0);
 if ($this->_foreach['no']['total'] > 0):
@@ -38,30 +38,50 @@ if ($this->_foreach['no']['total'] > 0):
 ?>
 						<li>
 							<a href="javascript:select_ej(<?php echo $this->_var['cat']['id']; ?>);">
-								<img src="<?php echo $this->_var['cat']['cat_image']; ?>" alt="" width="25" height="25" />
+								<img src="<?php echo $this->_var['cat']['cat_image']; ?>" alt="" width="35" height="35" />
 								<p><?php echo htmlspecialchars($this->_var['cat']['name']); ?></p>
 							</a>
 						</li>
 						<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 						
+						
+						
 						<div style="height: 25px;"></div>
 					</ul>
 				</div>
-				<div class="ejfl fr">
-					<ul class="ejfl_li">
-						<?php $_from = $this->_var['cat_arr']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'cat');$this->_foreach['no'] = array('total' => count($_from), 'iteration' => 0);
-if ($this->_foreach['no']['total'] > 0):
+				<div class="ejfl fr" id="rigtfd">
+					
+						<ul class="ejflul">
+							<?php $_from = $this->_var['cat_arr']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'cat');if (count($_from)):
     foreach ($_from AS $this->_var['cat']):
+?>
+							<li class="ejflli">
+								
+								<div class='ejfl_top' <?php if ($this->_var['cat']['cat_id']): ?> onclick='none(this)' <?php endif; ?>  >
+									<span class="fl"></span>
+									<a class='fl' <?php if ($this->_var['cat']['cat_id'] == null): ?> href='<?php echo $this->_var['cat']['url']; ?>' <?php endif; ?>><?php echo htmlspecialchars($this->_var['cat']['name']); ?>
+									<i class='fr'></i></a>
+								</div>
+								<ul class="ejfl_li">
+									<?php $_from = $this->_var['cat']['cat_id']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'list');$this->_foreach['no'] = array('total' => count($_from), 'iteration' => 0);
+if ($this->_foreach['no']['total'] > 0):
+    foreach ($_from AS $this->_var['list']):
         $this->_foreach['no']['iteration']++;
 ?>
-						<li>
-							<a href="<?php echo $this->_var['cat']['url']; ?>">
-								<?php echo htmlspecialchars($this->_var['cat']['name']); ?>
-							</a>
-						</li>
-						<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
-					</ul>
-
+									<li>
+										<a href="<?php echo $this->_var['list']['url']; ?>">
+											<?php echo htmlspecialchars($this->_var['list']['name']); ?>
+										</a>
+									</li>
+									<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+								</ul>
+							</li>
+							<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+							
+						</ul>
+						
+				
+					
 				</div>
 			</div>
 		</div>
@@ -80,6 +100,7 @@ if ($this->_foreach['no']['total'] > 0):
 <script src="__TPL__/js/ectouch.js"></script>
 <script src="__TPL__/js/simple-inheritance.min.js"></script>
 <script src="__TPL__/js/code-photoswipe-1.0.11.min.js"></script>
+<script src="__TPL__/js/iscroll.js"></script>
 <script src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script>
 <script src="__TPL__/js/jquery.scrollUp.min.js"></script>
 <script type="text/javascript" src="__PUBLIC__/js/validform.js"></script>
@@ -109,19 +130,34 @@ if ($this->_foreach['no']['total'] > 0):
 //	$(".fdl").css({
 //			"maxHeight": a
 //		})
-		$(".ejfl_li").height(a);
+	
+		
 //	$(".ejfl").css({
 //		"maxHeight": a
 //	})
-	$(".ejfl").width(b-10);
+	$(".ejfl").width(b);
+	$(".ejfl").height(a);
 	$(".fdbox").width(w);
 	$(".max").height(h);
 	$(".fdl li").on("click", $(".fdl li a"), function() {
 
 		$(".fdl li a").removeClass("syfl_activate");
-
+	
 		$(this).find("a").addClass("syfl_activate");
 	})
+	
+	$(window).resize(function(){
+		 h = document.documentElement.clientHeight;
+		 w = document.documentElement.clientWidth;
+		 b = w - $(".fdl").width();
+		 a = h - $(".header").height();
+		$(".fdl").height(a);
+		$(".ejfl").width(b);
+		$(".ejfl").height(h);
+		$(".fdbox").width(w);
+		$(".max").height(h);
+	})
+
 </script>
 <script type="text/javascript">
 	function select_ej(id) {
@@ -133,13 +169,66 @@ if ($this->_foreach['no']['total'] > 0):
 			dataType: "Json",
 			success: function(result, status) {
 				if(status) {
-					$(".ejfl_li li").remove();
-				 for(var o in result){   
-					$(".ejfl_li").append("<li><a href='"+result[o]['url']+"'>"+result[o]['name']+"</a></li>")
-			      }  
+					$("#rigtfd li").remove();
+//					$(".swiper-slide").append();
+					var str='';
+				 for(var o in result){  
+				 	
+					var colo = parseInt(Math.random()*10000);
+					
+					var color =parseInt(Math.random()*100);
+					
+					var f = 'hsl('+ Math.random()*colo +', 100% , '+Math.random()*color+'%)';
+				 	if(result[o]['cat_id'] != ''){
+				 		str += "<li class='ejflli'><div class='ejfl_top' onclick='none(this)'><span class='fl' style='background:"+f+"'></span><a class='fl'>"+result[o]['name']+"<i class='fr'></i></a></div><ul class='ejfl_li'>"
+						for(var u in result[o]['cat_id']){
+							str += "<li><a href='"+result[o]['cat_id'][u]['url']+"'>"+result[o]['cat_id'][u]['name']+"</a></li>";
+						}
+				 	}else{
+				 		str += "<li class='ejflli'><div class='ejfl_top' ><span class='fl' style='background:"+f+"'></span><a class='fl' href='"+result[o]['url']+"'>"+result[o]['name']+"<i class='fr'></i></a></div><ul class='ejfl_li'>"
+				 	}
+				 	str += "</ul></li>";
+			     } 
+
+			     $("#rigtfd ul").append(str);
+			   		myScroll = new IScroll('#lftfd');
+					myScroll = new IScroll('#rigtfd');
+					
+//					var col= 1;
+//					var colo = parseInt(Math.random()*1000);
+//					var color =parseInt(Math.random()*100)
+//					$(".ejflli").each(function(){
+//						
+//						var f = 'hsl('+ Math.random()*colo +', 100% , '+Math.random()*100+'%)';
+//						$(".ejfl_top span").eq(col).css("background",f)
+//						col++;
+//						colo++;
+//						
+//					})
 				}
 				
 			}
 		});
 	}
+	
+	
+	function none(obj){
+		$(obj).siblings(".ejfl_li").toggleClass("ejflnone");
+	
+		
+	};
+	
+	myScroll = new IScroll('#lftfd',{click:true});
+	myScroll = new IScroll('#rigtfd',{click:true});
+	var col = 0;
+	
+	
+	
+	$(".ejflli").each(function(){
+		var colo = parseInt(Math.random()*10000);					
+		var color =parseInt(Math.random()*100);	
+		var f = 'hsl('+ Math.random()*colo +', 100% , '+Math.random()*color+'%)';
+		$(".ejflli .ejfl_top").eq(col).find("span").css("background",f);
+		col++;
+	})
 </script>

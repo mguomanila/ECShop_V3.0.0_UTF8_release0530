@@ -389,7 +389,7 @@ function register() {
 		msg += '用户名为空' + '\n';
 	} else if (username.match(/^\s*$|^c:\\con\\con$|[%,\'\*\"\s\t\<\>\&\\]/)) {
 		msg += username_invalid + '\n';
-	} else if (username.length < 3) {
+	} else if (username.length < 2) {
 		// msg += username_shorter + '\n';
 	}
 

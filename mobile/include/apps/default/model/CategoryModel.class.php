@@ -102,7 +102,7 @@ class CategoryModel extends BaseModel {
      * @param   string      $ext        商品扩展查询
      * @return  array
      */
-    function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min = 0, $max = 0, $ext = '') {
+    function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min = 0, $max = 0, $ext = '',$limit=0) {
         $brand_where = ($brand > 0) ? " AND g.brand_id = '$brand'" : '';
 
         $price_where = ($min > 0) ? " AND g.shop_price >= $min " : '';
@@ -136,12 +136,15 @@ class CategoryModel extends BaseModel {
         }
 
         if (!empty($cats)) {
-            $sql .= " AND (" . $cats . " OR " . model('goods')->get_extension_goods($cats) . ")";
+            $sql .= " AND (" . $cats . " OR " . model('Goods')->get_extension_goods($cats) . ")";
         }
+        
 
         $order_type = C('recommend_order');
-        $sql .= ($order_type == 0) ? ' ORDER BY g.sort_order, g.last_update DESC' : ' ORDER BY RAND() ' . ' LIMIT ' . $num;
+        $sql .= ($order_type == 0) ?( $limit ==0 ?' ORDER BY g.sort_order, g.last_update DESC' :' ORDER BY g.sort_order, g.last_update DESC LIMIT 4'): ' ORDER BY RAND() ' . ' LIMIT ' . $num;
+
         $res = $this->query($sql);
+
         $idx = 0;
         $goods = array();
         foreach ($res as $key => $value) {
@@ -162,6 +165,8 @@ class CategoryModel extends BaseModel {
             $goods[$idx]['shop_price'] = price_format($value['shop_price']);
             $goods[$idx]['thumb'] = get_image_path($value['goods_id'], $value['goods_thumb'], true);
             $goods[$idx]['goods_img'] = get_image_path($value['goods_id'], $value['goods_img']);
+            $goods[$idx]['sales_count'] = model('GoodsBase')->get_sales_count($value['goods_id']);
+            
             $goods[$idx]['url'] = url('goods/index', array('id' => $value['goods_id']));
 
             $goods[$idx]['short_style_name'] = add_style($goods[$idx]['short_name'], $value['goods_name_style']);

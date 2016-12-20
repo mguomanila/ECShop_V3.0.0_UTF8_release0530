@@ -456,6 +456,7 @@ class CategoryController extends CommonController {
             	$cat_arr=$value['cat_id'];
             	$i += 1;
             }
+
             $this->assign('cat_arr', $cat_arr);
             
             $this->assign('category', $category);
@@ -507,6 +508,8 @@ class CategoryController extends CommonController {
 	                //顶级分类
 	                ecs_header("Location: " . url('category/top_all') . "\n");
 	            }
+
+	            
 	        $category=json_encode($category);		
 	        print_r($category);
 	        exit;

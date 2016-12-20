@@ -1,74 +1,172 @@
-<!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
-<div class="con"> 
-	 <header class="ect-header ect-margin-tb ect-margin-lr"> <a href="{:url('category/top_all')}" class="pull-left ect-icon ect-icon1 ect-icon-cate1"></a>
-    <div class="ect-header-div">
-      <button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;{$lang.no_keywords}</button>
-    </div>
-  </header>
-  <!--<header class="ect-header "> 
+<!-- #BeginLibraryItem "/library/page_header.lbi" -->
+<!-- #EndLibraryItem -->
+<div class="con">
+	<header class="ect-header ect-margin-tb ect-margin-lr">
+		<a href="{:url('category/top_all')}" class="pull-left ect-icon ect-icon1 ect-icon-cate1"></a>
+		<div class="ect-header-div">
+			<button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;圣诞狂欢</button>
+		</div>
+	</header>
+	<!--<header class="ect-header "> 
   	<img src="images/title_img.jpg" style="width: 100%;"/>
   </header>-->
-  <!--banner滚动图片s-->
-  <div id="focus" class="focus ect-margin-tb">
-    <div class="hd">
-      <ul>
-      </ul>
-    </div>
-    <div class="bd">
-      {insert name='ads' id=1 num=3}
-    </div>
-  </div>
-  <!--<div style="text-align: center;padding: 5px 0 18px;"><img src="__TPL__/images/logo.png" style="width:100%" /></div>-->
-  <!--首页快速导航-->
-  <nav class="container-fluid">
-    <ul class="row ect-row-nav">
-      <!--{foreach from=$navigator item=nav}--> 
-      <a href="{$nav.url}">
-      <li class="col-sm-3 col-xs-3"><i><img src="{$nav.pic}" ></i>
-        <p class="text-center">{$nav.name}</p>
-      </li>
-      </a> 
-      <!--{/foreach}-->
-    </ul>
-  </nav>
-  <div id="">
-  	<div class="tjcp_name">
-  	<h3>特价产品</h3>
-  </div>
-  <div class="tjsp swiper-container">
-  	
-  	<ul class="swiper-wrapper">
-  		{foreach from=$best_goods item=list}
-  			<li class="swiper-slide">
-  				<a href="{$list.url}">
-  					<div class="tjspbox">
-  						<img src="{$list.goods_img}" alt="" />
-  						<span>{$list.name}</span>
-  					</div>	
-  				</a>
-  			</li>
-  			{/foreach}
-  	</ul>
-  	
-  </div>
+	<!--banner滚动图片s-->
+	<div id="focus" class="focus ect-margin-tb">
+		<div class="hd">
+			<ul>
+			</ul>
+		</div>
+		<div class="bd">
+			{insert name='ads' id=1 num=4}
+		</div>
+	</div>
+	<!--<div style="text-align: center;padding: 5px 0 18px;"><img src="__TPL__/images/logo.png" style="width:100%" /></div>-->
+	<!--首页快速导航-->
+	<nav class="container-fluid">
+		<ul class="row ect-row-nav">
+			<!--{foreach from=$navigator item=nav}-->
+			<a href="{$nav.url}">
+				<li class="col-sm-3 col-xs-3"><i><img src="{$nav.pic}" ></i>
+					<p class="text-center">{$nav.name}</p>
+				</li>
+			</a>
+			<!--{/foreach}-->
+		</ul>
+	</nav>
+	
+	
+	<div>
+		<div class="tjcp_name">
+			<img src="images/new.jpg" alt="" style="width: 100%;"/>
+		</div>
+		<ul class="shapbox">
+			<!--{foreach from=$new_goods item=lis}-->
+			<li>
+				<a href="{$lis.url}">
+					<div class="jingp xinp">
+						<img src="images/new_img2.png" alt="" />
+					</div>
+					<img src="{$lis.goods_img}" alt="" />
+					<span>{$lis.name}</span>
+					<p>{$lis.shop_price}<span class="shapbox_xl">销量：{$lis.sales_count}</span></p>
+				</a>
+			</li>
+			<!--{/foreach}-->
 
-  </div>
-  <!-- #BeginLibraryItem "/library/recommend_hot.lbi" --><!-- #EndLibraryItem -->
-  <footer>
-    <nav class="ect-nav"><!-- #BeginLibraryItem "/library/page_menu.lbi" --><!-- #EndLibraryItem --></nav>
-  </footer>
-  <div style="padding-bottom:4.2em;"></div>
+		</ul>
+	</div>
+	
+	
+	
+	
+	
+	
+<div id="">
+		<div class="tjcp_name">
+			<img src="images/best.jpg" alt="" style="width: 100%;"/>
+		</div>
+		<div class="tjsp swiper-container">
+
+			<ul class="swiper-wrapper">
+				{foreach from=$best_goods item=list}
+				<li class="swiper-slide">
+					<a href="{$list.url}">
+						<div class="tjspbox">
+							<img src="{$list.goods_img}" alt="" />
+
+						</div>
+						<span>{$list.name}</span>
+					</a>
+				</li>
+				{/foreach}
+			</ul>
+
+		</div>
+
+	</div>
+
+		<div>
+		<div class="tjcp_name">
+			<img src="images/hot.jpg" alt="" style="width: 100%;"/>
+		</div>
+		<ul class="shapbox">
+			<!--{foreach from=$hot_goods item=lis}-->
+			<li>
+				<a href="{$lis.url}">
+					<div class="jingp">
+						
+					</div>
+					<img src="{$lis.goods_img}" alt="" />
+					<span>{$lis.name}</span>
+					<p>{$lis.shop_price}<span class="shapbox_xl">销量：{$lis.sales_count}</span></p>
+				</a>
+			</li>
+			<!--{/foreach}-->
+
+		</ul>
+	</div>
+
+
+
+
+	<footer>
+		<nav class="ect-nav">
+			<!-- #BeginLibraryItem "/library/page_menu.lbi" -->
+			<!-- #EndLibraryItem -->
+		</nav>
+	</footer>
+	<div style="padding-bottom:4.2em;"></div>
 </div>
-<!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem -->
-<!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem --> 
+<!-- #BeginLibraryItem "/library/search.lbi" -->
+<!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+<!-- #EndLibraryItem -->
+
+
+<!--<div class="hbbox">
+	<div class="hongbao">
+		<a href="javascript:djhb()">
+			<img src="images/hb.png" alt="" width="70%">
+			<div class="hongbaoc">
+				<p>您手速慢了，没有抢到哦</p>
+			</div>
+		</a>
+		
+	</div>
+	
+</div>-->
+
 <script type="text/javascript">
-var swiper = new Swiper('.tjsp', {
-//      pagination: '.swiper-pagination',
-        slidesPerView: 3,
-        paginationClickable: true,
-        spaceBetween: 1,
-        setWrapperSize :false
-    });
-//get_asynclist("{:url('index/ajax_goods', array('type'=>'best'))}" , '__TPL__/images/loader.gif');
+	var swiper = new Swiper('.tjsp', {
+		//      pagination: '.swiper-pagination',
+		slidesPerView: 3,
+		paginationClickable: true,
+		spaceBetween: 1,
+		setWrapperSize: false,
+		autoplay: 2000,
+        autoplayDisableOnInteraction : false
+	});
+//	get_asynclist("{:url('index/ajax_goods', array('type'=>'hot'))}" , '__TPL__/images/loader.gif');
 </script>
-</body></html>
+<script type="text/javascript" src="js/b.js"></script>
+<!--<script>
+  function djhb(){
+  	
+  	if ($("div").hasClass("block")) {
+  		$(".hongbao").css({"display":"none"});
+  		$(".hbbox").removeClass("hbanme");
+  	}
+  	$(".hongbaoc").addClass("block");
+	$(".hongbao img").attr({"src":"themes/default/images/hb1.png"});
+  	var set = setInterval(mov,3000);
+  	function mov(){
+  		$(".hongbao").css({"display":"none"});
+  	    $(".hbbox").removeClass("hbanme");
+  	}
+  }
+
+	$(".hbbox").css({"marginLeft":"-105px"});
+</script>-->
+</body>
+
+</html>

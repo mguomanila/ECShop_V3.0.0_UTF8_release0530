@@ -21,7 +21,7 @@ $_LANG['separate_by'][1] = '推荐订单分成';
 
 $_LANG['expire'] = '推荐时效：';
 $_LANG['level_point_all'] = '会员积分分成总额百分比：';
-$_LANG['level_money_all'] = '现金分成总额百分比：';
+$_LANG['level_money_all'] = '金积分成总额百分比：';
 $_LANG['level_register_all'] = '注册积分分成数：';
 $_LANG['level_register_up'] = '等级积分分成上限：';
 $_LANG['level_point'] = '会员积分分成百分比';

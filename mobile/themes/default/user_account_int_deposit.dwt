@@ -33,7 +33,7 @@
       </li>
        <li id="content_text" style="display: none;">
        	<div class="input-text"><b class="pull-left">好友账户：</b><span>
-       		<input type="text" placeholder="请输入好友账户"  name="rest_user_name" value=""/>
+       		<input type="text" placeholder="请输入好友账户的用户名"  name="rest_user_name" value=""/>
        	</li>
       <!-- {else} -->
             <input type="hidden"  name="user_type" value="1"/>
@@ -156,4 +156,5 @@ function submitSurplus() {
 	}
 	{/literal}
 </script>
+<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
 </body></html>

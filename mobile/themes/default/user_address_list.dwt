@@ -14,3 +14,4 @@
 <script type="text/javascript">
 get_asynclist('{:url("user/address_list")}' , '__TPL__/images/loader.gif');
 </script> 
+<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->

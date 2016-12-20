@@ -1,7 +1,7 @@
 .user-bottom { border-bottom: 1px solid #e3e3e3; }
 .user-bottom0 { border-bottom: 0 !important; }
 /*user基本信息*/
-.user-info { overflow: hidden; padding: 1em; width: 100%; background: url(../images/default.png); position: relative; box-sizing: border-box; }
+.user-info { overflow: hidden; padding: 1em; width: 100%; background: url(../images/default.png); -position: relative; box-sizing: border-box; }
 .user-info .user-img i { font-size: 4em; padding: 0.1em; background: #f1f1f1; border-radius: 8px; color: #aaa; }
 .user-info dl { margin-left: 0.6em; color: #fff; }
 .user-info dl dt h4 { font-size: 1.5em }
@@ -155,18 +155,171 @@ padding-top: 0.5em !important;}
 	
 }
 .pull-rights dd{
-	float: right;
+	-float: right;
 	margin-bottom: 2px;
 	text-align: left;
 	width: 100%;
 }
 .pull-right{
-	right: 38vw!important;
-	bottom: 10vw!important;
+	right: 4vw!important;
+	-bottom: 10vw!important;
 }
 .user-info{
 	padding: 1.4em!important;
 }
 .user-info .user-img i{
 	font-size: 6em;
+}
+
+.user-img dd{
+	color: #fff;
+}
+.user-info .user-img i{
+	border-radius: 50%;
+}
+.money{
+	background: #fff;
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 2%;
+	margin-top: 2%;
+}
+.money li{
+	color: #333;
+	float: left;
+	box-sizing: border-box;
+	border-right: 1px solid #e1e1e1;
+	width: 33.3%;
+	text-align: center;
+}
+.money li span{
+	position: static;
+	color: #333;
+	line-height: 37px;
+	display: block;
+	vertical-align: middle;
+	border-bottom: 1px solid #e1e1e1;
+	box-sizing: border-box;
+}
+.money li p{
+	line-height: 37px;
+}
+.money li p img{
+	vertical-align: middle
+}
+.user-info dl{
+	padding-top: 3%;
+}
+.yhm{
+	position: absolute;
+	top: 2%;
+	left: 3%;
+	color: #fff;
+	font-size: 15px;
+	display: inline-block;
+}
+.out{
+	position: absolute;
+	top: 3%;
+	right: 3%;
+	color: #333;
+	font-size: 18px;
+}
+.out a{
+	color: #e57a00!important;
+}
+.out a img{
+	position: relative;
+	top: -8px;
+}
+.user-img{
+	width: 50%;
+	text-align: center;
+}
+.user-img dd{
+	margin-top: 1%;
+	color: #333;
+	font-weight: 700;
+}
+.user-img dd a{
+	color: #333;
+	font-weight: 700;
+}
+.user-info{
+	background: url(../images/bg.jpg) no-repeat 1% 60%;
+	background-size: cover ;
+}
+.pthy_bg{
+	background: url(../images/ptbg.jpg) no-repeat 0 60%;
+	background-size: cover ;
+}
+.jzhy{
+	position: relative;
+}
+.jzhy:before{
+	content: "";
+	position: absolute;
+	top: -37%;
+	left: -62%;
+	width: 30px;
+	height: 30px;
+	background: url(../images/jinzuan.png) no-repeat  1% 1%;
+	background-size:contain ;
+	z-index: 10;
+}
+.bjhy{
+	position: relative;
+}
+.bjhy:before{
+	content: "";
+	position: absolute;
+	top: -37%;
+	left: -62%;
+	width: 30px;
+	height: 30px;
+	background: url(../images/bojin.png) no-repeat  1% 1%;
+	background-size:contain ;
+	z-index: 10;
+}
+
+
+
+
+
+
+
+.grbox{
+	overflow: hidden;
+	text-align: center;
+	margin-top: .6rem;
+}
+.grzl{
+	border-right: 1px solid #e3e3e3;
+}
+.grzl,
+.yhk{
+	float: left;
+	width: 50%;
+	background: #fff;
+	box-sizing: border-box;
+	border-bottom: 1px solid #e3e3e3;
+}
+.grzl a,
+.yhk a{
+	line-height: 42px;
+}
+.flow-consignee{
+	margin-top: 0;
+	border-top: 0 none;
+}
+.grjh{
+	border-bottom: 1px solid #fff;
+}
+
+.grul,
+.yhkul{
+	display: none;
+}
+.grblock{
+	display: block;
 }

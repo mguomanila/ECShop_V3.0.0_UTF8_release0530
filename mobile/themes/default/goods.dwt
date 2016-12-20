@@ -64,7 +64,7 @@
       <p>{$lang.goods_weight} {$goods.goods_weight}</p>
       <!-- {/if} -->
       <p><!--{if $goods.is_promote and $goods.gmt_end_time } 促销--><strong id="leftTime" class="price">{$lang.please_waiting}</strong><!--{/if}--></p>
-    	<p>购买此商品可使用：{$goods.integral}现金分</p>
+    	<p>购买此商品可使用：{$goods.integral}金积分</p>
     </section>
 
     <!-- {if $promotion} 优惠活动 -->

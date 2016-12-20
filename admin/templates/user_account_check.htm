@@ -27,7 +27,7 @@
     <td>
       <input type="radio" name="is_paid" value="0" checked="true" />{$lang.unconfirm}
       <input type="radio" name="is_paid" value="1" />{$lang.confirm}
-      {if $process_type eq '现金分提现' || $process_type eq '提现'}
+      {if $process_type eq '金积分提现' || $process_type eq '提现'}
       <input type="radio" name="is_paid" value="2" />无效
       {/if}
     </td>

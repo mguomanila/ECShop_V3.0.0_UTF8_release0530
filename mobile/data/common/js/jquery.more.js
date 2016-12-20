@@ -7,7 +7,7 @@
     } 
 
     var settings = {
-        'amount'      :   '15',          
+        'amount'      :   '16',          
         'address'     :   'comments.php',
         'format'      :   'json',
         'template'    :   '.single_item',
@@ -78,7 +78,8 @@
                     //t.attr('id', 'more_element_'+ (variables.last++))
                     if(settings.scroll == 'true'){
                     //    root.append(t.html())
-                    root.children('.more_loader_spinner').before(t.html())  
+                    root.children('.more_loader_spinner').before(t.html()) 
+                    
                     }else{
                     //    alert('...')
                           
@@ -97,6 +98,8 @@
             if(counter < settings.amount) methods.remove()            
 
         },
+                
+        
         get_data      : function(){   
            // alert('getting data')
             var ile;
@@ -108,9 +111,10 @@
                 ile = settings.amount;              
             }
 
+			
             $.post(settings.address, {
                 last : variables.last, 
-                amount : ile                
+                amount : ile  
             }, function(data){
                 $(settings.trigger).css('display','block')
                 methods.add_elements(data)

@@ -5,8 +5,11 @@ function get_asynclist(url, src) {
     $('#J_ItemList').more({'address': url, 'spinner_code': '<div style="text-align:center; margin:10px;"><img src="' + src + '" /></div>'})
 
     $(window).scroll(function() {
-        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+	    
+       	if ($(window).scrollTop() == $(document).height() - $(window).height()) { 	
             $('.get_more').click();
+            console.log( $(document).height())
+             console.log( $(window).height())
         }
     });
 }
