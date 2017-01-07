@@ -280,6 +280,15 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
 						$userid=$arr['user_id'];
 						$surplus_type[3]='好友积分充值;好友ID'.$userid;
 						
+						$user_integral=$arr['integral_amount']*0.15;
+						$sql = "SELECT * FROM ". $GLOBALS['ecs']->table('users') ." WHERE user_id = '$userid'";
+                    	$user_info =  $GLOBALS['db']->getRow($sql);
+                    	$sql = "SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_info[parent_id]'";
+                    	$userparent_info =  $GLOBALS['db']->getRow($sql);
+						if($userparent_info['usser_type'] != 1){
+                    		log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1, $surplus_type[3], ACT_SAVING);
+						}
+						
 						$arr['user_id']=$arr['friend_id'];
                     	//推荐人所得积分						
 						$sql="SELECT * FROM ". $GLOBALS['ecs']->table('users') ." WHERE user_id = $arr[user_id]";

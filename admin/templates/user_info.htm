@@ -3,7 +3,7 @@
 <!-- $Id: user_info.htm 16854 2009-12-07 06:20:09Z sxc_shop $ -->
 {include file="pageheader.htm"}
 <div class="main-div">
-<form method="post" action="users.php" name="theForm" onsubmit="return validate()">
+<form method="post" action="users.php" enctype="multipart/form-data"  name="theForm" onsubmit="return validate()">
 <table width="100%" >
   <tr>
     <td class="label">{$lang.username}:</td>
@@ -77,6 +77,14 @@
   	{/if}
   </tr>
   <tr>
+  	<td class="label">兼职金钻:</td>
+  	<td>
+  		<input type="radio" name="job" {if $user.job eq '1'}checked{/if} value="1"/>否&nbsp;&nbsp;&nbsp;&nbsp;
+  		<input type="radio" name="job" {if $user.job eq '2'}checked{/if} value="2"/>是
+  	</td>
+  </tr>
+
+  <tr>
   	{if $user.suppliers_type eq "1"}
   	<td class="label">{$lang.supplierstype}:</td>
   	<td>
@@ -89,6 +97,82 @@
   	</td>
   	{/if}
   </tr>
+    <tr>
+	    <td class="label">操作记录:</td>
+
+	    <td id="next"><a href="javascript:;" onclick="addImg(this)">[+]</a>
+	    <input id=""  type="file" name="operating_record[]" maxlength="60" value="{$suppliers.facade_img}" /></td>
+	  </tr>
+  <script type="text/javascript">
+  var user_type=$("input[name='user_type']");
+  var jz = $("input[name='job']");
+{if $user.user_type neq "2"}
+  	jz.attr('disabled','disabled');
+  {/if}
+	for (var i=0; i<user_type.length;i++) {
+		user_type[i].onclick=function(){
+			var jianzhi=$("input[name='user_type']:checked").val()
+			if(jianzhi==2){
+				jz.removeAttr('disabled');
+			}else{
+				jz.removeAttr('checked')
+				jz.attr('disabled','disabled');
+			}
+		}
+	}
+	
+	
+	function addImg(obj)
+	  {
+	      $("#next").append("<a href='javascript:;' onclick='removeImg(this)'>[-]</a><input   type='file' name='operating_record[]' maxlength='60' value='{$suppliers.facade_img}' />")
+	  }
+	function removeImg(obj)
+	  {
+	  	$(obj).next().remove()
+	  	$(obj).remove()
+//		      var row = rowindex(obj.parentNode.parentNode);
+//		      var tbl = document.getElementById('supp');
+//		
+//		      tbl.deleteRow(row);
+	  }
+  </script>
+  <tr>
+	    <td class="label">操作记录展示:</td>
+
+	    <td>
+	    	<ul style="padding: 0;">
+	   	 {foreach from=$operating_record item=path}
+	    		{if $path neq ''}
+	    		<li style="list-style: none; float: left;text-align: center;">
+	    			<img src="../{$path}" alt="" height="50px"/>
+				    <br />
+				    <a href="javascript:del_img('{$path}','{$user.user_id}');">删除</a>
+	    		</li>
+	    		{/if}
+		    {/foreach}
+	    		
+	    	</ul>
+	    </td>
+
+	  </tr>
+	  <script type="text/javascript">
+
+		function del_img(img_path,id){
+			$.ajax({
+				type:"post",
+				url:"users.php?act=del_img",
+				data:"img_path="+img_path+"&user_id="+id,
+				dataType:"text",
+				success:function(result,status){					
+					if(status){
+						location.reload(true);
+					}	
+				}
+			});
+
+		
+		}
+	</script>
   <tr>	
   	<td class="label"><a href="javascript:showNotice('fxtishi_info');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>
   		 返现活动:</td>

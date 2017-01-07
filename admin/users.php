@@ -230,7 +230,7 @@ elseif ($_REQUEST['act'] == 'edit')
     $users  = init_users();
     $user   = $users->get_user_info($row['user_name']);
 
-    $sql = "SELECT u.user_id,u.user_type,u.suppliers_type, u.fx_activity,u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn,
+    $sql = "SELECT u.operating_record,u.job,u.user_id,u.user_type,u.suppliers_type, u.fx_activity,u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn,
     u.office_phone, u.home_phone, u.mobile_phone".
         " FROM " .$ecs->table('users'). " u LEFT JOIN " . $ecs->table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
 
@@ -259,6 +259,8 @@ elseif ($_REQUEST['act'] == 'edit')
         $user['user_type']   	= $row['user_type'];
         $user['fx_activity']   	= $row['fx_activity'];
         $user['suppliers_type'] = $row['suppliers_type'];
+        $user['job'] 			= $row['job'];
+        $user['operating_record'] 	= $row['operating_record'];
     }
     else
     {
@@ -338,12 +340,48 @@ elseif ($_REQUEST['act'] == 'edit')
         }
     }
     assign_query_info();
+    $operating_record=explode('|',$user['operating_record']);
+    $smarty->assign('operating_record',             $operating_record);
+    
     $smarty->assign('ur_here',          $_LANG['users_edit']);
     $smarty->assign('action_link',      array('text' => $_LANG['03_users_list'], 'href'=>'users.php?act=list&' . list_link_postfix()));
     $smarty->assign('user',             $user);
     $smarty->assign('form_action',      'update');
     $smarty->assign('special_ranks',    get_rank_list(true));
     $smarty->display('user_info.htm');
+}
+
+/*------------------------------------------------------ */
+//-- 删除供货商店招图片
+/*------------------------------------------------------ */
+elseif($_REQUEST['act'] == 'del_img'){
+
+    $user_id = intval($_REQUEST['user_id']);
+	$user_img_path=empty($_REQUEST['img_path'])?'':$_REQUEST['img_path'];
+	if(!empty($user_id) && !empty($user_img_path)){
+        @unlink('../' . $user_img_path);
+        $sql = "SELECT operating_record " .
+                    " FROM " . $ecs->table('users') .
+                    " WHERE user_id = '$user_id'";
+        $row = $db->getRow($sql);
+        if(empty($row['operating_record'])){
+        	$new_img=str_replace($user_img_path,'',$row['operating_record']);
+        	
+        }else{
+        	$new_img=str_replace($user_img_path.'|','',$row['operating_record']);
+        	
+        }
+
+        if(empty($new_img)){
+        	$new_img=null;
+        }
+        $sql="UPDATE " . $ecs->table('users') . " SET operating_record = '$new_img' WHERE user_id = '$user_id'";
+		if($db->query($sql)){
+			echo true;
+		}else{
+			echo false;
+		}
+	}
 }
 
 /*------------------------------------------------------ */
@@ -354,6 +392,7 @@ elseif ($_REQUEST['act'] == 'update')
 {
     /* 检查权限 */
     admin_priv('users_manage');
+include_once(ROOT_PATH . '/includes/cls_image.php');
     
     $username = empty($_POST['username']) ? '' : trim($_POST['username']);
     $password = empty($_POST['password']) ? '' : trim($_POST['password']);
@@ -414,6 +453,49 @@ elseif ($_REQUEST['act'] == 'update')
     /* 更新会员的其它信息 */
     $other =  array();
     
+    if($_FILES['operating_record']['name']){
+    	
+    }
+    $num='';
+    foreach ($_FILES['operating_record']['size'] as $key => $value) {
+    	if($value>1700000){
+//  		$num=$num.'、'.$key+1;
+			sys_msg('图片过大');
+    	}
+    }
+//  if($num!=''){
+//  	$content=trim($num,'、');
+//  	sys_msg('第'.$content.'张图片过大');
+//  }
+	$image = new cls_image($_CFG['bgcolor']);
+	$sql = "SELECT operating_record " .
+            " FROM " . $ecs->table('users') .
+            " WHERE user_id = '$user_id'";
+    $row = $db->getRow($sql);
+	if(is_array($_FILES['operating_record']['name'])){
+		foreach ($_FILES['operating_record']['name'] as $key => $value) {
+			if($_FILES['operating_record']['tmp_name'][$key] != '' && $_FILES['operating_record']['tmp_name'][$key] != 'none'){
+				$upload = array(
+	                'name' => $_FILES['operating_record']['name'][$key],
+	                'type' => $_FILES['operating_record']['type'][$key],
+	                'tmp_name' => $_FILES['operating_record']['tmp_name'][$key],
+	                'size' => $_FILES['operating_record']['size'][$key],
+	            );
+				$operating_record   = $image->upload_image($upload,'operating_record'); // 原始图片
+				$other['operating_record'].=$operating_record.'|';
+			}
+		}
+	}else{
+		if($_FILES['operating_record']['tmp_name'] != '' && $_FILES['operating_record']['tmp_name'] != 'none'){
+			$operating_record   = $image->upload_image($_FILES['operating_record'],'operating_record'); // 原始图片
+			$other['operating_record']=$operating_record.'|';
+		}
+	}
+	if(!empty($row['operating_record'])){
+		$other['operating_record']=$row['operating_record'].$other['operating_record'];
+	}
+	$other['job']=isset($_POST['job']) ? intval($_POST['job']) : 1;
+    
     $sql='SELECT * FROM '. $ecs->table('users') ." WHERE user_id = '$_POST[id]'" ;
 	$userinfo=$db->getRow($sql);
 	if(($userinfo['user_type'] != $_POST['user_type']) && $userinfo['user_type'] == 1)
@@ -424,7 +506,13 @@ elseif ($_REQUEST['act'] == 'update')
 			$other['parent_id']=$parentinfo ? $parentinfo['ancestor_id'] : '';
 		}
 	}
-    
+	if($other['job']!=1){
+		if($userinfo['job']==1){
+			$change_desc='兼职金钻,预支300金积分';
+    		log_account_change_vr($user_id, 0, 0, 0, (-1)*1280,0, $change_desc, ACT_SAVING);
+    	}
+	}
+
     $affiliate_name=isset($_POST['affiliate_name']) ? htmlspecialchars($_POST['affiliate_name']) : '';
 	if(!empty($affiliate_name)){
 		$parent_info=get_assign_user_info($affiliate_name);		
@@ -440,6 +528,7 @@ elseif ($_REQUEST['act'] == 'update')
     $other['mobile_phone'] = isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
     $other['suppliers_type']=isset($_POST['suppliers']) ? intval($_POST['suppliers']) : 1;
 	$other['user_type']=isset($_POST['user_type']) ? intval($_POST['user_type']) : 1;
+
 	$other['fx_activity']=isset($_POST['fx_activity']) ? htmlspecialchars($_POST['fx_activity']) : '';
     $db->autoExecute($ecs->table('users'), $other, 'UPDATE', "user_name = '$username'");
 
@@ -727,6 +816,8 @@ function user_list()
         $filter['mobilephone'] = empty($_REQUEST['mobilephone']) ? '' : trim($_REQUEST['mobilephone']);
         $filter['rank'] = empty($_REQUEST['rank']) ? 0 : intval($_REQUEST['rank']);
         $filter['user_type'] = empty($_REQUEST['user_type']) ? 0 : intval($_REQUEST['user_type']);
+        $filter['job'] = empty($_REQUEST['job']) ? 1 : intval($_REQUEST['job']);
+        
         $filter['pay_points_gt'] = empty($_REQUEST['pay_points_gt']) ? 0 : intval($_REQUEST['pay_points_gt']);
         $filter['pay_points_lt'] = empty($_REQUEST['pay_points_lt']) ? 0 : intval($_REQUEST['pay_points_lt']);
 
@@ -741,6 +832,9 @@ function user_list()
         if ($filter['mobilephone'])
         {
             $ex_where .= " AND mobile_phone LIKE '%" . mysql_like_quote($filter['mobilephone']) ."%'";
+        }
+        if($filter['job'] == 2){
+        	$ex_where .= " AND job = 2";
         }
         if ($filter['rank'])
         {

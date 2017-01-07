@@ -12,9 +12,9 @@
       <!-- {foreach from=$goods_list item=goods key=k} -->
       <li>
         <div class="ect-clear-over"> <a href="{:url('goods/index',array('id'=>$this->_var['goods']['goods_id']))}"><img src="{$goods.goods_thumb}" title="{$goods.goods_name|escape:html}"></a>
-          <dl>
-            <dt>
-              <h4 class="title"><a href="{:url('goods/index',array('id'=>$this->_var['goods']['goods_id']))}">{$goods.goods_name} 
+          <div class="gwc_right">
+            <div>
+              <h4 class="title"><a class="gwc_a" href="{:url('goods/index',array('id'=>$this->_var['goods']['goods_id']))}">{$goods.goods_name} 
                 <!-- {if $goods.parent_id gt 0} 配件 --> 
                 <span style="color:#FF0000">（{$lang.accessories}）</span> 
                 <!-- {/if} --> 
@@ -22,27 +22,31 @@
                 <span style="color:#FF0000">（{$lang.largess}）</span> 
                 <!-- {/if} --> 
                 </a></h4>
-            </dt>
-            <dd class="ect-color999"> 
+            </div>
+            <div class="ect-color999"> 
               <!-- {if $show_goods_attribute eq 1} 显示商品属性 -->
               <p>{$goods.goods_attr|nl2br}</p>
               <!-- {/if} -->
-              <p><strong class="ect-colory">{$goods.goods_price}</strong></p>
-            </dd>
-          </dl>
+              <p style="float: right;"><strong class="ect-colory">{$goods.goods_price}</strong></p>
+            </div>
+            
+            
+            <div class="ect-margin-tb ect-margin-bottom0 ect-clear-over flow-num-del"> 
+		        <!-- {if $goods.goods_id gt 0 && $goods.is_gift eq 0 && $goods.parent_id eq 0} 普通商品可修改数量 -->
+		          <div class="input-group pull-left wrap"> <span class="input-group-addon" onClick="change_goods_number('1',{$goods.rec_id})" >-</span>
+		            <input type="hidden" id="back_number{$goods.rec_id}" value="{$goods.goods_number}" />
+		            <input type="text" class="form-num form-contro"  name="{$goods.rec_id}" id="goods_number{$goods.rec_id}" autocomplete="off" value="{$goods.goods_number}" onFocus="back_goods_number({$goods.rec_id})"  onblur="change_goods_number('2',{$goods.rec_id})" />
+		            <span class="input-group-addon" onClick="change_goods_number('3',{$goods.rec_id})">+</span> </div>
+		         
+		         <!-- {else} -->
+		          	<input type="text" class="txtnum" readonly value="{$goods.goods_number}"/>
+		          <!-- {/if} --> 
+		           <div class="pull-right flow-del text-center"> <a href="javascript:if (confirm('{$lang.drop_goods_confirm}')) location.href='{:url('flow/drop_goods',array('id'=>$this->_var['goods']['rec_id']))}';" style="padding: 2px 5px;">{$lang.drop}</a> </div>
+		        </div>
+          </div>
+          
         </div>
-        <div class="ect-margin-tb ect-margin-bottom0 ect-clear-over flow-num-del"> 
-        <!-- {if $goods.goods_id gt 0 && $goods.is_gift eq 0 && $goods.parent_id eq 0} 普通商品可修改数量 -->
-          <div class="input-group pull-left wrap"> <span class="input-group-addon" onClick="change_goods_number('1',{$goods.rec_id})" >-</span>
-            <input type="hidden" id="back_number{$goods.rec_id}" value="{$goods.goods_number}" />
-            <input type="text" class="form-num form-contro"  name="{$goods.rec_id}" id="goods_number{$goods.rec_id}" autocomplete="off" value="{$goods.goods_number}" onFocus="back_goods_number({$goods.rec_id})"  onblur="change_goods_number('2',{$goods.rec_id})" />
-            <span class="input-group-addon" onClick="change_goods_number('3',{$goods.rec_id})">+</span> </div>
-         
-         <!-- {else} -->
-          	<input type="text" class="txtnum" readonly value="{$goods.goods_number}"/>
-          <!-- {/if} --> 
-           <div class="pull-right flow-del text-center"> <a href="javascript:if (confirm('{$lang.drop_goods_confirm}')) location.href='{:url('flow/drop_goods',array('id'=>$this->_var['goods']['rec_id']))}';" style="padding: 2px 5px;">{$lang.drop}</a> </div>
-        </div>
+        
       </li>
       <!-- {/foreach} -->
     </ul>
@@ -50,6 +54,11 @@
     <p class="bg-warning text-center ect-padding-tb" onClick="location.href='{:url('flow/label_favourable')}'">{$lang.show_favourable}</p>
     <!-- {/if} -->
   </section>
+  
+  
+  
+  
+  
   <!-- {if $fittings_list} -->
      <div class="two-btn flow-jiesuan ect-padding-tb ect-padding-lr text-center">
    		<a class="btn btn-info" type="button" href="{:url('flow/goods_fittings')}">{$lang.goods_fittings}</a>

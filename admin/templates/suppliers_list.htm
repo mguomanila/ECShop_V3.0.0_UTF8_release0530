@@ -30,7 +30,7 @@
       <td><input type="checkbox" name="checkboxes[]" value="{$suppliers.suppliers_id}" />
         {$suppliers.suppliers_id}</td>
       <td class="first-cell">
-        <span onclick="javascript:listTable.edit(this, 'edit_suppliers_name', {$suppliers.suppliers_id})">{$suppliers.suppliers_name|escape:html}      </span></td>
+        <span >{$suppliers.suppliers_name|escape:html}      </span></td>
       <td>{$suppliers.suppliers_desc|nl2br}</td>
 			<td align="center"><img src="images/{if $suppliers.is_check eq 1}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'is_check', {$suppliers.suppliers_id})" style="cursor:pointer;"/></td>
       <td align="center">

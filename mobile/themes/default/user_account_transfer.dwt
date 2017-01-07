@@ -1,0 +1,161 @@
+<!-- #BeginLibraryItem "/library/user_header.lbi" --><!-- #EndLibraryItem -->
+<ul class="nav nav-tabs" role="tablist">
+    <li><a href="{:url('User/account_detail')}" >{$lang.add_surplus_log}</a></li>
+    <li><a href="{:url('User/account_points')}" >{$lang.view_points}</a></li>
+    
+    <li><a href="{:url('User/account_log')}" >{$lang.view_application}</a></li>
+
+	<li><a href="{:url('User/account_raply')}" >{$lang.surplus_type_1}</a></li>
+	<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_99}</a></li>
+	<!--<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
+	<!-- {if $user_type eq 2|| $user_type eq 3} -->
+	<li ><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
+	<!--{/if}-->
+	<li><a href="{:url('User/account_jewel')}" >{$lang.surplus_type_4}</a></li>
+	<li class="active"><a href="{:url('User/transfer')}" >{$lang.surplus_type_5}</a></li>
+  </ul>
+<form action="{:url('user/act_account')}" method="post" name="theForm"  enctype="multipart/form-data"  onSubmit="return submitSurplus()">
+  <div class="ect-bg-colorf flow-consignee">
+    <ul class="o-info">
+      <li>
+        <div class="input-text"><b class="pull-left">转账积分：</b><span>
+          <input id="vr" name="amount"  placeholder="1元人民币等于100金元宝" type="text" class="inputBg_touch amount" value="{$order.amount|escape}" />
+          </span></div>
+      </li>
+
+       <li id="content_text" style="display: ;">
+       	<div class="input-text"><b class="pull-left">好友账户：</b><span>
+       		<input type="text" placeholder="请输入好友账户的用户名"  name="rest_user_name" value=""/>
+            <input type="hidden"  name="user_type" value="2"/>
+       		
+       	</li>
+       	 <li id="content_text" style="display: ;">
+       	<div class="input-text"><b class="pull-left">验证手机：</b><span>
+       		<input type="text" readonly  name="mobile_phone" value="{$info.mobile_phone}"/><a class="yazm" onclick="dianji2('tra_code')" style="float: right;position: relative;top: -25px;border: 1px solid #e1e1e1;padding: 3px;">获取验证码</a>
+       	</li>
+       	<li id="content_text" style="display: ;">
+       	<div class="input-text"><b class="pull-left">验&nbsp;&nbsp;证&nbsp;&nbsp;码：</b><span>
+       		<input type="text"   name="mobile_code" value=""/>
+       	</li>
+
+   
+      <li class="input-text"><b class="pull-left">{$lang.process_notic}：</b>
+        <textarea name="user_note" placeholder="{$lang.process_notic}" type="text">{$order.user_note|escape}</textarea>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="two-btn ect-padding-tb ect-padding-lr ect-margin-tb text-center">
+   <input type="hidden" name="surplus_type" value="5" />
+          <input type="hidden" name="rec_id" value="{$order.id}" />
+          <input type="hidden" name="act" value="act_account" />
+          <input type="hidden" name="session" value="tra_code" />
+          
+    <input type="submit" name="submit"  class="btn btn-info"  value="确认转账"/>
+    <input type="reset" name="submit"  class="btn btn-info ect-bg-colory"  value="{$lang.button_reset}"/>
+  </div>
+</form>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js" ></script> 
+
+</div>
+<!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem --> <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem --> 
+<script type="text/javascript" src="__PUBLIC__/js/region.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/shopping_flow.js"></script> 
+<script type="text/javascript">
+	region.isAdmin = false;
+	{foreach from=$lang.flow_js item=item key=key}
+	var {$key} = "{$item}";
+	{/foreach}
+	{literal}
+	onload = function() {
+	      if (!document.all)
+	      {
+	        document.forms['theForm'].reset();
+	      }
+	}
+	{/literal}
+</script>
+<script type="text/javascript">
+ 		var k = true;
+	  	var seconds = 60;
+	    function getdate(){
+	    	k= false;
+	        seconds--;
+	         $(".yazm").text(seconds+"s后重新发送");
+	         $(".yazm").css({"background":"#ccc"});
+	    }
+	
+	   function sss(){
+	      if(seconds<=1){
+	      	k=true;
+	         $(".yazm").text("重新发送");
+	         $(".yazm").css({"background":"#fff"});
+	        return;
+	      }
+	     getdate();
+	     var set = setTimeout(sss,1000); 
+	   }
+	   function dianji2(session){
+
+	  	if(k==true){
+	  		$.ajax({
+	  			type:"post",
+				url:"{:url('user/get_code')}",
+				data:'mobile_phone='+{$info.mobile_phone}+'&session='+session,
+				dataType:"text",
+				async:true
+	  		});
+	  		seconds =60;
+	  		sss(); 		
+	  	}else{  		
+	  		return;
+	  	}
+	  	 	
+	  }
+		        	/*******************************************************************************
+ * 会员余额申请
+ */
+function submitSurplus() {
+	var frm = document.forms['theForm'];
+	var surplus_type = frm.elements['surplus_type'].value;
+	var surplus_amount = frm.elements['amount'].value;
+	var rest_user_name = frm.elements['rest_user_name'].value;
+	var mobile_code = frm.elements['mobile_code'].value;
+	
+	var process_notic = frm.elements['user_note'].value;
+	var payment_id = 0;
+	var msg = '';
+
+	if (surplus_amount.length == 0) {
+		alert('请输入您要操作的积分数量');
+		return false;
+	} else {
+		var reg = /^[\.0-9]+/;
+		if (!reg.test(surplus_amount)) {
+			msg += surplus_amount_error + '\n';
+		}
+	}
+if(surplus_amount<=0){
+	alert('积分必须大于零');
+		return false;
+}
+	if(rest_user_name.length == 0){
+		alert('请输入您转账对象的用户名');
+		return false;
+	}
+	if(mobile_code.length == 0){
+		alert('请输入验证码');
+		return false;
+	}
+
+
+	if (msg.length > 0) {
+		alert(msg);
+		return false;
+	}
+
+	return true;
+}
+</script>
+<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
+</body></html>

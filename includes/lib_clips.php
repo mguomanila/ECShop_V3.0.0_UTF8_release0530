@@ -377,16 +377,30 @@ function insert_user_account($surplus, $amount)
  */
 function insert_user_account_integral($surplus, $amount,$str=0)
 {
-		if(isset($surplus['friend_id'])){
-			$sql = 'INSERT INTO ' .$GLOBALS['ecs']->table('user_account').
-           ' (user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid,integral_amount,friend_id)'.
-            " VALUES ('$surplus[user_id]', '', '$str', '".gmtime()."', 0, '', '$surplus[user_note]', '$surplus[process_type]', '$surplus[payment]', 0,'$amount',$surplus[friend_id])";
+	$data="user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid,integral_amount";
+	$val="'$surplus[user_id]', '', '$str', '".gmtime()."', 0, '', '$surplus[user_note]', '$surplus[process_type]', '$surplus[payment]', 0,'$amount'";
+	if(isset($surplus['friend_id'])){
+		$data =$data. ',friend_id';
+		$val =$val.",$surplus[friend_id]";
+	}
+	if(isset($surplus['stub_img'])){
+		$data =$data. ',stub_img,stub_status';
+		$val =$val.",'$surplus[stub_img]','$surplus[stub_status]'";
+	}
+	$sql='INSERT INTO ' .$GLOBALS['ecs']->table('user_account').
+           "(".$data.")". " VALUES (".$val.")";
 		
-		}else{
-		$sql = 'INSERT INTO ' .$GLOBALS['ecs']->table('user_account').
-           ' (user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid,integral_amount)'.
-            " VALUES ('$surplus[user_id]', '', '$str', '".gmtime()."', 0, '', '$surplus[user_note]', '$surplus[process_type]', '$surplus[payment]', 0,'$amount')";
-		}
+		
+//		if(isset($surplus['friend_id'])){
+//			$sql = 'INSERT INTO ' .$GLOBALS['ecs']->table('user_account').
+//         ' (user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid,integral_amount,friend_id)'.
+//          " VALUES ('$surplus[user_id]', '', '$str', '".gmtime()."', 0, '', '$surplus[user_note]', '$surplus[process_type]', '$surplus[payment]', 0,'$amount',$surplus[friend_id])";
+//		
+//		}else{
+//		$sql = 'INSERT INTO ' .$GLOBALS['ecs']->table('user_account').
+//         ' (user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid,integral_amount)'.
+//          " VALUES ('$surplus[user_id]', '', '$str', '".gmtime()."', 0, '', '$surplus[user_note]', '$surplus[process_type]', '$surplus[payment]', 0,'$amount')";
+//		}
 
     $GLOBALS['db']->query($sql);
 
@@ -535,7 +549,7 @@ function get_account_log($user_id, $num, $start)
     $account_log = array();
     $sql = 'SELECT * FROM ' .$GLOBALS['ecs']->table('user_account').
            " WHERE user_id = '$user_id'" .
-           " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE)) .
+           " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL)) .
            " ORDER BY add_time DESC";
     $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
@@ -543,12 +557,23 @@ function get_account_log($user_id, $num, $start)
     {
         while ($rows = $GLOBALS['db']->fetchRow($res))
         {
+        	$arr=explode('|',$rows['short_user_note']);
+			$img=explode(':',$arr[0]);
+			if($img[0]=='img'){
+				$note=array_shift($arr);
+				$rows['short_user_note']=implode('|',$arr);
+			}
             $rows['add_time']         = local_date($GLOBALS['_CFG']['date_format'], $rows['add_time']);
             $rows['admin_note']       = nl2br(htmlspecialchars($rows['admin_note']));
             $rows['short_admin_note'] = ($rows['admin_note'] > '') ? sub_str($rows['admin_note'], 30) : 'N/A';
             $rows['user_note']        = nl2br(htmlspecialchars($rows['user_note']));
             $rows['short_user_note']  = ($rows['user_note'] > '') ? sub_str($rows['user_note'], 30) : 'N/A';
-
+			$arr=explode('|',$rows['user_note']);
+			$img=explode(':',$arr[0]);
+			if($img[0]=='img'){
+				$note=array_shift($arr);
+				$rows['short_user_note']=($rows['user_note'] > '')?sub_str(implode('|',$arr),30): 'N/A';
+			}
             $rows['amount']           = price_format(abs($rows['amount']), false);
 			$rows['integral']           = abs($rows['integral_amount']).'积分';
 			if($rows['is_paid'] == 0){
@@ -576,7 +601,10 @@ function get_account_log($user_id, $num, $start)
             		$rows['type'] = $GLOBALS['_LANG']['surplus_type_3'].':好友';
             	}
             	
-            }else
+            } elseif($rows['process_type'] == 4){
+            	$rows['type'] = $GLOBALS['_LANG']['surplus_type_4'];
+            }
+            else
             {
             	$rows['type'] = $GLOBALS['_LANG']['surplus_type_2'];
             }

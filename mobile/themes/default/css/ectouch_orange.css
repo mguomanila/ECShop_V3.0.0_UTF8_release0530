@@ -435,8 +435,8 @@ border: 1px solid transparent;border-radius: 4px;cursor: pointer;display: inline
 .input-search button{width:3.6em; height:3.7em;  background:#e6e6e6; display:block; position:absolute; right:0em; border-radius: 0 0.4em 0.4em 0; border:none;}
 .input-search button i{color:#999; font-size:1.8em;}
 .hot-search{margin-top:0.4em; display:table; width:100%;}
-.hot-search p{margin-top:0.5em;}
-.hot-search h4{height:1.6em;}
+.hot-search p{margin-top:1em;}
+.hot-search h4{height:2.2em;}
 .hot-search a{display:table-cell; float:left;  padding:0.8em; background:#fff; margin-right:0.6em; margin-bottom:0.6em; border-radius:0.4em;}
 /*========================
         优惠活动页

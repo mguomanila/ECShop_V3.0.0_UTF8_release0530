@@ -107,11 +107,28 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit')
 
     if ($_REQUEST['act'] == 'edit')
     {
+    	
         /* 取得余额信息 */
         $user_account = $db->getRow("SELECT * FROM " .$ecs->table('user_account') . " WHERE id = '$id'");
 
         // 如果是负数，去掉前面的符号
         $user_account['amount'] = str_replace('-', '', $user_account['amount']);
+    	$smarty->assign('stub_img1',      $user_account['stub_img']);
+        
+//      $arr=explode('|',$user_account['user_note']);
+        if(!empty($user_account['stub_img'])){
+        	$user_account['stub_img']='../data/stub_img/'.$user_account['stub_img'];
+        }
+//		$img=explode(':',$arr[0]);
+//		if($img[0]=='img'){
+//			$note=array_shift($arr);
+//			$user_account['user_note']=implode('|',$arr);
+//			$stub_img='../data/stub_img/'.$img[1];
+//		}else{
+//			$stub_img='';
+//		}
+
+//  	$smarty->assign('stub_img',      $stub_img);
 
         /* 取得会员名称 */
         $sql = "SELECT user_name FROM " .$ecs->table('users'). " WHERE user_id = '$user_account[user_id]'";
@@ -161,8 +178,31 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
     $admin_note   = !empty($_POST['admin_note'])   ? trim($_POST['admin_note'])       : '';
     $user_note    = !empty($_POST['user_note'])    ? trim($_POST['user_note'])        : '';
     $payment      = !empty($_POST['payment'])      ? trim($_POST['payment'])          : '';
+    $stub_status  = !empty($_POST['stub_status'])  ? trim($_POST['stub_status'])      : 0;
+    
 
     $user_id = $db->getOne("SELECT user_id FROM " .$ecs->table('users'). " WHERE user_name = '$user_name'");
+	
+	include_once(ROOT_PATH . 'includes/cls_image.php');
+
+	if($_FILES['stub']['size']>2000000){
+		sys_msg('图片过大');
+	}
+	
+	$image = new cls_image($_CFG['bgcolor']);
+
+	if (!empty($_FILES['stub']['name']))
+    {
+        $img_up_info = basename($image->upload_image($_FILES['stub'], 'stub_img'));
+		if($img_up_info==false){
+			sys_msg($image->error_msg);
+		}
+		
+		$stub_img = $img_up_info;
+    }else{
+    	$stub_img = $_POST['stub_img']?$_POST['stub_img']:'';
+    }
+
 
     /* 此会员是否存在 */
     if ($user_id == 0)
@@ -203,18 +243,28 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
         }
 
         $sql = "INSERT INTO " .$ecs->table('user_account').
-               " VALUES ('', '$user_id', '$_SESSION[admin_name]', '$amount', '".gmtime()."', '".gmtime()."', '$admin_note', '$user_note', '$process_type', '$payment', '$is_paid','$integral','0')";
+               " VALUES ('', '$user_id', '$_SESSION[admin_name]', '$amount', '".gmtime()."', '".gmtime()."', '$admin_note', '$user_note', '$process_type', '$payment', '$is_paid','$integral','0','','0')";
         $db->query($sql);
         $id = $db->insert_id();
     }
     else
     {
+    	$data='';
+    	if(!empty($stub_img)){
+    		$data .="stub_img = '$stub_img',";
+    	}
+    	if($stub_status != 0){
+    		$data .="stub_status = $stub_status,";
+    	}
+
         /* 更新数据表 */
         $sql = "UPDATE " .$ecs->table('user_account'). " SET ".
                "admin_note   = '$admin_note', ".
                "user_note    = '$user_note', ".
+               $data.
                "payment      = '$payment' ".
               "WHERE id      = '$id'";
+
         $db->query($sql);
     }
 
@@ -320,7 +370,10 @@ elseif ($_REQUEST['act'] == 'check')
         $process_type = $_LANG['surplus_type_2'];
     }
     elseif($account['process_type'] == 3)
-    {
+    {		
+    	if(!empty($account['stub_img'])){
+        	$account['stub_img']='../data/stub_img/'.$account['stub_img'];
+        }
         $process_type = $_LANG['surplus_type_3'];
     }
     else
@@ -330,8 +383,11 @@ elseif ($_REQUEST['act'] == 'check')
 
     $sql = "SELECT user_name FROM " .$ecs->table('users'). " WHERE user_id = '$account[user_id]'";
     $user_name = $db->getOne($sql);
-
+	
+	
     /* 模板赋值 */
+	
+   
     $smarty->assign('ur_here',      $_LANG['check']);
     $account['user_note'] = htmlspecialchars($account['user_note']);
     $smarty->assign('surplus',      $account);
@@ -419,12 +475,22 @@ elseif ($_REQUEST['act'] == 'action')
             log_account_change($account['user_id'], $amount, 0, 0, 0, $_LANG['surplus_type_0'], ACT_SAVING);
 
         }elseif($is_paid == '1' && $account['process_type'] == '4'){
-        	$sql='SELECT * FROM '. $ecs->table('users') ." WHERE user_id = '$account[user_id]'" ;
-			$userinfo=$db->getRow($sql);
+        	$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ." WHERE user_id = '$account[user_id]'" ;
+			$userinfo=$GLOBALS['db']->getRow($sql);
+			$parent=$userinfo;
+			$lang_content=$userinfo['user_name'].'升级金钻收益';
+			for ($i=0; $i < $i+1; $i++) { 
+				$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ."users WHERE user_id = $parent[parent_id]";
+				$parent=$GLOBALS['db']->getRow($sql);
+				if($parent['user_type']!=1){
+            		log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0, $lang_content, ACT_SAVING);
+					break;
+				}
+			}
 			if($userinfo['user_type'] == 1)
 			{
-				$sql='SELECT * FROM '. $ecs->table('users') ." WHERE user_id = $userinfo[parent_id]";
-				$parentinfo=$db->getRow($sql);
+				$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ." WHERE user_id = $userinfo[parent_id]";
+				$parentinfo=$GLOBALS['db']->getRow($sql);
 				$set='';
 				if($parentinfo['user_type'] == 1){
 					$set=',parent_id = '.$parentinfo['ancestor_id'];
@@ -441,6 +507,17 @@ elseif ($_REQUEST['act'] == 'action')
 					$pd	 =strstr($account['user_id'],'|');
 					if(!empty($account['friend_id'])){
 						$userid=$account['user_id'];
+						
+						$user_integral=$account['integral_amount']*0.15;
+						$sql = "SELECT * FROM ". $GLOBALS['ecs']->table('users') ." WHERE user_id = '$userid'";
+                    	$user_info =  $GLOBALS['db']->getRow($sql);
+                    	$sql = "SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_info[parent_id]'";
+                    	$userparent_info =  $GLOBALS['db']->getRow($sql);
+						if($userparent_info['usser_type'] != 1){
+                    		log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1, $_LANG['surplus_type_3'], ACT_SAVING);
+						}
+						
+						
 						$account['user_id']=$account['friend_id'];
 						
 						//商家所得积分
@@ -515,7 +592,7 @@ elseif ($_REQUEST['act'] == 'action')
             update_user_account($id, 0, $admin_note, $is_paid,$integral);
 
             //更新会员余额数量
-            log_account_change($account['user_id'], $amount, 0, 0, $fmt_amount, $_LANG['surplus_type_2'], ACT_DRAWING);
+            log_account_change($account['user_id'], $amount, 0, 0, $fmt_amount, '金积分提现失败', ACT_POINTS);
         }
         elseif ($is_paid == '0')
         {
@@ -581,7 +658,7 @@ elseif ($_REQUEST['act'] == 'remove')
 	if($arr['process_type'] == 2){
         $fmt_amount   = str_replace('-', '', $arr['integral_amount']);
     	
-    	log_account_change($arr['user_id'], 0, 0, 0, $fmt_amount, $_LANG['surplus_type_2'], ACT_DRAWING);
+    	log_account_change($arr['user_id'], 0, 0, 0, $fmt_amount, '金积分提现失败', ACT_POINTS);
 	}elseif($arr['process_type'] == 1){
 	 	$fmt_amount   = str_replace('-', '', $arr['amount']);
     	
@@ -699,7 +776,7 @@ function account_list()
         $filter['end_date'] = empty($_REQUEST['end_date']) ? '' : (local_strtotime($_REQUEST['end_date']) + 86400);
 
         $filter['sum'] = !empty($_REQUEST['sum']) ? $_REQUEST['sum'] : 0;
-
+        $filter['stub_status'] = isset($_REQUEST['stub_status']) ? $_REQUEST['stub_status'] : '';
         $where = " WHERE 1 ";
         if ($filter['user_id'] > 0)
         {
@@ -711,7 +788,11 @@ function account_list()
         }
         else
         {
-            $where .= " AND ua.process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL));
+            $where .= " AND ua.process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_TRANSFER));
+        }
+        if($filter['stub_status'] != '' && $filter['stub_status'] != -1){
+
+        	$where .= " AND ua.stub_status = $filter[stub_status] AND ua.stub_img <> '' ";
         }
         if(!empty($filter['start_time']) )
         {
@@ -772,7 +853,7 @@ function account_list()
             $GLOBALS['ecs']->table('user_account'). ' AS ua LEFT JOIN ' .
             $GLOBALS['ecs']->table('users'). ' AS u ON ua.user_id = u.user_id'.
             $where . "ORDER by " . $filter['sort_by'] . " " .$filter['sort_order']. " LIMIT ".$filter['start'].", ".$filter['page_size'];
-		
+
         $filter['keywords'] = stripslashes($filter['keywords']);
         set_filter($filter, $sql);
         

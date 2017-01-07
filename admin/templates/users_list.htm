@@ -9,7 +9,7 @@
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
    
     &nbsp;{$lang.usertype} 
-    <select name="user_type">
+    <select name="user_type" onchange="jiechu(this);">
     	<option value="0">{$lang.type}</option>{html_options options=$user_type }</select>
     &nbsp;
 
@@ -18,10 +18,32 @@
        &nbsp;&nbsp;时间起点&nbsp;&nbsp;<input name="start_time" type="text" id="start_time" size="10" value='{if $start_time}{$start_time}{/if}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
       
         &nbsp;&nbsp;时间末点&nbsp;&nbsp;<input name="end_time" type="text" id="end_time" size="10" value='{if $end_time}{$end_time}{/if}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>
+     <input type="checkbox" name="job" id="job" value="1" disabled="disabled" onchange="xuanzhong(this)" />兼职金钻
      
     <input type="submit" value="{$lang.button_search}" />
   
   </form>
+  <script type="text/javascript">
+  	function jiechu(obj){
+
+     	if($(obj).val() == '2'){
+     		$("#job").removeAttr('disabled');
+     	}else{
+				$("#job").removeAttr('checked')
+     		$("#job").val(1);
+     		$("#job").attr('disabled','');
+     	}
+    }
+  	function xuanzhong(obj){
+     		if($(obj).val()==2){
+     		$(obj).val('1')
+     		}else{
+     		$(obj).val('2')
+     			
+     		}
+
+     	}
+  </script>
 </div>
 
 <form method="POST" action="" name="listForm" onsubmit="return confirm_bath()">
@@ -107,6 +129,8 @@ function searchUser()
     listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
 //  listTable.filter['rank'] = document.forms['searchForm'].elements['user_rank'].value;
     listTable.filter['user_type'] = document.forms['searchForm'].elements['user_type'].value;
+    listTable.filter['job'] = document.forms['searchForm'].elements['job'].value;
+    
     listTable.filter['mobilephone'] = Utils.trim(document.forms['searchForm'].elements['mobilephone'].value);
     listTable.filter['start_time'] = document.forms['searchForm'].elements['start_time'].value;
     listTable.filter['end_time'] = document.forms['searchForm'].elements['end_time'].value;

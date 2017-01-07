@@ -193,6 +193,10 @@ elseif ($action == 'act_register')
 
 		if(!empty($_POST['recomme']) ){
 			$recomme=explode('W20161111',htmlspecialchars($_POST['recomme']),2);
+			if(!empty($recomme[0])){
+				$recomme1=explode('w20161111',htmlspecialchars($_POST['recomme']),2);
+				$recomme=$recomme1;
+			}
 			if(empty($recomme[0])){
 				$parent_info=get_assign_user_info($recomme[1],'recomme');
 				$other['parent_id']=$parent_info['user_id']?$parent_info['user_id']:'';
@@ -207,7 +211,7 @@ elseif ($action == 'act_register')
         {
             show_message($_LANG['passport_js']['agreement']);
         }
-        if (strlen($username) < 3)
+        if (strlen($username) < 2)
         {
             show_message($_LANG['passport_js']['username_shorter']);
         }
@@ -539,7 +543,6 @@ elseif ($action == 'profile')
     }
 
     $smarty->assign('extend_info_list', $extend_info_list);
-
     /* 密码提示问题 */
     $smarty->assign('passwd_questions', $_LANG['passwd_questions']);
     $email_arr=explode('XXXXX@XX.com',$user_info['email']);
@@ -565,13 +568,53 @@ elseif ($action == 'act_edit_profile')
     $other['mobile_phone'] = $mobile_phone = isset($_POST['extend_field5']) ? trim($_POST['extend_field5']) : '';
     $sel_question = empty($_POST['sel_question']) ? '' : compile_str($_POST['sel_question']);
     $passwd_answer = isset($_POST['passwd_answer']) ? compile_str(trim($_POST['passwd_answer'])) : '';
-
-
-$sql = 'SELECT * FROM '. $ecs->table('users') . " WHERE mobile_phone = '$other[mobile_phone]'  AND user_id <> '$user_id'";
-				$arr=$db->getRow($sql);
-					if(!empty($arr)){
-		        		show_message('手机号已存在');
-				}
+    
+    $user_info = get_profile($user_id);
+    $user_bank= isset($_POST['extend_field103']) ? trim($_POST['extend_field103']) : '';
+    $bank_name=  isset($_POST['extend_field105']) ? trim($_POST['extend_field105']) : '';
+    $user_bank_name= isset($_POST['extend_field104']) ? trim($_POST['extend_field104']) : '';
+    
+    $sql="SELECT reg_field_id,content FROM ". $ecs->table('reg_extend_info') ." WHERE user_id =".$user_id." AND reg_field_id IN (103,104,105)" ;
+    $reg_extend_info=$db->getAll($sql);
+	foreach ($reg_extend_info as $key => $value) {
+		$list[$value['reg_field_id']]=$value;
+	}
+    if($other['mobile_phone']!=$user_info['mobile_phone']||($list['104']['content'] != $user_bank_name) || ($list['105']['content'] != $bank_name)){
+        if(!empty($other['mobile_phone']))
+		{
+			$preg_mobile_phone="/^[1][3456789][0-9]{9}$/";
+			$static=preg_match($preg_mobile_phone,$other['mobile_phone']);
+			if($static == 0 )
+			{
+				show_message('- 手机格式不正确');
+			}
+			$sql = 'SELECT * FROM '. $ecs->table('users') . " WHERE mobile_phone = '$other[mobile_phone]'  AND user_id <> '$user_id'";
+			
+			$arr=$db->getRow($sql);
+			if(!empty($arr)){
+	        		show_message('- 手机号已存在');
+			}
+		}else{
+			show_message('- 手机号不能为空');
+		}
+        $session = isset($_POST['session']) ? $_POST['session'] : '';
+		$mobile_code = isset($_POST['mobile_code']) ? $_POST['mobile_code'] : '';
+		if($mobile_code==false){
+			show_message('请输入验证码', $_LANG['back_page_up'], 'user.php?act=profile', 'error');
+		}
+		if($mobile_code != $_SESSION[$session]['sms_code']){
+			show_message('验证码错误', $_LANG['back_page_up'], 'user.php?act=profile', 'error');
+		}
+		if(time() - $_SESSION[$session]['sms_time'] >300000){
+			unset($_SESSION[$session]['sms_code']);
+			unset($_SESSION[$session]['sms_time']);
+			show_message('验证码已过期', $_LANG['back_page_up'], 'user.php?act=profile', 'error');
+		}
+		
+		unset($_SESSION[$session]['sms_code']);
+		unset($_SESSION[$session]['sms_time']);
+   	}
+    
     /* 更新用户扩展字段的数据 */
     $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 ORDER BY dis_order, id';   //读出所有扩展字段的id
     $fields_arr = $db->getAll($sql);
@@ -725,9 +768,13 @@ elseif ($action == 'get_mobile_sms')
     $smarty->display('user_passport.dwt');
 }
 elseif($action == 'get_code_sms'){
-	$_SESSION['sms_code'] = $sms_code = mt_rand(1000, 9999);
-	$_SESSION['sms_time'] =time();
+	$session = isset($_POST['session']) ? $_POST['session'] : '';
+	
+	$_SESSION[$session]['sms_code'] = $sms_code = mt_rand(1000, 9999);
+	$_SESSION[$session]['sms_time'] =time();
 	$mobile_phone = isset($_POST['mobile_phone']) ? $_POST['mobile_phone'] : '';
+    	$_SESSION[$session]['mobile_phone'] =$mobile_phone;
+	
 	$content="【成都沃尔迅科技有限公司】你好，您的短信验证码是".$sms_code."，请您及时输入，短信5分钟内有效。";
 	$message = iconv("UTF-8","GB2312",$content);
 	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$message);
@@ -736,21 +783,24 @@ elseif($action == 'get_code_sms'){
 /* 密码找回-->根据提交的手机验证码进行相应处理 */
 elseif ($action == 'check_sms')
 {
+	$session = isset($_POST['session']) ? $_POST['session'] : '';
+	
 	$mobile_phone = isset($_POST['mobile_phone']) ? $_POST['mobile_phone'] : '';
 	$mobile_code = isset($_POST['mobile_code']) ? $_POST['mobile_code'] : '';
 	
 	if($mobile_phone != $_SESSION['temp_user_mobile']){
 		show_message('手机号不正确', $_LANG['back_page_up'],'user.php?get_password_sms', 'error');
 	}
-	if(time() - $_SESSION['sms_time'] >300000){
-		unset($_SESSION['sms_code']);
-		unset($_SESSION['sms_time']);
+	if(time() - $_SESSION[$session]['sms_time'] >300000){
+		unset($_SESSION[$session]['sms_code']);
+		unset($_SESSION[$session]['sms_time']);
 		show_message('验证码已过期', $_LANG['back_page_up'], 'user.php?get_password_sms', 'error');
 	}
-	if($mobile_code != $_SESSION['sms_code']){
+	if($mobile_code != $_SESSION[$session]['sms_code']){
 		show_message('验证码错误', $_LANG['back_page_up'], 'user.php?get_password_sms', 'error');
 	}
-
+	unset($_SESSION[$session]['sms_code']);
+	unset($_SESSION[$session]['sms_time']);
 	$_SESSION['user_id'] = $_SESSION['temp_user'];
     $_SESSION['user_name'] = $_SESSION['temp_user_name'];
     unset($_SESSION['temp_user']);
@@ -1559,11 +1609,36 @@ elseif ($action == 'affirm_received')
 /* 会员退款申请界面 */
 elseif ($action == 'account_raply')
 {
+	$sql="SELECT reg_field_id, content FROM ".$ecs->table('reg_extend_info').
+	"WHERE user_id = $user_id AND reg_field_id IN (103,104,105)";
+	$extend_info_arr123 = $db->getAll($sql);
+	foreach ($extend_info_arr123 as $key => $value) {
+    	$extend[$value['reg_field_id']]['reg_field_id']=$value['reg_field_id'];
+    	$extend[$value['reg_field_id']]['content']=empty($value['content'])?'':$value['content'];
+    	
+    }
+
+	$smarty->assign('extend',   $extend);
+	$user_type=get_user_type();
+	$smarty->assign('user_type',   $user_type);
     $smarty->display('user_transaction.dwt');
 }
 /* 会员积分提现申请界面 */
 elseif ($action == 'integral_raply')
 {
+
+	$sql="SELECT reg_field_id, content FROM ".$ecs->table('reg_extend_info').
+	"WHERE user_id = $user_id AND reg_field_id IN (103,104,105)";
+	$extend_info_arr123 = $db->getAll($sql);
+	foreach ($extend_info_arr123 as $key => $value) {
+    	$extend[$value['reg_field_id']]['reg_field_id']=$value['reg_field_id'];
+    	$extend[$value['reg_field_id']]['content']=empty($value['content'])?'':$value['content'];
+    	
+    }
+
+	$smarty->assign('extend',   $extend);
+	$user_type=get_user_type();
+	$smarty->assign('user_type',   $user_type);
     $smarty->display('user_transaction.dwt');
 }
 /* 会员预付款界面 */
@@ -1597,7 +1672,8 @@ elseif ($action == 'integral_deposit')
 elseif ($action == 'account_detail')
 {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
-
+$user_type=get_user_type();
+	$smarty->assign('user_type',   $user_type);
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
     $account_type = 'user_money';
@@ -1649,13 +1725,14 @@ elseif ($action == 'account_detail')
 elseif ($action == 'account_log')
 {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
-
+$user_type=get_user_type();
+	$smarty->assign('user_type',   $user_type);
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 	
     /* 获取记录条数 */
     $sql = "SELECT COUNT(*) FROM " .$ecs->table('user_account').
            " WHERE user_id = '$user_id'" .
-           " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE));
+           " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL));
     $record_count = $db->getOne($sql);
 
     //分页函数
@@ -1775,7 +1852,7 @@ elseif ($action == 'act_account')
         /* 如果成功提交 */
         if ($surplus['rec_id'] > 0)
         {
-        	log_account_change($user_id, 0, 0, 0, $amount, $_LANG['surplus_type_2'], ACT_DRAWING);
+        	log_account_change($user_id, 0, 0, 0, $amount, $_LANG['surplus_type_2'], ACT_POINTS);
         	
             $content = $_LANG['surplus_appl_submit'];
             show_message($content, $_LANG['back_account_log'], 'user.php?act=account_log', 'info');
@@ -1789,8 +1866,33 @@ elseif ($action == 'act_account')
     }
     elseif($surplus['process_type'] == 3){
 
+		include_once(ROOT_PATH . 'includes/cls_image.php');
+		if($amount>=1500){
+    		if(!$_FILES['stub']['name']){
+                show_message('请上传票据');
+    		}
+    	}
+
+		if($_FILES['stub']['size']>2000000){
+			show_message('图片过大');
+		}
+		$image = new cls_image($_CFG['bgcolor']);
+
+		if ((isset($_FILES['stub']['error']) && $_FILES['stub']['error'] == 0) || (!isset($_FILES['stub']['error']) && isset($_FILES['stub']['tmp_name']) && $_FILES['stub']['tmp_name'] != 'none'))
+        {
+            $img_up_info = basename($image->upload_image($_FILES['stub'], 'stub_img'));
+			if($img_up_info==false){
+				show_message($image->error_msg);
+			}
+//			$surplus['user_note'] = 'img:'.$img_up_info.'|'.$surplus['user_note'];
+			$surplus['stub_img']=isset($img_up_info)?$img_up_info:'';
+			$surplus['stub_status']=0;
+        }
     	if($user_type==2){
     		$rest_user=get_assign_user_info($_POST['rest_user_name']);
+    		if($rest_user['user_id'] == $user_id){
+            	show_message('好友账户不能为自己');
+    		}
     		$surplus['user_note'] = '充值好友账户：'.$_POST['rest_user_name'].' | 好友ID：'.$rest_user['user_id'].' | '.$surplus['user_note'];
     		$surplus['friend_id']=$rest_user['user_id'];
     		if ($surplus['payment_id'] <= 0)
@@ -2065,7 +2167,7 @@ elseif ($action == 'cancel')
     if($arr['process_type'] == 2){
             $fmt_amount   = str_replace('-', '', $arr['integral_amount']);
     	
-    	    log_account_change($user_id, 0, 0, 0, $fmt_amount, $_LANG['surplus_type_2'], ACT_DRAWING);
+    	    log_account_change($user_id, 0, 0, 0, $fmt_amount, '金积分提现失败', ACT_POINTS);
     }elseif($arr['process_type'] == 1){
     	$fmt_amount   = str_replace('-', '', $arr['amount']);
     	

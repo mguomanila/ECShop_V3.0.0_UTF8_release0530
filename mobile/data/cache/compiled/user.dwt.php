@@ -1,10 +1,10 @@
 <?php echo $this->fetch('library/user_header.lbi'); ?>
 <link rel="stylesheet" type="text/css" href="__TPL__/css/common.css"/>
 <!--<div class="demo" id="demo2">alert</div>-->
-<div class="user-info <?php if ($this->_var['info']['user_type'] == '普通会员'): ?>pthy_bg<?php endif; ?>">
+<div  class="user-info <?php if ($this->_var['info']['user_type'] == '普通会员'): ?>pthy_bg<?php endif; ?>">
   <div class="user-img" >
   	<!--<i class="glyphicon glyphicon-user"></i>-->
-  	<img src="themes/default/images/tx.png" alt="" width="130"/>
+  	<img src="<?php if ($this->_var['info']['user_img']): ?><?php echo $this->_var['info']['user_img']; ?><?php else: ?>__TPL__/images/tx.png<?php endif; ?>" alt="" width="130" height="130" style="position: relative;z-index: 1;border-radius: 50%;"/>
   	<dd> <?php echo $this->_var['info']['username']; ?></dd>
   	<dd> <a class="<?php if ($this->_var['info']['user_type'] == '金钻会员'): ?>jzhy<?php elseif ($this->_var['info']['user_type'] == '铂金会员'): ?>bjhy<?php endif; ?>">
   		
@@ -37,11 +37,12 @@
     
 <section class="container-fluid user-nav">
   <ul class="row ect-row-nav text-center">
-    <a href="<?php echo url('user/not_pay_order_list');?>">
+    <!--<a href="<?php echo url('user/not_pay_order_list');?>">
     <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/not_pay_list.png" style="height: 54px;width: 54px;">
       <p class="text-center"><?php echo $this->_var['lang']['not_pay_list']; ?></p>
     </li>
-    </a> <a href="<?php echo url('user/order_list');?>">
+    </a>-->
+    <a href="<?php echo url('user/order_list');?>">
     <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/order_list_lnk.png" style="height: 54px;width: 54px;">
       <p class="text-center"><?php echo $this->_var['lang']['order_list_lnk']; ?></p>
     </li>
@@ -77,6 +78,11 @@
       <p class="text-center">我的会员</p>
     </li>
     </a>
+    <a href="<?php echo url('user/benefit_desc');?>">
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/benefit_desc.png" style="height: 54px;width: 54px;">
+      <p class="text-center">公益基金</p>
+    </li>
+    </a>
     <!--<a href="<?php echo url('user/bonus');?>">
     <li class="col-sm-3 col-xs-3"><i class="glyphicon glyphicon-gift"></i>
       <p class="text-center"><?php echo $this->_var['lang']['label_bonus']; ?></p>
@@ -90,8 +96,8 @@
     <a href="<?php echo url('user/msg_list');?>">
     <li class="col-sm-3 col-xs-3"><i ><img src="__TPL__/images/xiaoxi.png" style="height: 69px;width: 59px;"></i>
       <p class="text-center">我的消息</p>-->
-    </li>
-    </a>
+    <!--</li>
+    </a>-->
 	
   </ul>
 </section>
@@ -213,7 +219,7 @@
     })
 </script>
 <script type="text/javascript" src="themes/default/js/alertPopShow.js"></script>
-<script type="text/javascript">
+<!--<script type="text/javascript">
 //	$(function(){
 //		$('#demo2').on('click', function(){
 			var neirong='欢迎登陆沃尔迅积分奖励系统，在本商城消费的商品都将以金元宝的形式回赠到您的个人账户</br>系统规则：</br>1：购买多少金额的商品系统即回赠相应比例的金元宝到您的个人账户</br>2：用户获得的金元宝将每天按照万分之六左右的比例兑换成金积分，1金积分=1元</br>3：金积分可用于商城购买商品消费</br>4：提现会扣除相应金额的6%【税收及相关:手续费】</br>5：用户购买商品回赠的金元宝都将扣除千分之五作为爱心公益基金捐助';
@@ -225,11 +231,14 @@
 					//按下确定按钮执行的操作
 					//todo ....
 					this.hide();
+					$("body").css({"overflow":"auto","position":"static"});
 				  }	
 				}
 			);
+			$("body").css({"overflow":"hidden","position":"fixed","top":"0"})
+			
 //	   });
 //	})
-</script>
+</script>-->
 </body>
 </html>

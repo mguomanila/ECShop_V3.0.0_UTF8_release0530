@@ -90,6 +90,35 @@ class UsersModel extends BaseModel {
                 " WHERE user_id = '" . $_SESSION['user_id'] . "'";
         $this->query($sql);
     }
+    
+    
+        
+    
+    
+    function ectouchUpload($key = '', $upload_dir = 'images', $thumb = false, $width = 220, $height = 220) {
+        $upload = new UploadFile();
+        //设置上传文件大小
+        $upload->maxSize = 1024 * 1024 * 5; //最大2M
+        //设置上传文件类型
+        $upload->allowExts = explode(',', 'jpg,jpeg,gif,png,bmp,mp3,amr,mp4');
+        //生成缩略图
+        $upload->thumb = $thumb;
+        //缩略图大小
+        $upload->thumbMaxWidth = $width;
+        $upload->thumbMaxHeight = $height;
+
+        //设置附件上传目录
+        $upload->savePath =  $upload_dir ;
+
+        if (!$upload->upload($key)) {
+            //捕获上传异常
+            return array('error' => 1, 'message' => $upload->getErrorMsg());
+        } else {
+            //取得成功上传的文件信息
+            return array('error' => 0, 'message' => $upload->getUploadFileInfo());
+        }
+    }
+    
 
     /**
      * 用户注册，登录函数
@@ -1914,6 +1943,48 @@ class UsersModel extends BaseModel {
             $res[$k]['pay_points'] = abs($v['pay_points']);
             $res[$k]['short_change_desc'] = sub_str($v['change_desc'], 60);
             $res[$k]['amount'] = $v['user_money'];
+        }
+        
+        return $res;
+        
+       
+    }
+    
+    
+     /**
+     * 查询会员积分明细
+     * @access  public
+     * @param   int     $user_id    会员ID
+     * @param   int     $num        每页显示数量
+     * @param   int     $start      开始显示的条数
+     * @return  array
+     */
+    public function get_account_points($user_id, $num, $start) {
+        
+        // 获取余额记录
+        $account_log = array();
+        
+        $sql = 'SELECT * FROM ' . $this->pre . "account_log WHERE user_id = " . $user_id . ' AND pay_points <> 0 AND change_type IN (0,1,4,5,99)' .
+        " ORDER BY log_id DESC limit " . $start . ',' . $num;
+
+        $res = $this->query($sql);
+        
+        if (empty($res)) {
+            return array();
+            exit;
+        }
+        
+        foreach ($res as $k => $v) {
+            $res[$k]['change_time'] = local_date(C('date_format'), $v['change_time']);
+            $res[$k]['type'] = $v['pay_points'] > 0 ? L('account_inc') : L('account_dec');
+            $res[$k]['user_money'] = price_format(abs($v['user_money']), false);
+            $res[$k]['frozen_money'] = price_format(abs($v['frozen_money']), false);
+            $res[$k]['rank_points'] = abs($v['rank_points']);
+            $res[$k]['pay_points'] = abs($v['pay_points']);
+            $res[$k]['short_change_desc'] = sub_str($v['change_desc'], 60);
+            $res[$k]['amount'] = $v['user_money'];
+            $res[$k]['points'] = $v['pay_points'];
+            
         }
         
         return $res;

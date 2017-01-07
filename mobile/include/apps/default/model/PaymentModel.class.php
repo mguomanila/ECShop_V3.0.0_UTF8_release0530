@@ -204,6 +204,16 @@ class PaymentModel extends BaseModel {
                         
                         $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[user_id]'" ;
 						$userinfo=$this->row($sql);
+						$parent=$userinfo;
+						$lang_content=$userinfo['user_name'].'升级金钻收益';
+						for ($i=0; $i < $i+1; $i++) { 
+							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $parent[parent_id]";
+							$parent=$this->row($sql);
+							if($parent['user_type']!=1){
+                        		model('ClipsBase')->log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0, $lang_content, ACT_SAVING);
+								break;
+							}
+						}
 						if($userinfo['user_type'] == 1)
 						{
 							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $userinfo[parent_id]";
@@ -247,9 +257,19 @@ class PaymentModel extends BaseModel {
                         $arr = $this->row($sql);
 
 						if(!empty($arr['friend_id'])){
-							
 							$userid=$arr['user_id'];
-						$surplus_type[3]='好友积分充值;好友ID'.$userid;
+							$surplus_type[3]='好友积分充值;好友ID'.$userid;
+							
+							$user_integral=$arr['integral_amount']*0.15;
+							$sql = "SELECT * FROM " . $this->pre . "users WHERE user_id = '$userid'";
+                        	$user_info = $this->row($sql);
+                        	$sql = "SELECT * FROM " . $this->pre . "users WHERE user_id = '$user_info[parent_id]'";
+                        	$userparent_info = $this->row($sql);
+							if($userparent_info['usser_type'] != 1){
+                        			model('ClipsBase')->log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1, $surplus_type[3], ACT_SAVING);
+							}
+							
+							
 							
 							$arr['user_id']=$arr['friend_id'];
 							$sql = "SELECT * FROM " . $this->pre . "users WHERE user_id = '$arr[user_id]'";

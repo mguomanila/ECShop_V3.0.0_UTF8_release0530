@@ -29,6 +29,7 @@
             <div class="swiper-slide">{insert name='ads' id=1 num=1}</div>
             <div class="swiper-slide">{insert name='ads' id=2 num=1}</div>
             <div class="swiper-slide">{insert name='ads' id=3 num=1}</div>
+            <div class="swiper-slide">{insert name='ads' id=16 num=1}</div>
             <div class="swiper-slide">{insert name='ads' id=17 num=1}</div>
         </div>
         <!-- Add Pagination -->

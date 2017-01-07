@@ -5,7 +5,7 @@
 	  {/foreach}
 	  
 	</script>
-<form name="formEdit" action="{:url('user/profile')}" method="post" onSubmit="return userEdit();">
+<form name="formEdit"  id="myform" action="{:url('user/profile')}" method="post" enctype="multipart/form-data" onSubmit="return userEdit();">
 	<div class="grbox">
 		<div class="grzl grjh">
 			<a>个人资料</a>
@@ -50,43 +50,37 @@
           </span></div>
       </li>-->
       <!-- {elseif $field.id eq 103 ||$field.id eq 104 ||$field.id eq 105} -->
+      <!--{elseif $field.id eq 106}-->
+    
+<li style="height: 95px">
+        <div class="input-text">
+        	<b class="pull-left" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}:</b>
+        	<span id="preview" class="preview">
+
+         
+                <img id="imghead" border="0" src="images/photo_icon.png" width="90" height="90" style="margin-left: 0;" onclick="$('#previewImg').click();">
+                    
+
+        </span>
+            <input type="file" name="extend_field{$field.id}" onchange="previewImage(this)" style="display: none;" id="previewImg">
+        </div>
+     </li>
+     <script type="text/javascript" src="__TPL__/js/img_pre.js" ></script> 
       <!-- {else} -->
       <li>
         <div class="input-text"><b class="pull-left" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}:</b><span>
-          <input name="extend_field{$field.id}" type="text" {if $field.id eq 5}readonly id="mobile" class="ccc"{/if} value="{$field.content}" placeholder="{$field.reg_field_name}">
-          </span>
+          <input name="extend_field{$field.id}" type="text" {if $field.id eq 5}readonly id="mobile" class="mobile ccc"{/if} value="{$field.content}" placeholder="{$field.reg_field_name}">
+
+        </span>
         {if $field.id eq 5} <p style="float: right;position: relative;z-index: 100;" class="exph">更换手机</p>{/if}
         </div>
       </li>
- 			{if $field.id eq 5}
-			<li style="text-align: center;background: #e1e1e1;" class="none">
-				验证手机：{$profile.mobile_phone}
-			</li>
-			<style type="text/css">
-					.none{
-						display: none;
-					}
-					.none2{
-						display: none;
-					}
-					#mobile{
-						width: 50%;
-					}
-			</style>
- 			<li class="none">
- 				<div class="input-text">
- 					<b class="pull-left">验证码:</b>
- 					<span>
- <input name="session1" type="hidden" value="mobile_code" />
- 						
-           <input type="text" placeholder="" name="mobile_code"  id="" value="" style="width: 50%;"/>
-          </span>
-          {if $field.id eq 5} <p class="yazm" style="float: right;position: relative;z-index: 100;" onclick="dianji('mobile_code')">获取验证码</p>{/if}
-         
- 				</div>
- 			</li>
+
+ 			
+ 		
+			
  			 
- 			{/if}
+ 			
       <!-- {/if} --> 
       {/foreach}
     </ul>
@@ -95,11 +89,11 @@
     	
     	<li>
         <div class="input-text"><b class="pull-left" >{$field.reg_field_name}：</b><span>
-          <input name="extend_field{$field.id}" class="bank ccc" readonly type="text" placeholder="{$field.reg_field_name}"  value="{$field.content}">
+          <input name="extend_field{$field.id}" id="extend_field{$field.id}" class="bank ccc" readonly type="text" placeholder="{$field.reg_field_name}"  value="{$field.content}">
          </span></div>
       </li>
       {/foreach}
-      <p style="position: relative;z-index: 100;display: block;width: 100%;text-align: right;float: left;margin-top: 15px;" class="exph2"> 修改银行信息</p>
+      <p style="position: relative;z-index: 100;display: block;width: 100%;text-align: right;float: left;margin-top: 15px;" class="exph2">绑定银行账户</p>
 
       
       <!--<input type="" name="bank_code" id="bank_code" value="" />-->
@@ -110,7 +104,7 @@
  				<div class="input-text">
  					<b class="pull-left" >验证码:</b>
  					<span>
- <input name="session2" type="hidden" value="bank_code" />
+
  						
            <input type="text" placeholder="" name="bank_code"  id="" value="" style="width: 50%;"/>
           </span>
@@ -128,10 +122,49 @@
   
   <input name="act" type="hidden" value="profile" />
   <div class="two-btn ect-padding-tb ect-padding-lr ect-margin-tb text-center">
-    <input name="submit" type="submit" value="{$lang.confirm_edit}" class="btn btn-info" />
+ <input name="session" type="hidden" value="mobile_code" />
+  	
+    <input name="submit" type="submit" value="{$lang.confirm_edit}" class="btn btn-info sss" />
   </div>
 </form>
+<style type="text/css">
+						.none{
+							display: none;
+						}
+						.none2{
+							display: none;
+						}
+						#mobile{
+							width: 50%;
+						}
+</style>
+
+	<div class="code_tc" style="display: none;background: #fff;">
+ 				<li style="text-align: center;padding-top: 5%;" class="">
+					验证手机：{$profile.mobile_phone}
+				</li>
+				
+	 			<li class="code_tc_yz">
+	 				<div class="input-text">
+	 					<b class="pull-left">验证码:</b>
+	 					<span>
+
+	 						
+	           <input type="text" placeholder="" name="mobile_code"  id="mobile_code" value="" style="width: 48%;"/>
+	          </span>
+	          <p class="yazm" style="float: right;position: relative;z-index: 100;font-size: 14px;" onclick="dianji('mobile_code')">获取验证码</p>
+	         
+	 				</div>
+	 			</li>
+	 			<p style="text-align: center;color: red;line-height: 35px;font-size: 14px;display: none;" id="code_tc_ts">ssss</p>
+	 			<li style="text-align: center;">
+	 				<a onclick="" id="code_tc_fa">返回</a>
+	 				<a onclick="verify_code('mobile_code','bank')" id="code_tc_tr1" style="display: none;">确定</a>
+	 				<a onclick="verify_code('mobile_code','mobile')" id="code_tc_tr" style="display: none;">确定</a>
+	 			</li>
+ 			</div>
 </div>
+<div class="ect_bg"></div>
 <script type="text/javascript" src="__TPL__/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
 	$(".grzl").on("click",function(){
@@ -187,8 +220,42 @@
 	  	 	
 	  }
 	   
-	   
-	   
+	  
+
+	  	function verify_code(session,ipt){
+	  		
+	  
+	  	 $.ajax({
+	  	 	type:"post",
+	  	 	url:"{:url('user/verify_code')}",
+				data:'mobile_phone='+{$profile.mobile_phone}+'&session='+session+'&verify_code='+$("#mobile_code").val(),
+	  	 	dataType:"text",
+				success:function(result,status){	
+					var result=JSON.parse(result)
+					if(result[0]!=0){
+						
+						$("#code_tc_ts").css("display","block").text(result[1]);
+					}else{
+						$("#code_tc_ts").css("display","block").text(result[1]+",1s后跳转");
+						setTimeout(function(){
+							$("#myform").css("display","block");
+							$(".code_tc").css("display","none");
+							var put="."+ipt
+							$(put).css("color","#333").removeAttr("readonly");
+							$(".ect_bg").css("display","none")
+							if(ipt=="mobile"){
+								$(".exph").css("display","none")
+							}else{
+								$(".exph2").css("display","none")
+							}
+						},1500)
+					
+					}
+				},
+	  	 	async:true
+	  	 });
+	  	}
+
 	   
 	   
 	   
@@ -232,39 +299,60 @@
 	  	 	
 	  }
 	   
-	   
+	 
+
 
 	
 	$(".exph").on("click",function(){
 		
+		$("#myform").css("display","none");
+		$(".code_tc").css("display","block");
+		$("#code_tc_tr").css("display","inline-block");
+		$("#code_tc_tr1").css("display","none");
+		var ws = document.documentElement.clientHeight;
+		$(".ect_bg").css({"height":ws,"display":"block"});
+		$("#code_tc_ts").css("display","none");
 		
-//		$("#mobile").val("");
-//		$("#mobile").attr("placeholder","请填写新绑定手机号");
 		
-		if($(".none").css("display") == "block"){
-			$("#mobile").attr("readonly","");
-			$(".none").css("display","none");
-			$("#mobile").addClass("ccc");
-		}else{
-			$(".none").css("display","block");
-			$("#mobile").removeAttr("readonly");
-			$("#mobile").removeClass("ccc");
-		}
+	});
+	
+	$("#code_tc_fa").on("click",function(){
+		$("#myform").css("display","block");
+		$(".code_tc").css("display","none");
+		$(".ect_bg").css("display","none")
 	})
+	
+	
+	
+	
+	
+	
 	$(".exph2").on("click",function(){
 
-		if($(".none2").css("display") == "block"){
-			$(".bank").attr("readonly","");
-			$(".none2").css("display","none");
-			$(".bank").addClass("ccc");
-		}else{
-			$(".none2").css("display","block");
-		  $(".bank").removeAttr("readonly");
-		  $(".bank").removeClass("ccc");
-		}
-
+		$("#myform").css("display","none");
+		$(".code_tc").css("display","block");
+		$("#code_tc_tr1").css("display","inline-block");
+		$("#code_tc_tr").css("display","none");
+		var ws = document.documentElement.clientHeight;
+		$(".ect_bg").css({"height":ws,"display":"block"});
+		$("#code_tc_ts").css("display","none");
+		
 	})
 
+
+
+
+
+      var scw = document.documentElement.clientWidth;
+      var sch = document.documentElement.clientHeight;
+      	$("#sctx").on("click",function(){		
+      		$(".container").css({"width":scw,"height":sch,"position":"fixed","background":"rgba(0,0,0,0.2)","top": 0,"left": 0,"zIndex":1001})
+      	})
+     	$(".ok").on("click",function(){
+     		$(".container").css({"zIndex":0,"width":"200px","height":"200px"})
+     		
+     		return false
+     	})
 </script>
 <!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem --> <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
 <!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->

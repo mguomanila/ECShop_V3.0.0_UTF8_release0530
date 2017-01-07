@@ -4,7 +4,7 @@
      <section>
       <ul>
    		<li>
-    		<div class="input-text"><b>{$lang.username}：</b><span><input placeholder="{$lang.username}/{$lang.mobile}/{$lang.email}" name="username" type="text"  class="inputBg" id="username" datatype="*" ></span></div>
+    		<div class="input-text"><b>{$lang.username}：</b><span><input placeholder="{$lang.username}/{$lang.mobile}" name="username" type="text"  class="inputBg" id="username" datatype="*" ></span></div>
         </li>
         <li>
     		<div class="input-text"><b>{$lang.label_password}：</b><span><input placeholder="{$lang.label_password}"  name="password" type="password" class="inputBg" datatype="*6-16" /></span></div>

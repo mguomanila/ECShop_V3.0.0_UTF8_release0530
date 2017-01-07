@@ -50,6 +50,7 @@ $_LANG['surplus_type_0'] = '充值';
 $_LANG['surplus_type_1'] = '提现';
 $_LANG['surplus_type_2'] = '金积分提现';
 $_LANG['surplus_type_3'] = '金元宝充值';
+$_LANG['surplus_type_4'] = '升级金钻';
 $_LANG['deposit_money'] = '充值金额';
 $_LANG['process_notic'] = '会员备注';
 $_LANG['user_bank'] = '银行账号';

@@ -114,6 +114,7 @@ define('SURPLUS_RETURN',            1); // 从帐户提款
 define('SURPLUS_INTEGRAL',          2); // 从帐户提款
 define('SURPLUS_INTEGRAL_SAVE',     3); // 从帐户提款
 define('SURPLUS_JEWEL',     		4); // 升级金钻
+define('SURPLUS_TRANSFER',     		5); // 好友转账
 
 /* 评论状态 */
 define('COMMENT_UNCHECKED',         0); // 未审核
@@ -168,6 +169,8 @@ define('GAT_PACKAGE',               4); // 超值礼包
 define('ACT_SAVING',                0);     // 帐户冲值
 define('ACT_DRAWING',               1);     // 帐户提款
 define('ACT_ADJUSTING',             2);     // 调节帐户
+define('ACT_SM_FX',            		4);     // 每日返现
+define('ACT_POINTS',            	5);     // 积分提现
 define('ACT_OTHER',                99);     // 其他类型
 
 /* 密码加密方法 */

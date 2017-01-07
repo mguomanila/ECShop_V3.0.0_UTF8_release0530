@@ -4,7 +4,7 @@
      <section>
       <ul>
    		<li>
-    		<div class="input-text"><b><?php echo $this->_var['lang']['username']; ?>：</b><span><input placeholder="<?php echo $this->_var['lang']['username']; ?>/<?php echo $this->_var['lang']['mobile']; ?>/<?php echo $this->_var['lang']['email']; ?>" name="username" type="text"  class="inputBg" id="username" datatype="*" ></span></div>
+    		<div class="input-text"><b><?php echo $this->_var['lang']['username']; ?>：</b><span><input placeholder="<?php echo $this->_var['lang']['username']; ?>/<?php echo $this->_var['lang']['mobile']; ?>" name="username" type="text"  class="inputBg" id="username" datatype="*" ></span></div>
         </li>
         <li>
     		<div class="input-text"><b><?php echo $this->_var['lang']['label_password']; ?>：</b><span><input placeholder="<?php echo $this->_var['lang']['label_password']; ?>"  name="password" type="password" class="inputBg" datatype="*6-16" /></span></div>

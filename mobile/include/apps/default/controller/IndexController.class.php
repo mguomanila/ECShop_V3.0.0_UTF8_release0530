@@ -95,5 +95,22 @@ class IndexController extends CommonController {
             $this->redirect(url('index'));
         }
     }
+    
+    public function download_app() {
+        $this->assign('app_url', 'http://www.oryigo.com/app/oryigo.apk');
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+		if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
+			
+        	$this->assign('app_act', '2');	
+		} else if(strpos($user_agent, 'MicroMessenger') === false){
+			/**非微信浏览**/
+        	$this->assign('app_act', '1');
+		}
+		else{
+        	$this->assign('app_act', '0');
+		}
+        $this->assign('title', 'app下载');
+        $this->display('download_app.dwt');
+    }
 
 }

@@ -616,7 +616,6 @@ function saveOrderAddress(id)
  */
 function submitSurplus()
 {
-	alert(123);
   var frm            = document.forms['formSurplus'];
   var surplus_type   = frm.elements['surplus_type'].value;
   var surplus_amount = frm.elements['amount'].value;

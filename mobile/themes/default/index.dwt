@@ -1,10 +1,13 @@
 <!-- #BeginLibraryItem "/library/page_header.lbi" -->
 <!-- #EndLibraryItem -->
+<link rel="stylesheet" type="text/css" href="__TPL__/css/lrtk.css" />
+
 <div class="con">
+	<div class="Upper">
 	<header class="ect-header ect-margin-tb ect-margin-lr">
 		<a href="{:url('category/top_all')}" class="pull-left ect-icon ect-icon1 ect-icon-cate1"></a>
 		<div class="ect-header-div">
-			<button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;圣诞狂欢</button>
+			<button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;年终大促销</button>
 		</div>
 	</header>
 	<!--<header class="ect-header "> 
@@ -17,7 +20,7 @@
 			</ul>
 		</div>
 		<div class="bd">
-			{insert name='ads' id=1 num=4}
+			{insert name='ads' id=1 num=5}
 		</div>
 	</div>
 	<!--<div style="text-align: center;padding: 5px 0 18px;"><img src="__TPL__/images/logo.png" style="width:100%" /></div>-->
@@ -116,7 +119,27 @@
 		</nav>
 	</footer>
 	<div style="padding-bottom:4.2em;"></div>
+	
+	</div>
 </div>
+<script type="text/javascript" src="__TPL__/js/jquery_money.js"></script>
+
+<script type="text/javascript">
+$.AutomLeafStart({
+	leafsfolder:"__TPL__/money/",
+	howmanyimgsare:3,
+	initialleafs: 20,
+	maxYposition:-500,
+	multiplyclick:false,
+	multiplynumber:3,
+	infinite:false,
+	fallingsequence:-100
+});
+
+	$.AutomLeafAdd({leafsfolder:"__TPL__/money/",add:10,});
+
+//$("#botAgregar").on("click",function(){$.AutomLeafAdd({leafsfolder:"images/",add:8,})});
+</script>
 <!-- #BeginLibraryItem "/library/search.lbi" -->
 <!-- #EndLibraryItem -->
 <!-- #BeginLibraryItem "/library/page_footer.lbi" -->
@@ -149,6 +172,7 @@
 //	get_asynclist("{:url('index/ajax_goods', array('type'=>'hot'))}" , '__TPL__/images/loader.gif');
 </script>
 <script type="text/javascript" src="js/b.js"></script>
+
 <!--<script>
   function djhb(){
   	
@@ -167,6 +191,7 @@
 
 	$(".hbbox").css({"marginLeft":"-105px"});
 </script>-->
+
 </body>
 
 </html>

@@ -105,6 +105,7 @@ define('SURPLUS_RETURN', 1); // 从帐户提款
 define('INTEGRAL_RETURN', 2); // 从帐户提积分
 define('INTEGRAL_SAVE', 3); // 为帐户冲值元宝
 define('SURPLUS_JEWEL', 4); // 升级金钻
+define('SURPLUS_TRANSFER' ,5); // 好友转账
 define('PAY_L', 'l');
 
 /* 评论状态 */
@@ -164,6 +165,7 @@ define('ACT_DRAWING', 1);     // 帐户提款
 define('ACT_ADJUSTING', 2);     // 调节帐户
 define('ACT_OTHER', 99);     // 其他类型
 define('ACT_WECHAT', 3);     // 微信类型
+define('ACT_POINTS', 5);     // 积分提现
 
 /* 密码加密方法 */
 define('PWD_MD5', 1);  //md5加密方式

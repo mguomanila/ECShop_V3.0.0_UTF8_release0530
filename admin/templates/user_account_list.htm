@@ -13,6 +13,7 @@
         <option value="0" {$process_type_0}>{$lang.surplus_type_0}</option>
         <option value="1" {$process_type_1}>{$lang.surplus_type_1}</option>
         <option value="4" {$process_type_1}>{$lang.surplus_type_4}</option>
+        <option value="5" {$process_type_1}>{$lang.surplus_type_5}</option>
         <option value="2" {$process_type_1}>{$lang.surplus_type_2}</option>
         <option value="3" {$process_type_1}>{$lang.surplus_type_3}</option>
         
@@ -32,7 +33,12 @@
       
         &nbsp;&nbsp;时间末点&nbsp;&nbsp;<input name="end_time" type="text" id="end_time" size="10" value='{if $end_time}{$end_time}{/if}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>
      &nbsp;&nbsp;求和&nbsp;&nbsp;<input type="checkbox" id="xuanzhong1" name="sum" value="0" onchange="xuanzhong(this)"   disabled="disabled"/>
-
+<select name="stub_status" id="stub_status"  disabled="disabled">
+        <option value="-1">票据审核</option>
+        <option value="0" {$is_paid_0}>未审核</option>
+        <option value="1" {$is_paid_1}>待修改</option>
+        <option value="2">已通过</option>
+      </select>
      <script type="text/javascript">
      function jiechu(obj){
 
@@ -42,6 +48,14 @@
 				$("#xuanzhong1").removeAttr('checked')
      		$("#xuanzhong1").val(0);
      		$("#xuanzhong1").attr('disabled','');
+     	}
+     	if($(obj).val() != 3){
+     		$("#stub_status").removeAttr('checked')
+     		$("#stub_status").val(-1);
+     		$("#stub_status").attr('disabled','disabled');
+     	}else{
+     		$("#stub_status").removeAttr('disabled');
+     		
      	}
      }
      	function xuanzhong(obj){
@@ -144,6 +158,8 @@ function searchUser()
     listTable.filter['end_time'] = document.forms['searchForm'].elements['end_time'].value;
     listTable.filter['sum'] = document.forms['searchForm'].elements['sum'].value;
     listTable.filter['payment'] = Utils.trim(document.forms['searchForm'].elements['payment'].value);
+    listTable.filter['stub_status'] = Utils.trim(document.forms['searchForm'].elements['stub_status'].value);
+    
     listTable.filter['is_paid'] = document.forms['searchForm'].elements['is_paid'].value;
     listTable.filter['page'] = 1;
     listTable.loadList();

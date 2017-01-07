@@ -308,7 +308,9 @@ class AdvertController extends AdminController {
                         $img = $this->get_ad_code($data['ad_id']);
                         //排除远程图片
                         if (strpos($img, 'http://') === false && strpos($img, 'https://') === false){
-                            $filename = __URL__.$img;
+                            $filename = __URL__.'/'.$img;
+//                          print_r($filename);
+//                          exit();
                             @unlink($filename);
                         }
 

@@ -110,7 +110,7 @@ function get_profile($user_id)
     /* 会员帐号信息 */
     $info  = array();
     $infos = array();
-    $sql  = "SELECT idcard,user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank,".
+    $sql  = "SELECT user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank,".
              " msn, qq, office_phone, home_phone, mobile_phone, passwd_question, passwd_answer ".
            "FROM " .$GLOBALS['ecs']->table('users') . " WHERE user_id = '$user_id'";
     $infos = $GLOBALS['db']->getRow($sql);
@@ -171,7 +171,7 @@ function get_profile($user_id)
     $info['user_money']  = price_format($info['user_money'], false);
     $info['pay_points']  = $info['pay_points'] . $GLOBALS['_CFG']['integral_name'];
     $info['bonus']       = $bonus;
-    $info['idcard']      = $infos['idcard'];
+
     $info['qq']          = $infos['qq'];
     $info['msn']          = $infos['msn'];
     $info['office_phone']= $infos['office_phone'];

@@ -1,5 +1,9 @@
 <!-- $Id: user_account_check.htm 14216 2008-03-10 02:27:21Z testyang $ -->
 {include file="pageheader.htm"}
+<link href="../admin/big/css/bootstrap-grid.min.css" rel="stylesheet" />
+    <link href="../admin/big/dist/zoomify.min.css" rel="stylesheet" />
+    <link href="../admin/big/css/style.css" rel="stylesheet" />
+    <script src="../admin/big/dist/zoomify.min.js"></script>
 <div class="main-div">
 <form method="post" action="user_account.php" name="theForm" onsubmit="return validate();">
 <table border="0" width="100%">
@@ -16,6 +20,17 @@
   <tr>
     <td colspan="2"><strong>{$lang.surplus_desc}：</strong>{$surplus.user_note}<hr /></td>
   </tr>
+  {if $surplus.stub_img}
+  <tr>
+  	<th width="15%" valign="middle" align="right">票据：</th>
+  	<td>
+  		<img id="gzs_t" src="{$surplus.stub_img}" style="width: 150px;"/>
+  	</td>
+  </tr>
+  <script type="text/javascript">
+  						 $('#gzs_t').zoomify();
+   </script>
+  {/if}
   <tr>
     <th width="15%" valign="middle" align="right">{$lang.surplus_notic}：</th>
     <td width="85%">

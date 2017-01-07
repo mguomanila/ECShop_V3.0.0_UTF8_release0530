@@ -10,7 +10,7 @@ $data = array (
     'show_in_nav' => '0',
     'grade' => '10',
     'sort_order' => '1',
-    'has_children' => '1',
+    'has_children' => '2',
     'goods_num' => '2',
     'level' => 0,
     'id' => '26',
@@ -31,6 +31,22 @@ $data = array (
     'level' => 1,
     'id' => '27',
     'name' => '大家电',
+  ),
+  28 => 
+  array (
+    'cat_id' => '28',
+    'cat_name' => '平板电脑',
+    'measure_unit' => '',
+    'parent_id' => '27',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => 0,
+    'level' => 2,
+    'id' => '28',
+    'name' => '平板电脑',
   ),
   32 => 
   array (
@@ -96,21 +112,21 @@ $data = array (
     'id' => '31',
     'name' => '洗衣机',
   ),
-  28 => 
+  3 => 
   array (
-    'cat_id' => '28',
-    'cat_name' => '平板电脑',
-    'measure_unit' => '',
-    'parent_id' => '27',
+    'cat_id' => '3',
+    'cat_name' => '小型手机',
+    'measure_unit' => '臺',
+    'parent_id' => '26',
     'is_show' => '1',
     'show_in_nav' => '0',
-    'grade' => '0',
+    'grade' => '4',
     'sort_order' => '50',
     'has_children' => '0',
-    'goods_num' => 0,
-    'level' => 2,
-    'id' => '28',
-    'name' => '平板电脑',
+    'goods_num' => '3',
+    'level' => 1,
+    'id' => '3',
+    'name' => '小型手机',
   ),
   25 => 
   array (
@@ -176,22 +192,6 @@ $data = array (
     'id' => '6',
     'name' => '手机',
   ),
-  8 => 
-  array (
-    'cat_id' => '8',
-    'cat_name' => '耳机',
-    'measure_unit' => '',
-    'parent_id' => '6',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '0',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => '3',
-    'level' => 1,
-    'id' => '8',
-    'name' => '耳机',
-  ),
   9 => 
   array (
     'cat_id' => '9',
@@ -207,6 +207,22 @@ $data = array (
     'level' => 1,
     'id' => '9',
     'name' => '电池',
+  ),
+  8 => 
+  array (
+    'cat_id' => '8',
+    'cat_name' => '耳机',
+    'measure_unit' => '',
+    'parent_id' => '6',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => '3',
+    'level' => 1,
+    'id' => '8',
+    'name' => '耳机',
   ),
   19 => 
   array (
@@ -330,27 +346,11 @@ $data = array (
     'show_in_nav' => '0',
     'grade' => '7',
     'sort_order' => '50',
-    'has_children' => '2',
+    'has_children' => '1',
     'goods_num' => 0,
     'level' => 0,
     'id' => '1',
     'name' => '手机类型',
-  ),
-  3 => 
-  array (
-    'cat_id' => '3',
-    'cat_name' => '小型手机',
-    'measure_unit' => '臺',
-    'parent_id' => '1',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '4',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => '3',
-    'level' => 1,
-    'id' => '3',
-    'name' => '小型手机',
   ),
   4 => 
   array (

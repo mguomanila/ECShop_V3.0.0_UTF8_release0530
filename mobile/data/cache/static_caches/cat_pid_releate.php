@@ -10,7 +10,7 @@ $data = array (
     'show_in_nav' => '0',
     'grade' => '10',
     'sort_order' => '1',
-    'has_children' => '1',
+    'has_children' => '2',
     'goods_num' => '2',
   ),
   1 => 
@@ -140,23 +140,10 @@ $data = array (
     'show_in_nav' => '0',
     'grade' => '7',
     'sort_order' => '50',
-    'has_children' => '2',
+    'has_children' => '1',
     'goods_num' => 0,
   ),
   11 => 
-  array (
-    'cat_id' => '3',
-    'cat_name' => '小型手机',
-    'measure_unit' => '臺',
-    'parent_id' => '1',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '4',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => '3',
-  ),
-  12 => 
   array (
     'cat_id' => '4',
     'cat_name' => '3G手机',
@@ -168,6 +155,19 @@ $data = array (
     'sort_order' => '50',
     'has_children' => '0',
     'goods_num' => '2',
+  ),
+  12 => 
+  array (
+    'cat_id' => '9',
+    'cat_name' => '电池',
+    'measure_unit' => '',
+    'parent_id' => '6',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => 0,
   ),
   13 => 
   array (
@@ -184,19 +184,6 @@ $data = array (
   ),
   14 => 
   array (
-    'cat_id' => '9',
-    'cat_name' => '电池',
-    'measure_unit' => '',
-    'parent_id' => '6',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '0',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => 0,
-  ),
-  15 => 
-  array (
     'cat_id' => '24',
     'cat_name' => '数码时尚',
     'measure_unit' => '',
@@ -208,7 +195,7 @@ $data = array (
     'has_children' => '0',
     'goods_num' => '8',
   ),
-  16 => 
+  15 => 
   array (
     'cat_id' => '20',
     'cat_name' => '保护壳',
@@ -221,7 +208,7 @@ $data = array (
     'has_children' => '0',
     'goods_num' => '1',
   ),
-  17 => 
+  16 => 
   array (
     'cat_id' => '27',
     'cat_name' => '大家电',
@@ -234,7 +221,33 @@ $data = array (
     'has_children' => '5',
     'goods_num' => '1',
   ),
+  17 => 
+  array (
+    'cat_id' => '3',
+    'cat_name' => '小型手机',
+    'measure_unit' => '臺',
+    'parent_id' => '26',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '4',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => '3',
+  ),
   18 => 
+  array (
+    'cat_id' => '28',
+    'cat_name' => '平板电脑',
+    'measure_unit' => '',
+    'parent_id' => '27',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => 0,
+  ),
+  19 => 
   array (
     'cat_id' => '32',
     'cat_name' => '冰箱',
@@ -247,7 +260,7 @@ $data = array (
     'has_children' => '0',
     'goods_num' => 0,
   ),
-  19 => 
+  20 => 
   array (
     'cat_id' => '29',
     'cat_name' => '家用空调',
@@ -260,7 +273,7 @@ $data = array (
     'has_children' => '0',
     'goods_num' => 0,
   ),
-  20 => 
+  21 => 
   array (
     'cat_id' => '30',
     'cat_name' => '家电配件',
@@ -273,23 +286,10 @@ $data = array (
     'has_children' => '0',
     'goods_num' => '1',
   ),
-  21 => 
+  22 => 
   array (
     'cat_id' => '31',
     'cat_name' => '洗衣机',
-    'measure_unit' => '',
-    'parent_id' => '27',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '0',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => 0,
-  ),
-  22 => 
-  array (
-    'cat_id' => '28',
-    'cat_name' => '平板电脑',
     'measure_unit' => '',
     'parent_id' => '27',
     'is_show' => '1',

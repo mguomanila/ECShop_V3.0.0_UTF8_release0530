@@ -1,43 +1,58 @@
 <!-- #BeginLibraryItem "/library/user_header.lbi" --><!-- #EndLibraryItem -->
 <ul class="nav nav-tabs" role="tablist">
     <li><a href="{:url('User/account_detail')}" >{$lang.add_surplus_log}</a></li>
+    <li><a href="{:url('User/account_points')}" >{$lang.view_points}</a></li>
+    
     <li><a href="{:url('User/account_log')}" >{$lang.view_application}</a></li>
 
 	<li><a href="{:url('User/account_raply')}" >{$lang.surplus_type_1}</a></li>
-	<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_2}</a></li>
+	<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_99}</a></li>
 	<!--<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
-	
+	<!-- {if $user_type eq 2|| $user_type eq 3} -->
 	<li class="active"><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
+	<!--{/if}-->
 	<li><a href="{:url('User/account_jewel')}" >{$lang.surplus_type_4}</a></li>
+	<li><a href="{:url('User/transfer')}" >{$lang.surplus_type_5}</a></li>
 	
   </ul>
-<form action="{:url('user/act_account')}" method="post" name="theForm" onSubmit="return submitSurplus()">
+<form action="{:url('user/act_account')}" method="post" name="theForm"  enctype="multipart/form-data"  onSubmit="return submitSurplus()">
   <div class="ect-bg-colorf flow-consignee">
     <ul class="o-info">
       <li>
         <div class="input-text"><b class="pull-left">消费金额：</b><span>
-          <input id="vr" name="amount"  placeholder="1元人民币等于100金元宝" type="text" class="inputBg_touch" value="{$order.amount|escape}" />
+          <input id="vr" name="amount_user"  placeholder="1元人民币等于100金元宝" type="text" class="inputBg_touch amount_user" value="{$order.amount|escape}" />
           </span></div>
       </li>
-      <li id="vr_user_tr" style="display: none;" >
+      <li id="vr_user_tr" style="display: ;" >
               <div class="input-text"><b class="pull-left">实际金额：</b><span>
-              <input id="vr_user" readonly name="amount_user" placeholder="实际金额" type="text" class="inputBg_touch" value="{$order.amount|escape}" />
+              <input id="vr_user" readonly name="amount" placeholder="实际金额" type="text" class="inputBg_touch amount" value="{$order.amount|escape}" />
           </span></div>
       </li>
      <!-- {if $user_type eq 2|| $user_type eq 3} -->
-     <li>
+     <!--<li>
         <div class="input-text"><b class="pull-left">充值对象：</b><span>
           	<input type="radio" id="anniu1" checked="checked" name="user_type" value="1"/>给自己充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        		<input type="radio" id="anniu2" name="user_type" value="2"/>给好友充
           </span></div>
-      </li>
-       <li id="content_text" style="display: none;">
+      </li>-->
+       <li id="content_text" style="display: ;">
        	<div class="input-text"><b class="pull-left">好友账户：</b><span>
        		<input type="text" placeholder="请输入好友账户的用户名"  name="rest_user_name" value=""/>
+            <input type="hidden"  name="user_type" value="2"/>
+       		
        	</li>
       <!-- {else} -->
             <input type="hidden"  name="user_type" value="1"/>
             <!-- {/if} -->
+      <li class="input-text" id="stub" style="display: none;position: relative;"><b class="pull-left" style="position: absolute;top: 63%;margin-top: -21px;">上传票据：</b>
+      		<!--<input type="button" name="" value="点击上传图片" id="scdj"/>
+			<input type="file" name="stub" id="scpj"  style="display:none"/>-->
+			<div id="preview">
+                <img id="imghead" border="0" src="images/photo_icon.png" width="90" height="90" onclick="$('#previewImg').click();">
+             </div>         
+            <input type="file" name="stub" onchange="previewImage(this)" style="display: none;" id="previewImg">
+      </li>
+
       <li class="input-text"><b class="pull-left">{$lang.process_notic}：</b>
         <textarea name="user_note" placeholder="{$lang.process_notic}" type="text">{$order.user_note|escape}</textarea>
       </li>
@@ -75,69 +90,31 @@
   </div>
 </form>
 <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js" ></script> 
+<script type="text/javascript" src="__TPL__/js/img_pre.js" ></script> 
 <script type="text/javascript">
 
-		    var aAnniu1=document.getElementById('anniu1');
-		    var aAnniu2=document.getElementById('anniu2');
-		    var aContent=document.getElementById('content_text');
-		    var vr=document.getElementById('vr');
-		    var vr_user=document.getElementById('vr_user');
-		    var vr_user_tr=document.getElementById('vr_user_tr');
-		    aAnniu1.onclick=function () {
-		        aContent.style.display='none';
-		        vr_user_tr.style.display='none';
-		        vr.name='amount'
-		        vr_user.name='amount_user'
-		    }
-		    aAnniu2.onclick=function () {
-		        aContent.style.display='';
-		         vr_user_tr.style.display='';
-		        vr.name='amount_user'
-		        vr_user.name='amount'
-		    }
+		   
 			$("#vr").keyup(function(){
+
 				var a= $("#vr").val()*0.15;
 				var b=a.toFixed(2);
   				$("#vr_user").val(b)
 			});
+			
+			$("#vr").on('keyup',function(){
+				if($(".amount").val()>=1500){
+					$("#stub").css('display','block')
+				}else{
+					$("#stub").css('display','none')
+				}
+			})
+			
+			
+			$("#scdj").on("click",function(){
+				$("#scpj").click();
+			})
         </script>
-<script type="text/javascript">
-		        	/*******************************************************************************
- * 会员余额申请
- */
-function submitSurplus() {
 
-	var frm = document.forms['theForm'];
-	var surplus_type = frm.elements['surplus_type'].value;
-	var surplus_amount = frm.elements['amount'].value;
-
-	var process_notic = frm.elements['user_note'].value;
-	var payment_id = 0;
-	var msg = '';
-
-	if (surplus_amount.length == 0) {
-		alert('请输入您要操作的金额数量');
-		return false;
-	} else {
-		var reg = /^[\.0-9]+/;
-		if (!reg.test(surplus_amount)) {
-			msg += surplus_amount_error + '\n';
-		}
-	}
-	
-
-	if (process_notic.length == 0) {
-		msg += process_desc + "\n";
-	}
-
-	if (msg.length > 0) {
-		alert(msg);
-		return false;
-	}
-
-	return true;
-}
-</script>
 </div>
 <!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem --> <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem --> 
 <script type="text/javascript" src="__PUBLIC__/js/region.js"></script> 
@@ -155,6 +132,45 @@ function submitSurplus() {
 	      }
 	}
 	{/literal}
+</script>
+<script type="text/javascript">
+		        	/*******************************************************************************
+ * 会员余额申请
+ */
+function submitSurplus() {
+	var frm = document.forms['theForm'];
+	var surplus_type = frm.elements['surplus_type'].value;
+	var surplus_amount = frm.elements['amount'].value;
+	var surplus_stub = frm.elements['stub'].value;
+	var process_notic = frm.elements['user_note'].value;
+	var payment_id = 0;
+	var msg = '';
+
+	if (surplus_amount.length == 0) {
+		alert('请输入您要操作的金额数量');
+		return false;
+	} else {
+		var reg = /^[\.0-9]+/;
+		if (!reg.test(surplus_amount)) {
+			msg += surplus_amount_error + '\n';
+		}
+	}
+
+	if(surplus_amount>=1500){
+		if(surplus_stub==false){
+			msg +='- 请上传票据 \n';
+			msg +='- 充值金额大于1500RMB时请上传票据 \n';
+		}
+	}
+
+
+	if (msg.length > 0) {
+		alert(msg);
+		return false;
+	}
+
+	return true;
+}
 </script>
 <!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
 </body></html>

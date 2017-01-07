@@ -40,11 +40,21 @@ class UserController extends CommonController {
         }else{
         	$info['user_type']='普通会员';
         }
+		$ex_where = "user_id =".$this->user_id." AND reg_field_id=106";
+        $extend_info_arr123 = $this->model->table('reg_extend_info')
+                ->field('reg_field_id, content')
+                ->where($ex_where)
+                ->find();
+        if($extend_info_arr123['content']){
+		$info['user_img']='data/attached/images/'.$extend_info_arr123['content'];
+        	
+        }
 
         // 如果是显示页面，对页面进行相应赋值
         assign_template();
         $this->assign('action', $this->action);
         $this->assign('info', $info);
+
     }
 
     /**
@@ -79,12 +89,71 @@ class UserController extends CommonController {
         $this->assign('title', L('user_center'));
         $this->display('user.dwt');
     }
+    
+
+    
+    
+    public function verify_code() {
+    	$code=$_POST['verify_code']?$_POST['verify_code']:'';;
+        $mobile_session=$_POST['session']?$_POST['session']:'';
+        $user_info = model('Users')->get_profile($this->user_id);
+
+    	$result=array();
+    	if(empty($code)){
+    		$content='请输入验证码';
+    		$result[0]='1';
+    		$result[1]=$content;
+    		$result=json_encode($result,JSON_UNESCAPED_UNICODE);
+    		die($result);
+    	}
+    	if($code != $_SESSION[$mobile_session]['sms_code']){
+			$content='验证码错误';
+    		$result[0]=4;
+    		$result[1]=$content;
+    		$result=json_encode($result,JSON_UNESCAPED_UNICODE);
+    		die($result);
+		}
+		if(time() - $_SESSION[$mobile_session]['sms_time'] >300000){
+			$content='验证码已过期';
+    		$result[0]=3;
+    		$result[1]=$content;
+    		$result=json_encode($result,JSON_UNESCAPED_UNICODE);
+			unset($_SESSION[$mobile_session]['sms_code']);
+			unset($_SESSION[$mobile_session]['sms_time']);
+			unset($_SESSION[$mobile_session]['mobile_phone']);
+			die($result);
+
+		}
+    	if($_SESSION[$mobile_session]['mobile_phone'] != $user_info['mobile_phone']){
+    		$content='手机号不正确';
+    		$result[0]=2;
+    		$result[1]=$content;
+    		$result=json_encode($result,JSON_UNESCAPED_UNICODE);
+    		die($result);
+		}
+		
+		
+		$_SESSION[$mobile_session]['verify_code']=1;
+		$_SESSION[$mobile_session]['verify_time']=time();
+		
+		
+		$content='验证成功';
+		$result[0]=0;
+		$result[1]=$content;
+		$result=json_encode($result,JSON_UNESCAPED_UNICODE);
+		unset($_SESSION[$mobile_session]['sms_code']);
+		unset($_SESSION[$mobile_session]['sms_time']);
+		unset($_SESSION[$mobile_session]['mobile_phone']);
+		die($result);
+    }
+    
+    
 
     /**
      * 账户中心
      */
     public function profile() {
-    	
+		
         // 修改个人资料的处理
         if (IS_POST) {
         	$user_info = model('Users')->get_profile($this->user_id);
@@ -95,11 +164,17 @@ class UserController extends CommonController {
             $other['mobile_phone'] = $mobile_phone = I('post.extend_field5');
             $sel_question = I('post.sel_question');
             $passwd_answer = I('post.passwd_answer');
+            $session=$_POST['session']?$_POST['session']:'';
+            $code=$_POST['mobile_code']?$_POST['mobile_code']:'';
             
             if($other['mobile_phone'] != $user_info['mobile_phone']){
-            	$code=$_POST['mobile_code']?$_POST['mobile_code']:'';
-            	$mobile_session=$_POST['session1']?$_POST['session1']:'';
-            	
+
+
+            	if(($_SESSION[$session]['verify_code'] != 1) &&( time() -$_SESSION[$session]['verify_time']>300000)){
+					unset($_SESSION[$session]['verify_time']);
+	        		
+	        		show_message('请重新输入验证码', L('back_page_up'), url('profile'), 'error');
+            	}
             	if(!empty($other['mobile_phone']))
 				{
 					$preg_mobile_phone="/^[1][3456789][0-9]{9}$/";
@@ -116,30 +191,16 @@ class UserController extends CommonController {
 				}else{
 					show_message('- 手机号不能为空');
 				}
-				
-				
-            	if(empty($code)){
-	        		show_message('请输入验证码', L('back_page_up'), url('profile'), 'error');
-	        	}
-	        	if($_SESSION[$mobile_session]['mobile_phone'] != $user_info['mobile_phone']){
-					show_message('手机号不正确', L('back_page_up'), url('profile'), 'error');
-				}
-				if(time() - $_SESSION[$mobile_session]['sms_time'] >300000){
-					unset($_SESSION[$mobile_session]['sms_code']);
-					unset($_SESSION[$mobile_session]['sms_time']);
-				unset($_SESSION[$mobile_session]['mobile_phone']);
-					
-					show_message('验证码已过期', L('back_page_up'), url('profile'), 'error');
-				}
-				if($code != $_SESSION[$mobile_session]['sms_code']){
-					show_message('验证码错误', L('back_page_up'), url('profile'), 'error');
-				}
-				unset($_SESSION[$mobile_session]['sms_code']);
-				unset($_SESSION[$mobile_session]['sms_time']);
-				unset($_SESSION[$mobile_session]['mobile_phone']);
+
+
+				unset($_SESSION[$session]['sms_code']);
+				unset($_SESSION[$session]['sms_time']);
+				unset($_SESSION[$session]['mobile_phone']);
 				
             }
-	        $ex_where = "user_id =".$this->user_id." AND reg_field_id IN (103,104,105)";
+
+            
+	        $ex_where = "user_id =".$this->user_id." AND reg_field_id IN (103,104,105,106)";
 	        $extend_info_arr123 = $this->model->table('reg_extend_info')
 	                ->field('reg_field_id, content')
 	                ->where($ex_where)
@@ -152,33 +213,53 @@ class UserController extends CommonController {
             $user_bank_name = I('post.extend_field104');
             
             if(($list['103']['content'] != $user_bank) || ($list['104']['content'] != $user_bank_name) || ($list['105']['content'] != $bank_name)){
-            	$code=$_POST['bank_code']?$_POST['bank_code']:'';
-            	$bank_session=$_POST['session2']?$_POST['session2']:'';
-            	
-            	if(empty($code)){
-	        		show_message('请输入验证码', L('back_page_up'), url('profile'), 'error');
-	        	}
-	        	if($_SESSION[$bank_session]['mobile_phone'] != $user_info['mobile_phone']){
-					show_message('手机号不正确', L('back_page_up'), url('profile'), 'error');
-				}
-				if(time() - $_SESSION[$bank_session]['sms_time'] >300000){
-					unset($_SESSION[$bank_session]['sms_code']);
-					unset($_SESSION[$bank_session]['sms_time']);
-				unset($_SESSION[$bank_session]['mobile_phone']);
-					
-					show_message('验证码已过期', L('back_page_up'), url('profile'), 'error');
-				}
-				if($code != $_SESSION[$bank_session]['sms_code']){
-					show_message('验证码错误', L('back_page_up'), url('profile'), 'error');
-				}
-				unset($_SESSION[$bank_session]['sms_code']);
-				unset($_SESSION[$bank_session]['sms_time']);
-				unset($_SESSION[$bank_session]['mobile_phone']);
+
+
+            	if(($_SESSION[$session]['verify_code'] != 1) &&( time() -$_SESSION[$session]['verify_time']>300000)){
+					unset($_SESSION[$session]['verify_time']);
+	        		
+	        		show_message('请重新输入验证码', L('back_page_up'), url('profile'), 'error');
+            	}
+//          	if(empty($code)){
+//	        		show_message('请输入验证码', L('back_page_up'), url('profile'), 'error');
+//	        	}
+//	        	if($_SESSION[$bank_session]['mobile_phone'] != $user_info['mobile_phone']){
+//					show_message('手机号不正确', L('back_page_up'), url('profile'), 'error');
+//				}
+//				if(time() - $_SESSION[$bank_session]['sms_time'] >300000){
+//					unset($_SESSION[$bank_session]['sms_code']);
+//					unset($_SESSION[$bank_session]['sms_time']);
+//				unset($_SESSION[$bank_session]['mobile_phone']);
+//					
+//					show_message('验证码已过期', L('back_page_up'), url('profile'), 'error');
+//				}
+//				if($code != $_SESSION[$bank_session]['sms_code']){
+//					show_message('验证码错误', L('back_page_up'), url('profile'), 'error');
+//				}
+
+				unset($_SESSION[$session]['sms_code']);
+				unset($_SESSION[$session]['sms_time']);
+				unset($_SESSION[$session]['mobile_phone']);
 				
             }
-
-			
-			
+			unset($_SESSION[$session]['verify_code']);
+            
+//          print_r($_FILES);
+//          exit();
+			$user_img=$_FILES['extend_field106'];
+			if($user_img['name']){
+				
+				$img=$list[106]['content'];
+				$filename = ROOT_PATH.'/data/attached/images/'.$img;
+         		@unlink($filename);
+                $result = model('Users')->ectouchUpload('extend_field106','./data/attached/images/');
+				if ($result['error'] > 0) {
+                    show_message($result['message']);
+               	}
+               	$user_img_path=$result['message']['extend_field106']['savename'];
+			}else{
+				$user_img_path=$list['106']['content'];
+			}
 			
 			$sql = 'SELECT * FROM ' . M()->pre . 'users' . " WHERE mobile_phone = '$other[mobile_phone]'  AND user_id <> $this->user_id";
 			$arr=M()->getRow($sql);
@@ -200,9 +281,16 @@ class UserController extends CommonController {
             // 循环更新扩展用户信息
             foreach ($fields_arr as $val) {
                 $extend_field_index = 'extend_field' . $val['id'];
-                if (isset($_POST[$extend_field_index])) {
-                    $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr(htmlspecialchars($_POST[$extend_field_index]), 0, 99) : htmlspecialchars($_POST[$extend_field_index]);
+                if (isset($_POST[$extend_field_index])||isset($_FILES[$extend_field_index])) {
+                	if($val['id']==106){
+                    $temp_field_content = $user_img_path;
 
+                	}else{
+                    $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr(htmlspecialchars($_POST[$extend_field_index]), 0, 99) : htmlspecialchars($_POST[$extend_field_index]);
+                		
+                	}
+
+					
                     $where_s['reg_field_id'] = $val['id'];
                     $where_s['user_id'] = $this->user_id;
                     $rs_s = $this->model->table('reg_extend_info')
@@ -315,15 +403,15 @@ class UserController extends CommonController {
                     break;
                 case 103:
                     $extend_info_list[$key]['content'] = $temp_arr[$val['id']];
-                    $arr[$key]=$extend_info_list[$key];
+                    $arr[$val['id']]=$extend_info_list[$key];
                     break;
                 case 104:
                     $extend_info_list[$key]['content'] = $temp_arr[$val['id']];
-                    $arr[$key]=$extend_info_list[$key];
+                    $arr[$val['id']]=$extend_info_list[$key];
                     break;
                 case 105:
                     $extend_info_list[$key]['content'] = $temp_arr[$val['id']];
-                    $arr[$key]=$extend_info_list[$key];
+                    $arr[$val['id']]=$extend_info_list[$key];
                     break;
                 default:
                     $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']];
@@ -360,12 +448,41 @@ class UserController extends CommonController {
         $this->assign('pager', $this->pageShow($count));
         
         $account_detail = model('Users')->get_account_detail($this->user_id, $size, ($page-1)*$size);
-        
+        $user_type=get_user_type();
+		$this->assign('user_type', $user_type);
         $this->assign('title', L('label_user_surplus'));
         $this->assign('surplus_amount', price_format($surplus_amount, false));
         $this->assign('account_log', $account_detail);
         $this->display('user_account_detail.dwt');
     }
+    
+    
+    
+    
+    /**
+     * 积分管理
+     */
+    public function account_points() {
+        
+        $size = I(C('page_size'), 5);
+        $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
+        $where = 'user_id = ' . $this->user_id . ' AND pay_points <> 0';
+        $count = $this->model->table('account_log')->field('COUNT(*)')->where($where)->getOne();
+        $this->pageLimit(url('user/account_points'), $size);
+        $this->assign('pager', $this->pageShow($count));
+        
+        $account_detail = model('Users')->get_account_points($this->user_id, $size, ($page-1)*$size);
+//      print_r($account_detail);
+        $user_type=get_user_type();
+		$this->assign('user_type', $user_type);
+        $this->assign('title', L('label_user_surplus'));
+
+        $this->assign('account_log', $account_detail);
+        $this->display('user_account_points.dwt');
+    }
+    
+    
+    
     
 
     /**
@@ -375,7 +492,7 @@ class UserController extends CommonController {
     
         $size = I(C('page_size'), 5);
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
-        $count = $this->model->table('user_account')->field('COUNT(*)')->where("user_id = $this->user_id AND process_type ". db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL)))->getOne();
+        $count = $this->model->table('user_account')->field('COUNT(*)')->where("user_id = $this->user_id AND process_type ". db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_TRANSFER)))->getOne();
         $this->pageLimit(url('user/account_log'), $size);
         $this->assign('pager', $this->pageShow($count));    
     
@@ -387,7 +504,11 @@ class UserController extends CommonController {
         }
         //获取余额记录
         $account_log = model('ClipsBase')->get_account_log($this->user_id, $size, ($page-1)*$size);
+		
 
+//      print_r($account_log);
+		$user_type=get_user_type();
+		$this->assign('user_type', $user_type);
         //模板赋值
         $this->assign('surplus_amount', price_format($surplus_amount, false));
         $this->assign('account_log',    $account_log);
@@ -411,8 +532,8 @@ class UserController extends CommonController {
 
 		if($arr['process_type'] == 2){
     		$fmt_amount   = str_replace('-', '', $arr['integral_amount']);
-        	$change_desc = L('surplus_type_2');
-	    	model('ClipsBase')->log_account_change($this->user_id, 0, 0, 0, $fmt_amount, $change_desc);	    	
+        	$change_desc = '金积分提现失败';
+	    	model('ClipsBase')->log_account_change($this->user_id, 0, 0, 0, $fmt_amount, $change_desc,ACT_POINTS);	    	
 		}elseif($arr['process_type'] == 1){
 		  	$fmt_amount   = str_replace('-', '', $arr['amount']);
         	$change_desc = L('surplus_type_1');
@@ -497,6 +618,8 @@ class UserController extends CommonController {
         if (empty($surplus_amount)) {
             $surplus_amount = 0;
         }
+        $user_type=get_user_type();
+		$this->assign('user_type', $user_type);
         $this->assign('surplus_amount', price_format($surplus_amount, false));
         $this->assign('title', L('label_user_surplus'));
         $this->display('user_account_raply.dwt');
@@ -554,11 +677,11 @@ class UserController extends CommonController {
                     break;
                 case 104:
                     $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
-                    $bank_name=$extend_info_list[$key];
+                    $user_bank_name=$extend_info_list[$key];
                     break;
                 case 105:
                     $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
-                    $user_bank_name=$extend_info_list[$key];
+                    $bank_name =$extend_info_list[$key];
                     break;
                 default:
                     $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']];
@@ -569,7 +692,8 @@ class UserController extends CommonController {
         $this->assign('bank_name', $bank_name);
         
         $this->assign('user_bank_name', $user_bank_name);
-       
+       $user_type=get_user_type();
+		$this->assign('user_type', $user_type);
         if (empty($surplus_amount)) {
             $surplus_amount = 0;
         }
@@ -585,7 +709,8 @@ class UserController extends CommonController {
         $this->assign('title', L('label_user_surplus'));
         $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $account    = model('ClipsBase')->get_surplus_info($surplus_id);
-    
+    $user_type=get_user_type();
+		$this->assign('user_type', $user_type);
         $this->assign('payment', model('ClipsBase')->get_online_payment_list(false));
         $this->assign('order',   $account);
         $this->display('user_account_deposit.dwt');
@@ -613,15 +738,39 @@ class UserController extends CommonController {
      *  会员积分充值界面 
      */
     public function integral_deposit(){
+//  	echo ini_get('upload_max_filesize');
+//  	print_r(system('/usr/bin/sudo /etc/init.d/nginx stop'));
         $this->assign('title', L('label_user_surplus'));
         $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $account    = model('ClipsBase')->get_surplus_info($surplus_id);
+
     	$user_type=get_user_type();
 		$this->assign('user_type', $user_type);
         $this->assign('payment', model('ClipsBase')->get_online_payment_list(false));
         $this->assign('order',   $account);
         $this->display('user_account_int_deposit.dwt');
     }
+    
+    
+      /**
+     *  会员积分充值界面 
+     */
+    public function transfer(){
+//  	echo ini_get('upload_max_filesize');
+//  	print_r(system('/usr/bin/sudo /etc/init.d/nginx stop'));
+        $this->assign('title', L('label_user_surplus'));
+        $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $account    = model('ClipsBase')->get_surplus_info($surplus_id);
+
+    	$user_type=get_user_type();
+		$this->assign('user_type', $user_type);
+        $this->assign('payment', model('ClipsBase')->get_online_payment_list(false));
+        $this->assign('order',   $account);
+       					
+        $this->display('user_account_transfer.dwt');
+    }
+    
+    
     
     
     /**
@@ -709,6 +858,9 @@ class UserController extends CommonController {
 	    	}
         	/* 判断是否有足够的余额的进行退款的操作 */
             $sur_amount = model('ClipsBase')->get_user_surplus_points($this->user_id);
+            if($integral<100 || $integral%100 !=0){
+            	show_message('提现金积分最低为100,提现金积分必须为100的倍数', L('back_page_up'), '', 'info');
+            }
             if ($integral > $sur_amount)
             {
                 $content = L('surplus_amount_error');
@@ -728,7 +880,7 @@ class UserController extends CommonController {
             {
         $change_desc = L('surplus_type_2');
             	
-        model('ClipsBase')->log_account_change($this->user_id, 0, 0, 0,$integral , $change_desc);
+        model('ClipsBase')->log_account_change($this->user_id, 0, 0, 0,$integral , $change_desc,ACT_POINTS);
             	
                 $content = L('surplus_appl_submit');
                 show_message($content, L('back_account_log'), url('User/account_log'), 'info');
@@ -743,9 +895,31 @@ class UserController extends CommonController {
         }
         elseif($surplus['process_type'] == 3)
         {
+        	$user_img=$_FILES['stub'];
+        	if($amount>=1500){
+        		if(!$user_img['name']){
+                    show_message('请上传票据',L('back_page_up'), '', 'info');
+        		}
+        	}
+//      	print_r($_FILES);
+//print_r(@disk_free_space(".")/ (1024 * 1024) . 'M');
+        	
+			if($user_img['name']){
+                
+                $result = model('Users')->ectouchUpload('stub','../data/stub_img/');
+				if ($result['error'] > 0) {
+                    show_message($result['message'],L('back_page_up'), '', 'info');
+               	}
+               	$user_img_path=$result['message']['stub']['savename'];
+			}
+			$surplus['stub_img']=isset($user_img_path)?$user_img_path:'';
+			$surplus['stub_status']=0;
         	if($user_type==2)
         	{
         		$rest_user=get_assign_user_info($_POST['rest_user_name']);
+        		if($rest_user['user_id'] == $this->user_id){
+                	show_message('好友账户不能为自己');
+        		}
     			$surplus['user_note'] = '充值好友账户：'.$_POST['rest_user_name'].' | 好友ID：'.$rest_user['user_id'].' | '.$surplus['user_note'];        		
     			$surplus['friend_id']=$rest_user['user_id'];
         	}
@@ -867,6 +1041,81 @@ class UserController extends CommonController {
             $this->assign('amount',  price_format($amount, false));
             $this->assign('order',   $order);
             $this->display('user_act_account.dwt');
+        }elseif($surplus['process_type'] == 5){
+        	
+        	$code=isset($_POST['mobile_code'])?$_POST['mobile_code']:'';
+        	$mobile_session=$_POST['session']?$_POST['session']:'';
+        	$user_info = model('Users')->get_profile($this->user_id);
+        	if(empty($code)){
+				$content='请输入验证码';
+                show_message($content, L('back_page_up'), '', 'info');
+        	}
+
+	    	if($code != $_SESSION[$mobile_session]['sms_code']){
+				$content='验证码错误';
+                show_message($content, L('back_page_up'), '', 'info');
+			}
+			if(time() - $_SESSION[$mobile_session]['sms_time'] >300000){
+				$content='验证码已过期';
+                show_message($content, L('back_page_up'), '', 'info');
+			}
+	    	if($_SESSION[$mobile_session]['mobile_phone'] != $user_info['mobile_phone']){
+	    		$content='手机号不正确';
+	    		show_message($content, L('back_page_up'), '', 'info');
+			}
+			unset($_SESSION[$mobile_session]['sms_code']);
+			unset($_SESSION[$mobile_session]['sms_time']);
+			unset($_SESSION[$mobile_session]['mobile_phone']);
+
+        	
+            /* 判断是否有足够的余额的进行退款的操作 */
+            $sur_amount = model('ClipsBase')->get_user_surplus_points($this->user_id);
+            if ($amount > $sur_amount)
+            {
+                $content = L('surplus_amount_error');
+                show_message($content, L('back_page_up'), '', 'info');
+            }
+            if($amount <= 0 || empty($amount)){
+            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
+            }
+            
+    		$rest_user=get_assign_user_info($_POST['rest_user_name']);
+    		
+    		if($rest_user['user_id'] == $this->user_id){
+            	show_message('好友账户不能为自己');
+    		}
+    		if($rest_user['user_type'] == 1){
+            	show_message('好友账户不是金钻会员，不支持转账');
+    		}
+			$surplus['user_note'] = '转账对象账户：'.$_POST['rest_user_name'].' | 转账对象ID：'.$rest_user['user_id'].' | '.$surplus['user_note'];        		
+			$surplus['friend_id']=$rest_user['user_id'];
+			
+			
+            //插入会员账目明细
+            $amount = '-'.$amount;
+            $surplus['payment'] = '';
+            $surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount,0,1);
+            
+
+    
+            /* 如果成功提交 */
+            if ($surplus['rec_id'] > 0)
+            {
+            	$change_desc1 = L('surplus_type_5').',好友ID:'.$this->user_id;
+            	$change_desc2 = L('surplus_type_5').',对象ID:'.$surplus['friend_id'];
+            	
+        		model('ClipsBase')->log_account_change($this->user_id, 0, 0, 0,$amount, $change_desc2);
+        		model('ClipsBase')->log_account_change($surplus['friend_id'], 0, 0, 0,$amount*(-1), $change_desc1);
+				
+            	
+                $content = L('surplus_transfer_ture');
+                show_message($content, L('back_account_log'), url('User/account_log'), 'info');
+            }
+            else
+            {
+                $content = $L('process_false');
+                show_message($content, L('back_page_up'), '', 'info');
+            }
         }
         /* 如果是会员预付款，跳转到下一步，进行线上支付的操作 */
         else
@@ -1792,13 +2041,14 @@ class UserController extends CommonController {
     
     
     public function my_vip(){
-    	$sql="SELECT user_id,user_type,user_name,from_unixtime(reg_time) AS reg_time FROM " . $this->model->pre .'users' ." WHERE parent_id = $this->user_id ORDER BY reg_time DESC";
+    	$sql="SELECT user_id,user_type,user_name,from_unixtime(reg_time) AS reg_time,love FROM " . $this->model->pre .'users' ." WHERE parent_id = $this->user_id ORDER BY reg_time DESC";
 		$aff_arr=$this->model->query($sql);
+		$user_type=get_user_type();
 		foreach ($aff_arr as $key => $value) {
 			$sql="SELECT user_id,sum(integral_amount) AS integral_amount FROM " . $this->model->pre ."user_account WHERE friend_id = $value[user_id] AND process_type = 3 AND is_paid = 1";
 			$res = $this->model->getRow($sql);
 			$res['integral_amount']=$res['integral_amount']?$res['integral_amount']:0;
-			if($value['user_type'] == '1'){
+			if($user_type == '1'){
 				$res['integral_amount'] = $res['integral_amount'] * 0.05;
 			}elseif($value['user_type'] == '2') {
 				$res['integral_amount'] = $res['integral_amount'] * 0.1;
@@ -1812,6 +2062,31 @@ class UserController extends CommonController {
         $this->display('user_vip.dwt');
         
     	
+    }
+    
+    public function benefit_desc(){
+    	$sql="SELECT user_id,user_type,user_name,from_unixtime(reg_time) AS reg_time,love FROM " . $this->model->pre .'users' ."  ORDER BY love DESC LIMIT 0 ,50";
+		$aff_arr=$this->model->query($sql);
+		foreach ($aff_arr as $key => $value) {
+			$list[$key+1]=$value;
+			if($value['user_id'] == $this->user_id){
+				$list[$key+1]['select'] = 1;
+			}else{
+				$list[$key+1]['select'] = 0;
+			}
+		}
+		$sql="SELECT SUM(love) AS love FROM " . $this->model->pre .'users';
+		$love=$this->model->getRow($sql);
+		$love=explode('.',$love['love']);
+		$num=strlen($love[0]);
+		$ca=9-$num;
+		for ($i=0; $i <$ca ; $i++) { 
+			$love[0]='0'.$love[0];
+		}
+		$this->assign('love', $love[0]);
+		$this->assign('aff_arr', $list);
+    	$this->assign('title', '公益基金');
+    	$this->display('user_benefit_desc.dwt');
     }
     
     
@@ -1853,7 +2128,7 @@ class UserController extends CommonController {
             // 纠错级别：L、M、Q、H
             $errorCorrectionLevel = 'L';
             // 点的大小：1到10
-            $matrixPointSize = 4;
+            $matrixPointSize = 6;
             QRcode::png($value, false, $errorCorrectionLevel, $matrixPointSize, 2);
         }
     }
@@ -2308,6 +2583,11 @@ class UserController extends CommonController {
 			
 			if(!empty($_POST['recomme'])){
 				$recomme=explode('W20161111',htmlspecialchars($_POST['recomme']),2);
+
+				if(!empty($recomme[0])){
+					$recomme1=explode('w20161111',htmlspecialchars($_POST['recomme']),2);
+					$recomme=$recomme1;
+				}
 				if(empty($recomme[0])){
 					$parent_info=get_assign_user_info($recomme[1],'recomme');
 					$other['parent_id']=$parent_info['user_id']?$parent_info['user_id']:'';
@@ -2341,7 +2621,7 @@ class UserController extends CommonController {
                     show_message(L('passport_js.agreement'));
                 }
 
-                if (strlen($username) < 3) {
+                if (strlen($username) < 2) {
                     show_message(L('passport_js.username_shorter'));
                 }
                 if (strlen($username) > 15) {

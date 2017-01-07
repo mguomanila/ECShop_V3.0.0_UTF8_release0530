@@ -60,6 +60,7 @@ class BaseModel extends Model {
         return $res;
     }
 
+
     /**
      * 载入配置信息
      * @access  public

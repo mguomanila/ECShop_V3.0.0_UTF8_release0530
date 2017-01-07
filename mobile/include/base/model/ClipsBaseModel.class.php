@@ -326,7 +326,7 @@ class ClipsBaseModel extends BaseModel {
  *
  * @return  int
  */
-public function insert_user_account_integral($surplus, $amount,$str=0)
+public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
 {
     $this->table = 'user_account';
         $data['user_id'] = $surplus['user_id'];
@@ -338,10 +338,16 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
         $data['user_note'] = $surplus['user_note'];
         $data['process_type'] = $surplus['process_type'];
         $data['payment'] = $surplus['payment'];
-        $data['is_paid'] = 0;
+        $data['is_paid'] = $paid;
 		$data['integral_amount'] = $amount;
 		if(isset($surplus['friend_id'])){
 			$data['friend_id']=$surplus['friend_id'];
+		}
+		if(isset($surplus['stub_img'])){
+			$data['stub_img']=$surplus['stub_img'];
+		}
+		if(isset($surplus['stub_status'])){
+			$data['stub_status']=$surplus['stub_status'];
 		}
         return $this->insert($data);
 }
@@ -467,7 +473,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
     public function get_account_log($user_id, $num, $start) {
         $account_log = array();
         $sql = 'SELECT * FROM ' . $this->pre . "user_account WHERE user_id = '$user_id'" .
-                " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL)) .
+                " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_TRANSFER)) .
                 " ORDER BY add_time DESC limit " . $start . ',' . $num;
 
         $list = $this->query($sql);
@@ -479,8 +485,23 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
                 $vo['short_admin_note'] = ($vo['admin_note'] > '') ? sub_str($vo['admin_note'], 30) : 'N/A';
                 $vo['user_note'] = nl2br(htmlspecialchars($vo['user_note']));
                 $vo['short_user_note'] = ($vo['user_note'] > '') ? sub_str($vo['user_note'], 30) : 'N/A';
-                $vo['pay_status'] = ($vo['is_paid'] == 0) ? L('un_confirm') : L('is_confirm');
+                $a=explode('| 备注',$vo['short_user_note']);
+                $vo['note']=$a[1];
+                $arr=explode('|',$vo['user_note']);
+				$img=explode(':',$arr[0]);
+				if($img[0]=='img'){
+					$note=array_shift($arr);
+					$vo['short_user_note']=($vo['user_note'] > '')?sub_str(implode('|',$arr),30): 'N/A';
+				}
                 
+//              $vo['pay_status'] = ($vo['is_paid'] == 0) ? L('un_confirm') : L('is_confirm');
+                if($vo['is_paid'] == 0){
+                	$vo['pay_status']=L('un_confirm');
+                }elseif($vo['is_paid'] == 1){
+                	$vo['pay_status']=L('is_confirm');
+                }else{
+                	$vo['pay_status']='已取消';
+                }
 				$vo['integral']           = abs($vo['integral_amount']).'积分';
 
                 /* 会员的操作类型： 冲值，提现 */
@@ -500,9 +521,14 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
                 	}
 
 					$vo['amount'] = abs($vo['integral_amount']).'积分';
-                }else{
+                }elseif($vo['process_type'] == 4){
                     $vo['type'] = L('surplus_type_4');
                 	
+                }
+                else{
+                    $vo['type'] = L('surplus_type_5');
+					$vo['amount'] = abs($vo['integral_amount']).'积分';
+                    
                 }
 
                 /* 支付方式的ID */
@@ -603,13 +629,15 @@ public function insert_user_account_integral($surplus, $amount,$str=0)
     public function get_user_default($user_id) {
         $user_bonus = $this->get_user_bonus();
 
-        $sql = "SELECT pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
+        $sql = "SELECT mobile_phone,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
         $row = $this->row($sql);
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
         $info['shop_name'] = C('shop_name');
         $info['integral'] =$row['pay_points']  ;
         $info['vr_points'] =  $row['vr_points'] ;
+        $info['mobile_phone'] =  $row['mobile_phone'] ;
+        
         $info['love'] = $row['love'] ;
 		$info['user_type'] = $row['user_type'];
         /* 增加是否开启会员邮件验证开关 */

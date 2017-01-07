@@ -4,9 +4,10 @@
 
 
 
-<table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" class="u-table">
+<!--<table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" class="u-table" id="u-table">
+	<div class="info_name">{$info.username}</div>
     <tr>
-      <td style="text-align:center;">{$shopurl}<br><img src="{$domain}{:url('user/create_qrcode', array('value'=>$this->_var['shopurl']))}"></td>
+      <td style="text-align:center;"><img src="{$domain}{:url('user/create_qrcode', array('value'=>$this->_var['shopurl']))}"></td>
     </tr>
     <tr>
         <td >
@@ -23,36 +24,35 @@
 			</div>
         </td>
     </tr>
- </table>
+ </table>-->
+ 
+ <div  id="u-table">
+ 	<div class="info_name_top"></div>
+	<div class="info_name">{$info.username}</div>
+	<div class="tab_etop"></div>
+    <div class="tab_ewm">
+      <img src="{$domain}{:url('user/create_qrcode', array('value'=>$this->_var['shopurl']))}">
+    </div>
+    <div class="tab_fx_top"></div>
+    <div class="tab_fx">
+       
+        	<div class="bdsharebuttonbox" data-tag="share_1" style="width:15em;margin:0 auto;">
+				<a class="bds_weixin" data-cmd="weixin"></a>
+        		
+				<a class="bds_qzone" data-cmd="qzone" href="#"></a>
+				<a class="bds_tsina" data-cmd="tsina"></a>
+				<a class="bds_bdhome" data-cmd="bdhome"></a>
+				<a class="bds_renren" data-cmd="renren"></a>
+			</div>
+       
+    </div>
+ </div>
   
 </div>
 <!-- {/if} --> 
 <!-- {/if} -->
-<script type="text/javascript">
-	function select_earnings(obj,user_id,user_name){
 
-		$.ajax({
-			type:"get",
-			url:"{:url('user/select_earnings')}",
-			data:"user_id="+user_id+"&user_type="+"{$info.user_type}",
-			dataType:"json",
-			success:function(result,status){					
-				if(status){
-					var arrayObj = new Array();
-					arrayObj=result;
-					if($('.earnings').attr('id')=='s'+user_id){
-						$(".earnings").remove()
-					}else{
-						$(".earnings").remove()
-						$(obj).after("<tr align='center' class='earnings' id='s"+user_id+"'><td>"+user_name+"今日充值</td><td colspan='3'>"+result['recharge']+"金元宝</td></tr><tr align='center' class='earnings' id='s"+user_id+"'><td>您今日的收益</td><td colspan='3'>"+result['earnings']+"金元宝</td></tr>");		
-						
-					}
-				}
-			}
-		});
-	}
-	
-</script>
+
 <script>
 	window._bd_share_config = {
 		common : {
@@ -69,4 +69,9 @@
 <!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem -->
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
 <!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
+<script type="text/javascript">
+	var table = $(window).height();
+	$("#u-table").height(table+80);
+</script>
+
 	

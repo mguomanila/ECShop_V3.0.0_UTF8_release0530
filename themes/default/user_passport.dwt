@@ -350,6 +350,7 @@
           <tr>
             <td></td>
             <td><input type="hidden" name="act" value="check_sms" />
+            <input type="hidden" name="session" value="pwd" />
               <input type="submit" name="submit" value="{$lang.submit}" class="bnt_blue" style="border:none;" />
               <input name="button" type="button" onclick="history.back()" value="{$lang.back_page_up}" style="border:none;" class="bnt_blue_1" />
 	    </td>
@@ -387,7 +388,7 @@
 	  		$.ajax({
 				type:"post",
 				url:"user.php?act=get_code_sms",
-				data:'mobile_phone='+{$mobile_phone},
+				data:'mobile_phone='+{$mobile_phone}+'&session=pwd',
 				dataType:"text",
 				async:true
 			});	

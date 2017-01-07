@@ -1,14 +1,20 @@
 <!-- #BeginLibraryItem "/library/user_header.lbi" --><!-- #EndLibraryItem -->
 <ul class="nav nav-tabs" role="tablist">
     <li><a href="{:url('User/account_detail')}" >{$lang.add_surplus_log}</a></li>
+    <li><a href="{:url('User/account_points')}" >{$lang.view_points}</a></li>
+    
     <li><a href="{:url('User/account_log')}" >{$lang.view_application}</a></li>
 
 	<li><a href="{:url('User/account_raply')}" >{$lang.surplus_type_1}</a></li>
-	<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_2}</a></li>
+	<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_99}</a></li>
 	<!--<li class="active"><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
 	
+	<!-- {if $user_type eq 2|| $user_type eq 3} -->
 	<li><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
+	<!--{/if}-->
 	<li><a href="{:url('User/account_jewel')}" >{$lang.surplus_type_4}</a></li>
+
+	
   </ul>
 <form action="{:url('user/act_account')}" method="post" name="theForm" onSubmit="return submitSurplus()">
   <div class="ect-bg-colorf flow-consignee">

@@ -2,13 +2,16 @@
 <ul class="nav nav-tabs" role="tablist">
     <li><a href="<?php echo url('User/account_detail');?>" ><?php echo $this->_var['lang']['add_surplus_log']; ?></a></li>
     <li class="active"><a href="<?php echo url('User/account_log');?>" ><?php echo $this->_var['lang']['view_application']; ?></a></li>
-
+    <li><a href="<?php echo url('User/account_points');?>" ><?php echo $this->_var['lang']['view_points']; ?></a></li>
+    
 	<li><a href="<?php echo url('User/account_raply');?>" ><?php echo $this->_var['lang']['surplus_type_1']; ?></a></li>
-	<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_2']; ?></a></li>
+	<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_99']; ?></a></li>
 	<!--<li><a href="<?php echo url('User/account_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_0']; ?></a></li>-->
-	
+	<?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3): ?>
 	<li><a href="<?php echo url('User/integral_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_3']; ?></a></li>
+	<?php endif; ?>
 	<li><a href="<?php echo url('User/account_jewel');?>" ><?php echo $this->_var['lang']['surplus_type_4']; ?></a></li>
+	<li><a href="<?php echo url('User/transfer');?>" ><?php echo $this->_var['lang']['surplus_type_5']; ?></a></li>
 	
   </ul>
  <div class="user-account-detail">
@@ -19,12 +22,14 @@
     	<li>
         	<p class="title"><span class="pull-left"><?php echo $this->_var['item']['add_time']; ?></span> <span class="pull-right"><?php echo $this->_var['item']['amount']; ?></span></p>
             <p class="content">
-            	<span class="remark pull-left"><?php echo $this->_var['lang']['process_notic']; ?>:<?php echo $this->_var['item']['user_note']; ?></span> 
+            	<span class="remark pull-left"><?php echo $this->_var['lang']['process_notic']; ?>:<?php echo $this->_var['item']['short_user_note']; ?></span> 
             	<span class="pull-right text-right type"><?php echo $this->_var['item']['type']; ?></span>
 			
 			</p>
 			<p class="content"><span class="remark pull-left"><?php echo $this->_var['lang']['admin_notic']; ?>:<?php if ($this->_var['item']['admin_note']): ?><?php echo $this->_var['item']['admin_note']; ?><?php else: ?>N/A<?php endif; ?></span> <span class="pull-right text-right type"><?php echo $this->_var['lang']['is_paid']; ?>:<?php echo $this->_var['item']['pay_status']; ?></p>
-			<p class="content"><?php echo $this->_var['lang']['handle']; ?>：<?php echo $this->_var['item']['handle']; ?>&nbsp;&nbsp;<?php if (( $this->_var['item']['is_paid'] == 0 && ( $this->_var['item']['process_type'] == 1 || $this->_var['item']['process_type'] == 2 || $this->_var['item']['process_type'] == 3 || $this->_var['item']['process_type'] == 4 ) ) || $this->_var['item']['handle']): ?>
+			<p class="content"><?php echo $this->_var['lang']['handle']; ?>：<?php echo $this->_var['item']['handle']; ?>&nbsp;&nbsp;
+				
+			<?php if (( $this->_var['item']['is_paid'] == 0 && ( $this->_var['item']['process_type'] == 1 || $this->_var['item']['process_type'] == 2 || $this->_var['item']['process_type'] == 3 || $this->_var['item']['process_type'] == 4 ) ) || $this->_var['item']['handle']): ?>
 			<a href="<?php echo url('user/cancel',array('id'=>$this->_var['item']['id']));?>" onclick="if (!confirm('<?php echo $this->_var['lang']['confirm_remove_account']; ?>')) return false;" class="btn btn-default"><?php echo $this->_var['lang']['is_cancel']; ?></a>
               <?php endif; ?>
 			  </p>

