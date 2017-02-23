@@ -131,7 +131,7 @@ if ($_REQUEST['act'] == 'login')
             
         }
     }else{
-    	select_cfg();
+    	
         if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0){
             $smarty->assign('gd_version', gd_version());
             $smarty->assign('random',     mt_rand());
