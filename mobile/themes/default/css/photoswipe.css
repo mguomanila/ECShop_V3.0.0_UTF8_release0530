@@ -872,3 +872,19 @@ div.ps-toolbar-play div.ps-toolbar-content
 	z-index: 100;
 }
 
+
+
+#sjhy_box a{
+	display: inline-block;
+	width: 3em;
+	text-align: center;
+}
+.jinzuan_a,
+.vip_a{
+	margin: 0 1em;
+	border-radius: 5px;
+}
+#sjhy_box .jinzuan_a{
+	background:#e87e04;
+	color: #fff;
+}

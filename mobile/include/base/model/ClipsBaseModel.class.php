@@ -643,7 +643,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
     public function get_user_default($user_id) {
         $user_bonus = $this->get_user_bonus();
 
-        $sql = "SELECT pay_points_2,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
+        $sql = "SELECT vip_type,pay_points_2,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
         $row = $this->row($sql);
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
@@ -657,6 +657,8 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
         
         $info['love'] = $row['love'] ;
 		$info['user_type'] = $row['user_type'];
+		$info['vip_type'] = $row['vip_type'];
+		
         /* 增加是否开启会员邮件验证开关 */
         $info['is_validate'] = (C('member_email_validate') && !$row['is_validated']) ? 0 : 1;
         $info['credit_line'] = $row['credit_line'];

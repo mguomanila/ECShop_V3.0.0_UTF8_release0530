@@ -21,17 +21,30 @@
   <div class="ect-bg-colorf flow-consignee">
     <ul class="o-info">
     	<li>
-        <div class="input-text"><b class="pull-left">升级类型：</b><span>
-          <p>金钻</p>
-          </span></div>
+        <div class="input-text">
+        	<b class="pull-left">升级类型：</b>
+        	<span>
+        		&nbsp;&nbsp;
+        		<input type="radio" class="jinzuan" checked="checked" name="sj_type" value="1" style="opacity: 0;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       			&nbsp;&nbsp;&nbsp;
+       			<input type="radio" class="vip" name="sj_type" value="2" style="opacity: 0;"/>
+        	</span>
+          	
+        </div>
+        <div id="sjhy_box">
+        	<span>
+        		<a href="#" class="jinzuan_a">金钻</a>
+        		<a href="#" class="vip_a">VIP</a>
+        	</span>
+        </div>
       </li>
       <li>
         <div class="input-text"><b class="pull-left">应付金额：</b><span>
-          <p>￥1280元</p>
-          <input type="hidden" name="amount" value="1280" readonly/>
+          <p class="yfje">￥1280元</p>
+          <input type="hidden" name="amount" value="1280" readonly  class="yfje_input"/>
           </span></div>
       </li>
-     <li>
+     <li id="user_type" >
         <div class="input-text"><b class="pull-left">充值对象：</b><span>
           	<input type="radio" class="anniu" checked="checked" name="user_type" value="1"/>给自己充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        		<input type="radio" class="anniu" name="user_type" value="2"/>给好友充
@@ -71,7 +84,7 @@
             <!-- {/foreach} -->
             </table>
   <div class="two-btn ect-padding-tb ect-padding-lr ect-margin-tb text-center">
-   <input type="hidden" name="surplus_type" value="4" />
+   <input type="hidden" name="surplus_type" value="4" class="surplus_type"/>
           <input type="hidden" name="rec_id" value="{$order.id}" />
           <input type="hidden" name="act" value="act_account" />
     <input type="submit" name="submit"  class="btn btn-info"  value="{$lang.submit_request}"/>
@@ -147,6 +160,29 @@ function submitSurplus() {
 			}
 
 		})
-	    	</script>
+	 </script>
+	    	
+	   <script type="text/javascript">
+	   		$(".jinzuan").on("click",function(){
+	   			$(".jinzuan_a").css({"background":"#e87e04","color":"#fff"});
+	   			$(".vip_a").css({"background":"none","color":"#000"});
+	   			$(".yfje").html("￥1280元");
+	   			$(".yfje_input").val("1280");
+	   			$(".surplus_type").val("4")
+//	   			$("#content_text").css("display",'block')
+				$("#user_type").css("display",'block')
+	   		})
+	   		
+	   		$(".vip").on("click",function(){
+	   			$(".vip_a").css({"background":"#e87e04","color":"#fff"});
+	   			$(".jinzuan_a").css({"background":"none","color":"#000"});
+	   			$(".yfje").html("￥10元");
+	   			$(".yfje_input").val("10");
+				$("#content_text").css("display",'none')
+				$("#user_type").css("display",'none')
+	   			
+	   			$(".surplus_type").val("7")
+	   		})
+	   </script>
 <!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
 </body></html>

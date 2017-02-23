@@ -24,12 +24,15 @@
       <h4><?php echo $this->_var['info']['username']; ?> | <a href="<?php echo url('user/logout');?>" class="ect-colorf"><?php echo $this->_var['lang']['label_logout']; ?></a></h4>
     </dt>
   </dl>-->
-  
+  <?php if ($this->_var['info']['user_type'] == '金钻会员'): ?>
  	<div style="position: fixed;top: 60vw;right: 3vw;color: #fff;border-radius: 50%;background: rgba(0,0,0,.3);width: 46px;height: 46px;text-align: center;line-height: 46px;z-index: 999;" id="gg">公告</div>
-	
-	<div style="display:none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,.8);z-index: 9998;" id="gg_bg"></div>
-	<div style="display:none;position: fixed;text-align: center;left: 0;top: 25vw;z-index: 9999;" id="gg_img"><img src="themes/default/images/gg.jpeg" alt="" width="100%"/></div>
+	<?php endif; ?>
+	<div id="gg_box">
+		<div style="display:none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,.8);z-index: 9998;" id="gg_bg"></div>
+		<div style="display:none;position: fixed;text-align: center;left: 0;top: 5vw;z-index: 9999;" id="gg_img"><img src="themes/default/images/gg.jpeg" alt="" width="100%"/></div>
 
+	</div>
+	
 
 
 </div>
@@ -288,7 +291,7 @@
 		$("body").css({"overflow":"hidden","position":"fixed","top":"0"})
 	});
 	
-	$("#gg_bg").on("click",function(){
+	$("#gg_box").on("click",function(){
 		$("#gg_img").hide("show");
 		$("#gg_bg").hide("show");
 		$("body").css({"overflow":"auto","position":"static"});

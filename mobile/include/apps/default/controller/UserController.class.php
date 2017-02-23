@@ -1104,7 +1104,92 @@ class UserController extends CommonController {
             $this->assign('amount',  price_format($amount, false));
             $this->assign('order',   $order);
             $this->display('user_act_account.dwt');
-        }elseif($surplus['process_type'] == 5){
+        }
+        elseif($surplus['process_type'] == 7)
+        {
+        	if($info['vip_type'] == 2){
+    			show_message('该账户已是VIP，无需再次升级', L('back_page_up'), '', 'info');
+    		}
+        	if ($surplus['payment_id'] <= 0)
+            {
+                show_message(L('select_payment_pls'));
+            }
+    		if($amount == 0 || empty($amount)||$amount != 10){
+    			show_message('请输入正确金额', L('back_page_up'), '', 'info');
+    		}
+    		
+//  		if($user_type == 2){
+//  			$usertype=get_user_type();
+//      		if($usertype == 1){
+//              	show_message('请先自己升级金钻，才能给好友升级金钻');
+//      		}
+//      		$rest_user=get_assign_user_info($_POST['rest_user_name']);
+//      		if($rest_user['user_id'] == $this->user_id){
+//              	show_message('好友账户不能为自己');
+//      		}
+//  			$usertype=get_user_type($rest_user['user_id']);
+//      		if($usertype != 1){
+//              	show_message('该账户已是金钻，无需再次升级');
+//      		}
+//      		$surplus['user_note'] = '充值好友账户：'.$_POST['rest_user_name'].' | 好友ID：'.$rest_user['user_id'].' | '.$surplus['user_note'];        		
+//  			$surplus['friend_id']=$rest_user['user_id'];
+//  		}else{
+//  			$usertype=get_user_type();
+//				if($usertype != 1){
+//              	show_message('该账户已是金钻，无需再次升级');
+//      		}
+//  		}
+			
+    		
+            //获取支付方式名称
+            $payment_info = array();
+            $payment_info = model('Order')->payment_info($surplus['payment_id']);
+            $surplus['payment'] = $payment_info['pay_name'];
+    
+            if ($surplus['rec_id'] > 0)
+            {
+                //更新会员账目明细
+                $surplus['rec_id'] = model('ClipsBase')->update_user_account($surplus);
+            }
+            else
+            {
+                //插入会员账目明细
+                $surplus['rec_id'] = model('ClipsBase')->insert_user_account($surplus, $amount);
+            }
+    
+            //取得支付信息，生成支付代码
+            $payment = unserialize_config($payment_info['pay_config']);
+    
+            //生成伪订单号, 不足的时候补0
+            $order = array();
+            $order['order_sn']       = $surplus['rec_id'];
+            $order['user_name']      = $_SESSION['user_name'];
+            $order['surplus_amount'] = $amount;
+    
+            //计算支付手续费用
+            $payment_info['pay_fee'] = pay_fee($surplus['payment_id'], $order['surplus_amount'], 0);
+    
+            //计算此次预付款需要支付的总金额
+            $order['order_amount']   = $amount + $payment_info['pay_fee'];
+    
+            //记录支付log
+            $order['log_id'] = model('ClipsBase')->insert_pay_log($surplus['rec_id'], $order['order_amount'], $type=PAY_VIP, 0);
+    
+            /* 调用相应的支付方式文件 */
+            include_once (ROOT_PATH . 'plugins/payment/' . $payment_info ['pay_code'] . '.php');
+    
+            /* 取得在线支付方式的支付按钮 */
+            $pay_obj = new $payment_info ['pay_code'] ();
+            $payment_info['pay_button'] = $pay_obj->get_code($order, $payment);
+    
+            /* 模板赋值 */
+            $this->assign('payment', $payment_info);
+            $this->assign('pay_fee', price_format($payment_info['pay_fee'], false));
+            $this->assign('amount',  price_format($amount, false));
+            $this->assign('order',   $order);
+            $this->display('user_act_account.dwt');
+        }
+        elseif($surplus['process_type'] == 5){
         	
         	$code=isset($_POST['mobile_code'])?$_POST['mobile_code']:'';
         	$mobile_session=$_POST['session']?$_POST['session']:'';

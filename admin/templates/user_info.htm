@@ -77,6 +77,13 @@
   	{/if}
   </tr>
   <tr>
+  	<td class="label">是否VIP:</td>
+  	<td>
+  		<input type="radio" name="vip_type" {if $user.vip_type eq '1'}checked{/if} value="1"/>否&nbsp;&nbsp;&nbsp;&nbsp;
+  		<input type="radio" name="vip_type" {if $user.vip_type eq '2'}checked{/if} value="2"/>是
+  	</td>
+  </tr>
+  <tr>
   	<td class="label">兼职金钻:</td>
   	<td>
   		<input type="radio" name="job" {if $user.job eq '1'}checked{/if} value="1"/>否&nbsp;&nbsp;&nbsp;&nbsp;

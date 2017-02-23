@@ -294,7 +294,7 @@ if ((DEBUG_MODE & 4) == 4)
 {
     include(ROOT_PATH . 'includes/lib.debug.php');
 }
-
+select_cfg();
 /* 判断是否支持 Gzip 模式 */
 if (!defined('INIT_NO_SMARTY') && gzip_enabled())
 {
@@ -304,4 +304,5 @@ else
 {
     ob_start();
 }
+
 ?>

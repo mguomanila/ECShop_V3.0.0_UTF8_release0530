@@ -74,7 +74,8 @@ define('OS_SPLITING_PART', 6); // 部分分单
 define('PAY_ORDER', 0); // 订单支付
 define('PAY_SURPLUS', 1); // 会员预付款
 define('PAY_INTEGRAL', 2); // 会员预付款
-define('PAY_JEWEL', 4); // 会员升级
+define('PAY_JEWEL', 4); // 金钻升级
+define('PAY_VIP', 7); // VIP升级
 define('PAY_S', 's');
 
 /* 配送状态 */

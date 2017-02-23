@@ -227,7 +227,7 @@ class PaymentModel extends BaseModel {
 							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $parent[parent_id]";
 							$parent=$this->row($sql);
 							if($parent['user_type']!=1){
-                        		model('ClipsBase')->log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0, 0,$lang_content, ACT_JEWEL);
+                        		model('ClipsBase')->log_account_change_vr($parent['user_id'], 300, 0, 0, 0,0, 0,$lang_content, ACT_JEWEL);
 								break;
 							}
 						}
@@ -247,6 +247,71 @@ class PaymentModel extends BaseModel {
 						
 						$this->query($sql);
                     }
+                }
+                elseif($pay_log['order_type'] == PAY_VIP)
+                {
+                	$sql = 'SELECT `id` FROM ' . $this->pre . "user_account WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
+                    $res = $this->row($sql);
+                    $res_id = $res['id'];
+                    if (empty($res_id)) {
+                        /* 更新会员预付款的到款状态 */
+                        $sql = 'UPDATE ' . $this->pre .
+                                "user_account SET paid_time = '" . gmtime() . "', is_paid = 1" .
+                                " WHERE id = '$pay_log[order_id]' LIMIT 1";
+                        $this->query($sql);
+
+
+						
+                        /* 取得添加预付款的用户以及金额 */
+                        $sql = "SELECT user_id,friend_id, amount FROM " . $this->pre .
+                                "user_account WHERE id = '$pay_log[order_id]'";
+                        $arr = $this->row($sql);
+                        if(!empty($arr['friend_id'])){
+                        $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[friend_id]'" ;
+                        	
+                        }else{
+                        $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[user_id]'" ;
+                        	
+                        }
+
+						$userinfo=$this->row($sql);
+//						$parent=$userinfo;
+//						$lang_content='编号:'.$pay_log['order_id'].';'.$userinfo['user_name'].'升级金钻收益';
+//						
+//						if($userinfo['user_type'] == 1)
+//						{
+//							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $userinfo[parent_id]";
+//							$parentinfo=$this->row($sql);
+							$set='';
+//							if($parentinfo['user_type'] == 1){
+//								$set=',parent_id = '.$parentinfo['ancestor_id'];
+//							}
+//						}
+//						
+//						for ($i=0; $i < $i+1; $i++) { 
+//							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $parent[parent_id]";
+//							$parent=$this->row($sql);
+//							if($parent['user_type']!=1){
+//                      		model('ClipsBase')->log_account_change_vr($parent['user_id'], 300, 0, 0, 0,0, 0,$lang_content, ACT_JEWEL);
+//								break;
+//							}
+//						}
+//                      
+//                      if(!empty($arr['friend_id'])){
+//                      	$sql='UPDATE ' . $this->pre .
+//                              "users SET user_type = 2" .$set.
+//                              " WHERE user_id = '$arr[friend_id]'";
+//
+//                      }else{
+//                      	
+                        	$sql='UPDATE ' . $this->pre .
+                                "users SET vip_type = 2" .$set.
+                                " WHERE user_id = '$arr[user_id]'";
+//                      }
+//                      model('ClipsBase')->log_account_change_vr($arr['user_id'],0,0,0,0,128000,0,$lang_content,ACT_JEWEL);
+//						
+						$this->query($sql);
+//                  }
                 }
                 elseif($pay_log['order_type'] == PAY_INTEGRAL)
                 {

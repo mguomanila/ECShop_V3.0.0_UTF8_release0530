@@ -230,7 +230,7 @@ elseif ($_REQUEST['act'] == 'edit')
     $users  = init_users();
     $user   = $users->get_user_info($row['user_name']);
 
-    $sql = "SELECT u.operating_record,u.job,u.user_id,u.user_type,u.suppliers_type, u.fx_activity,u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn,
+    $sql = "SELECT u.vip_type,u.operating_record,u.job,u.user_id,u.user_type,u.suppliers_type, u.fx_activity,u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn,
     u.office_phone, u.home_phone, u.mobile_phone".
         " FROM " .$ecs->table('users'). " u LEFT JOIN " . $ecs->table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
 
@@ -257,6 +257,7 @@ elseif ($_REQUEST['act'] == 'edit')
         $user['home_phone']     = $row['home_phone'];
         $user['mobile_phone']   = $row['mobile_phone'];
         $user['user_type']   	= $row['user_type'];
+        $user['vip_type']   	= $row['vip_type'];
         $user['fx_activity']   	= $row['fx_activity'];
         $user['suppliers_type'] = $row['suppliers_type'];
         $user['job'] 			= $row['job'];
@@ -528,7 +529,7 @@ include_once(ROOT_PATH . '/includes/cls_image.php');
     $other['mobile_phone'] = isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
     $other['suppliers_type']=isset($_POST['suppliers']) ? intval($_POST['suppliers']) : 1;
 	$other['user_type']=isset($_POST['user_type']) ? intval($_POST['user_type']) : 1;
-
+	$other['vip_type']=isset($_POST['vip_type']) ? intval($_POST['vip_type']) : 1;
 	$other['fx_activity']=isset($_POST['fx_activity']) ? htmlspecialchars($_POST['fx_activity']) : '';
     $db->autoExecute($ecs->table('users'), $other, 'UPDATE', "user_name = '$username'");
 
