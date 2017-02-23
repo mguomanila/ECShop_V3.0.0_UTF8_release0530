@@ -471,6 +471,7 @@ class FlowController extends CommonController {
             $consignee ['district']
         );
         $shipping_list = model('Shipping')->available_shipping_list($region);
+
         $cart_weight_price = model('Order')->cart_weight_price($flow_type);
         $insure_disabled = true;
         $cod_disabled = true;
@@ -600,7 +601,7 @@ class FlowController extends CommonController {
         $use_integral = C('use_integral');
         if ((!isset($use_integral) || C('use_integral') == '1') && $_SESSION ['user_id'] > 0 && $user_info ['pay_points'] > 0 && ($flow_type != CART_GROUP_BUY_GOODS && $flow_type != CART_EXCHANGE_GOODS)) {
             // 能使用积分
-            $this->assign('allow_use_integral', 1);
+            $this->assign('allow_use_integral', 0);
             $this->assign('order_max_integral', model('Flow')->flow_available_points()); // 可用积分
             $this->assign('your_integral', $user_info ['pay_points']); // 用户积分
         }
@@ -960,6 +961,9 @@ class FlowController extends CommonController {
      *  提交订单
      */
     public function done() {
+    	/* 取得赠送奖励方案*/
+        $precept = isset($_POST['precept']) ? intval($_POST ['precept']) :1;
+    	
         /* 取得购物类型 */
         $flow_type = isset($_SESSION ['flow_type']) ? intval($_SESSION ['flow_type']) : CART_GENERAL_GOODS;
         /* 检查购物车中是否有商品 */
@@ -1114,7 +1118,9 @@ class FlowController extends CommonController {
             }
         }
         /* 订单中的总额 */
-        $total = model('Users')->order_fee($order, $cart_goods, $consignee);
+        $total = model('Users')->order_fee($order, $cart_goods, $consignee,$precept);
+
+        
         $order ['bonus'] = $total ['bonus'];
         $order ['goods_amount'] = $total ['goods_price'];
         $order ['discount'] = $total ['discount'];
@@ -1216,7 +1222,7 @@ class FlowController extends CommonController {
             $parent_id = 0;
         }
         $order ['parent_id'] = $parent_id;
-
+		$order ['precept']=$precept;
         /* 插入订单表 */
         $error_no = 0;
         do {
@@ -1235,6 +1241,10 @@ class FlowController extends CommonController {
         /* 插入订单商品 */
         $sql = "INSERT INTO " . $this->model->pre . "order_goods( " . "order_id, goods_id, goods_name, goods_sn, product_id, goods_number, market_price, " . "goods_price, goods_attr, is_real, extension_code, parent_id, is_gift, goods_attr_id) " . " SELECT '$new_order_id', goods_id, goods_name, goods_sn, product_id, goods_number, market_price, " . "goods_price, goods_attr, is_real, extension_code, parent_id, is_gift, goods_attr_id" . " FROM " . $this->model->pre . "cart WHERE session_id = '" . SESS_ID . "' AND rec_type = '$flow_type'";
         $this->model->query($sql);
+        if($precept != 1){
+        	$sql="UPDATE " . $this->model->pre . "order_goods SET precept = 2 WHERE order_id='$new_order_id'";
+        	$this->model->query($sql);
+        }
         /* 修改拍卖活动状态 */
         if ($order ['extension_code'] == 'auction') {
             $sql = "UPDATE " . $this->model->pre . "goods_activity SET is_finished='2' WHERE act_id=" . $order ['extension_id'];

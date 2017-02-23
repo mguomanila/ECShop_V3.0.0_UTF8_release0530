@@ -84,6 +84,7 @@ elseif ($_REQUEST['act'] == 'calculator')
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'menu')
 {
+	
     include_once('includes/inc_menu.php');
 
 // 权限对照表
@@ -102,8 +103,10 @@ elseif ($_REQUEST['act'] == 'menu')
         {
             foreach ($val AS $k => $v)
             {
+            	
                 if ( isset($purview[$k]))
                 {
+                	
                     if (is_array($purview[$k]))
                     {
                         $boole = false;

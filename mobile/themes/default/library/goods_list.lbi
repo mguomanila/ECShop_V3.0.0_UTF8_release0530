@@ -33,7 +33,7 @@
 <div class="ect-margin-tb ect-pro-list ect-margin-bottom0 ect-border-bottom0">
   <ul id="J_ItemList">
     <!--{foreach name=goods_list from=$goods_list item=goods}-->
-    <li class="single_item"> <a href="{$goods.url}"><img src="{$goods.goods_thumb}" alt="{$goods.name}"></a>
+    <li class="single_item"> <a href="{$goods.url}"><img src="{$goods.goods_img}" alt="{$goods.name}"></a>
       <dl>
         <dt>
           <h4 class="title"><a href="{$goods.url}">{$goods.name}</a></h4>

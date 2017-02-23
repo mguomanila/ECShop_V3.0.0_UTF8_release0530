@@ -240,6 +240,8 @@
     <td><div align="right">{$lang.label_goods_amount}<strong>{$order.formated_goods_amount}</strong>
 - {$lang.label_discount}<strong>{$order.formated_discount}</strong> - {$lang.label_goods_discount_fee}<strong>{$order.formated_goods_discount_fee}</strong>     + {$lang.label_tax}<strong>{$order.formated_tax}</strong>
       + {$lang.label_shipping_fee}<strong>{$order.formated_shipping_fee}</strong>
+      
+      
       + {$lang.label_insure_fee}<strong>{$order.formated_insure_fee}</strong>
       + {$lang.label_pay_fee}<strong>{$order.formated_pay_fee}</strong>
       + {$lang.label_pack_fee}<strong>{$order.formated_pack_fee}</strong>
@@ -249,6 +251,7 @@
   </tr>
   <tr>
     <td><div align="right">
+    	+ 方案二：<strong>{$order.precept_money}</strong>
       - {$lang.label_money_paid}<strong>{$order.formated_money_paid}</strong> - {$lang.label_surplus} <strong>{$order.formated_surplus}</strong>
       - {$lang.label_integral} <strong>{$order.formated_integral_money}</strong>
       - {$lang.label_bonus} <strong>{$order.formated_bonus}</strong>

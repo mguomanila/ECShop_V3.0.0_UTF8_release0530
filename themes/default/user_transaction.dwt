@@ -682,7 +682,7 @@
       <!--{/if} -->
     <!--#订单详情页 end-->
     <!--#会员余额 start-->
-      <!--{if $action eq "account_raply" ||$action eq "integral_deposit" || $action eq "account_log" || $action eq "account_deposit" || $action eq "account_detail" || $action eq "integral_raply"} -->
+      <!--{if $action eq "account_raply" || $action eq "account_change" ||$action eq "integral_deposit" || $action eq "account_log" || $action eq "account_deposit" || $action eq "account_detail" || $action eq "integral_raply"|| $action eq "account_points"} -->
         <script type="text/javascript">
           {foreach from=$lang.account_js item=item key=key}
             var {$key} = "{$item}";
@@ -695,11 +695,14 @@
             <td align="right" bgcolor="#ffffff">
             	<!--<a href="user.php?act=account_deposit" class="f6">{$lang.surplus_type_0}</a> |-->
             	<a href="user.php?act=account_raply" class="f6">{$lang.surplus_type_1}</a>| 
-            	<a href="user.php?act=integral_raply" class="f6">{$lang.surplus_type_2}</a> | 
+            	<a href="user.php?act=account_change" class="f6">{$lang.surplus_type_6}</a> |
+            	<!--<a href="user.php?act=integral_raply" class="f6">{$lang.surplus_type_2}</a> |--> 
             	<!-- {if $user_type eq 2 || $user_type eq 3} -->
             	<a href="user.php?act=integral_deposit" class="f6">{$lang.surplus_type_3}</a> | 
             	<!--{/if}-->
             	<a href="user.php?act=account_detail" class="f6">{$lang.add_surplus_log}</a> | 
+            	<a href="user.php?act=account_points" class="f6">{$lang.add_points_log}</a> | 
+            	
             	<a href="user.php?act=account_log" class="f6">{$lang.view_application}</a> 
             </td>
           </tr>
@@ -716,7 +719,7 @@
 			{/if}
           <tr>
             <td width="15%" bgcolor="#ffffff">{$lang.repay_money}:</td>
-            <td bgcolor="#ffffff" align="left"><input type="text" name="amount" value="{$order.amount|escape}" class="inputBg" size="30" />
+            <td bgcolor="#ffffff" align="left"><input type="text"  id="zuidijifen" name="amount" onblur="zuidi()" value="{$order.amount|escape}" class="inputBg" size="30" />
             </td>
           </tr>
           <tr >
@@ -749,7 +752,157 @@
           </tr>
         </table>
         </form>
+        <script type="text/javascript">
+        	function zuidi(){
+        		var zdjf=$('#zuidijifen').val();
+        		var yu=zdjf%100;
+        		var msg='';
+        		if(zdjf<100){
+        			msg +=' - 提现金积分最低为100 \n';
+        		}
+        		if(yu!=0){
+        			msg +=' - 提现金积分必须为100的倍数 \n';
+        		}
+        		if(msg){
+        			$('#zuidijifen').val(0);
+        			alert(msg)
+        		}
+        	}
+        </script>
         <!-- {/if} -->
+        <!-- {if $action eq "account_change"} -->
+        
+
+        <form name="formSurplus" method="post" action="user.php" onSubmit="return submitSurplus()">
+        
+        <div style="width: 100%;border-left: 1px solid #ccc;box-sizing: border-box;border-right: 1px solid #ccc">
+        	 <div width="45%" bgcolor="#ffffff" style="overflow: hidden;">
+        	 	<div style="width: 50%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;">方案一金积分转换 
+        	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz1">选择</a>
+        	 	</div>
+        	 	<div style="width: 50%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;">方案二金积分转换 
+        	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz2">选择</a>
+        	 	</div>
+        	 </div> 
+        	 <div style="padding: 15px;border-top: 1px solid #ccc;" class="formSurplus_one">
+        	 	<input type="text" name="integral_1" id="formSurplus_ov"  size="30" style="border-top: 1px solid #ccc;width: 10%;height: 30px;font-size: 16px;position: relative; left: 22%;top: -7px;border: 1px solid #ccc;padding-left: 15px;color: #999;" placeholder="金积分1"/>
+        	 	<img src="images/gt.png" alt="" style="position: relative; left: 38%;top: 5px;"/>
+        	 	<span style="position: relative; left: 52%;top: -4px;font-size: 16px;">0.00</span>
+        	 </div>
+        	 <div style="padding: 15px;border-top: 1px solid #ccc;" class="formSurplus_two">
+        	 	<input type="text" name="integral_2" size="30" style="border-top: 1px solid #ccc;width: 10%;height: 30px;font-size: 16px;position: relative; left: 22%;top: -7px;border: 1px solid #ccc;padding-left: 15px;color: #999;" placeholder="金积分2 "/>
+        	 	<img src="images/gt.png" alt="" style="position: relative; left: 38%;top: 5px;"/>
+        	 	<span style="position: relative; left: 52%;top: -4px;font-size: 16px;">0.00</span>
+        	 </div>
+        </div>
+        
+        
+        	
+        <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
+        	
+          
+          
+          <tr>
+            <td bgcolor="#ffffff" style="padding-left: 5%;width: 15%;">{$lang.process_notic}:</td>
+            <td bgcolor="#ffffff" align="left"><textarea placeholder="会员备注" name="user_note" cols="55" rows="6" style="border:1px solid #ccc;">{$order.user_note|escape}</textarea></td>
+          </tr>
+          <tr>
+            <td bgcolor="#ffffff" colspan="2" align="center">
+  <input type="hidden" name="change_type" value="1" id="change_type"/>
+            	
+            <input type="hidden" name="surplus_type" value="6" />
+              <input type="hidden" name="act" value="act_account" />
+              <input type="submit" name="submit"  class="bnt_blue_1" value="{$lang.submit_request}" />
+              <input type="reset" name="reset" class="bnt_blue_1" value="{$lang.button_reset}" />
+            </td>
+          </tr>
+        </table>
+        </form>
+        
+       <script type="text/javascript">
+       		
+       		
+       		$("#formSurplus_xz1").on("click",function(){
+       			
+				$(this).toggleClass("formSurplus_xz");
+				
+//				$(".formSurplus_one").slideToggle("show");
+				
+				if($(".formSurplus_one").css("display") == "block"){
+					$(".formSurplus_one").css("display","none");
+				}else{
+					$(".formSurplus_one").css("display","block");
+				}
+				if($(".formSurplus_two").css("display") == "none"){
+					
+				}else{
+					if($(".formSurplus_two").css("display") == "block"){
+						$(".formSurplus_two").css("display","none");
+					}else{
+						$(".formSurplus_two").css("display","block");
+					}
+					$("#formSurplus_xz2").toggleClass("formSurplus_xz");
+				}
+				$(".formSurplus_two input").val("");
+				$(".formSurplus_two span").html("0.00");
+				
+				$("#change_type").val(1)
+			})
+			
+			$("#formSurplus_xz2").on("click",function(){
+       			
+				$(this).toggleClass("formSurplus_xz");
+				
+//				$(".formSurplus_one").slideToggle("show");
+				
+				if($(".formSurplus_two").css("display") == "block"){
+					$(".formSurplus_two").css("display","none");
+				}else{
+					$(".formSurplus_two").css("display","block");
+				}
+				
+				if($(".formSurplus_one").css("display") == "none"){
+					
+				}else{
+					if($(".formSurplus_one").css("display") == "block"){
+						$(".formSurplus_one").css("display","none");
+					}else{
+						$(".formSurplus_one").css("display","block");
+					}
+					$("#formSurplus_xz1").toggleClass("formSurplus_xz");
+				}
+				$(".formSurplus_one input").val("");
+				$(".formSurplus_one span").html("0.00");
+				
+				$("#change_type").val(2)
+			})
+
+			
+			
+			$(".formSurplus_one input").keyup(function(){
+				
+				var a = $(".formSurplus_one input").val()*.94;
+				var b=a.toFixed(2);
+				$(".formSurplus_one span").html(b)
+		
+			});
+			
+			$(".formSurplus_two input").keyup(function(){
+				
+				var a = $(".formSurplus_two input").val()*.87;
+				var b=a.toFixed(2);
+				$(".formSurplus_two span").html(b)
+		
+			});
+       </script>
+        
+        
+        
+        
+        
+        
+        <!-- {/if} -->
+        
         <!-- {if $action eq "integral_raply"} -->
         <form name="formSurplus" method="post" action="user.php" onSubmit="return submitSurplus()">
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
@@ -940,6 +1093,21 @@
             		
             	</td>	
             </tr>
+            <tr id="content_text" style="display: ;">
+            	<td bgcolor="#ffffff">选择方案：</td>
+            	<td align="left" bgcolor="#ffffff">
+            		<input type="radio" placeholder="" checked="checked"  name="precept" id="precept" class="precept" value="1"/>方案一
+       				<input type="radio" placeholder=""   name="precept" class="precept" value="2"/>方案二
+            	</td>	
+            </tr>
+            <tr>
+            	<td colspan="2" style="text-align: center;" id="ms">
+					1、前一天总营业额的12%作为次日消费奖励总额。</br>
+				2、按剩余总额的万分之六左右每天全额奖励，后续消费叠加。</br>
+				3、最终解释权归成都沃尔迅科技有限公司所有。
+            		
+            	</td>
+            </tr>
             <!-- {else} -->
             <input type="hidden"  name="user_type" value="1"/>
             <!-- {/if} -->
@@ -1017,12 +1185,49 @@
 			
 			$("#vr").keyup(function(){
 
-				var a= $("#vr").val()*0.15;
+				if($("#precept").is(":checked")){
+
+					var a= $("#vr").val()*0.15;
+				}else{
+					var a= $("#vr").val()*0.21;
+				}
 				var b=a.toFixed(2);
   				$("#vr_user").val(b)
 			});
+			
+			$(".precept").click(function(){
+
+				if($(this).val() == 1){
+					var a= $("#vr").val()*0.15;
+					$("#ms").html(
+						"1、前一天总营业额的12%作为次日消费奖励总额。"+"</br>"+
+				"2、按剩余总额的万分之六左右每天全额奖励，后续消费叠加。"+"</br>"+
+				"3、最终解释权归成都沃尔迅科技有限公司所有。"
+					)
+				}else{
+					var a= $("#vr").val()*0.21;
+					$("#ms").html(
+						"1、前一天总营业额的12%作为次日消费奖励总额。"+"</br>"+
+				"2、800天左右全额奖励(单笔消费)。"+"<br />"+
+//				"3、客户累计消费额400元以上方可参与活动(不含400元)。"+"<br />"+
+//				"4、消费者向平台缴纳5%的平台服务费，参与(800天改变生活)活动，享受消费额全额奖励(5%平台服务费不参与全额奖励)。"+"<br />"+
+//				"5、参与活动商家向平台缴纳16%的返还押金，按系统规则给予全额奖励。"+"<br />"+
+//				"6、原定金钻会员的推荐奖励按原规则减半进行奖励。"+"<br />"+
+//				"7、原定普通会员的推荐奖励全部取消。"+"<br />"+
+				"3、最终解释权归成都沃尔迅科技有限公司所有。"
+					)
+				}
+				var b=a.toFixed(2);
+				$("#vr_user").val(b)
+			})
+			
 			$("#vr").blur(function(){
-				var a= $("#vr").val()*0.15;
+				if($("#precept").is(":checked")){
+
+					var a= $("#vr").val()*0.15;
+				}else{
+					var a= $("#vr").val()*0.21;
+				}
 				var b=a.toFixed(2);
   				$("#vr_user").val(b)
 			})
@@ -1092,6 +1297,28 @@
             <td align="center" bgcolor="#ffffff">{$item.change_time}</td>
             <td align="center" bgcolor="#ffffff">{$item.type}</td>
             <td align="right" bgcolor="#ffffff">{$item.amount}</td>
+            <td bgcolor="#ffffff" title="{$item.change_desc}">&nbsp;&nbsp;{$item.short_change_desc}</td>
+          </tr>
+          <!--{/foreach}-->
+          <tr>
+            <td colspan="4" align="center" bgcolor="#ffffff"><div align="right">{$lang.current_surplus}{$surplus_amount}</div></td>
+          </tr>
+        </table>
+        <!-- #BeginLibraryItem "/library/pages.lbi" --><!-- #EndLibraryItem -->
+        <!-- {/if} -->
+        <!-- {if $action eq "account_points"} -->
+        <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
+          <tr align="center">
+            <td bgcolor="#ffffff">{$lang.process_time}</td>
+            <td bgcolor="#ffffff">{$lang.surplus_pro_type}</td>
+            <td bgcolor="#ffffff">{$lang.money}</td>
+            <td bgcolor="#ffffff">{$lang.change_desc}</td>
+          </tr>
+          <!--{foreach from=$account_log item=item}-->
+          <tr>
+            <td align="center" bgcolor="#ffffff">{$item.change_time}</td>
+            <td align="center" bgcolor="#ffffff">{$item.type}</td>
+            <td align="right" bgcolor="#ffffff">{if $item.amount neq 0}{$item.amount}{else}{$item.amount_2}{/if}</td>
             <td bgcolor="#ffffff" title="{$item.change_desc}">&nbsp;&nbsp;{$item.short_change_desc}</td>
           </tr>
           <!--{/foreach}-->

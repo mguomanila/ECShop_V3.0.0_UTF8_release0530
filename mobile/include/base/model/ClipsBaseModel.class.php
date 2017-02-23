@@ -314,6 +314,9 @@ class ClipsBaseModel extends BaseModel {
         $data['process_type'] = $surplus['process_type'];
         $data['payment'] = $surplus['payment'];
         $data['is_paid'] = 0;
+        if(isset($surplus['friend_id'])){
+			$data['friend_id']=$surplus['friend_id'];
+		}
         return $this->insert($data);
     }
 
@@ -348,6 +351,9 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
 		}
 		if(isset($surplus['stub_status'])){
 			$data['stub_status']=$surplus['stub_status'];
+		}
+		if(isset($surplus['precept'])){
+			$data['precept']=$surplus['precept'];
 		}
         return $this->insert($data);
 }
@@ -473,7 +479,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
     public function get_account_log($user_id, $num, $start) {
         $account_log = array();
         $sql = 'SELECT * FROM ' . $this->pre . "user_account WHERE user_id = '$user_id'" .
-                " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_TRANSFER)) .
+                " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_TRANSFER,ACT_CHANGE)) .
                 " ORDER BY add_time DESC limit " . $start . ',' . $num;
 
         $list = $this->query($sql);
@@ -525,10 +531,13 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
                     $vo['type'] = L('surplus_type_4');
                 	
                 }
-                else{
+                elseif($vo['process_type'] == 5){
                     $vo['type'] = L('surplus_type_5');
 					$vo['amount'] = abs($vo['integral_amount']).'积分';
                     
+                }else{
+                    $vo['type'] = L('surplus_type_6');
+                	
                 }
 
                 /* 支付方式的ID */
@@ -600,6 +609,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
         $condition['user_id'] = $user_id;
         return $this->field('SUM(pay_points)', $condition);
     }
+    public function get_user_surplus_points_2($user_id) {
+        $this->table = 'account_log';
+        $condition['user_id'] = $user_id;
+        return $this->field('SUM(pay_points_2)', $condition);
+    }
 
     /**
      * 查询会员的红包金额
@@ -629,14 +643,17 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
     public function get_user_default($user_id) {
         $user_bonus = $this->get_user_bonus();
 
-        $sql = "SELECT mobile_phone,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
+        $sql = "SELECT pay_points_2,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
         $row = $this->row($sql);
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
         $info['shop_name'] = C('shop_name');
         $info['integral'] =$row['pay_points']  ;
+        $info['pay_points_2'] =$row['pay_points_2']  ;
+        
         $info['vr_points'] =  $row['vr_points'] ;
         $info['mobile_phone'] =  $row['mobile_phone'] ;
+        $info['gold'] =  $row['gold'] ;
         
         $info['love'] = $row['love'] ;
 		$info['user_type'] = $row['user_type'];
@@ -937,7 +954,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
      * @param   int     $change_type    变动类型：参见常量文件
      * @return  void
      */
-    function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $vr_points=0,$change_desc = '', $change_type = ACT_OTHER) {
+    function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $vr_points=0,$gold=0,$change_desc = '', $change_type = ACT_OTHER,$love=0,$pay_points_2=0) {
         /* 插入帐户变动记录 */
         $account_log = array(
             'user_id' => $user_id,
@@ -946,22 +963,91 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
             'rank_points' => $rank_points,
             'pay_points' => $pay_points,
             'vr_points' => $vr_points,
+            'gold' => $gold,
+            'pay_points_2' => $pay_points_2,
             'change_time' => gmtime(),
             'change_desc' => $change_desc,
             'change_type' => $change_type
         );
         $this->table = 'account_log';
         $this->insert($account_log);
+        
+        $sql="SELECT * FROM ". $this->pre .
+                "users WHERE user_id = '$user_id'";
+        $info = $this->row($sql);
+        $bili=$info['bili'];
+        if($gold>0){
+	        $sum=$info['gold']+$gold;
+	        $bili=$sum/80000;
+        }
         /* 更新用户信息 */
         $sql = "UPDATE " . $this->pre .
                 "users SET user_money = user_money + ('$user_money')," .
                 " frozen_money = frozen_money + ('$frozen_money')," .
                 " rank_points = rank_points + ('$rank_points')," .
                 " vr_points = vr_points + ('$vr_points')," .
+                " gold = gold + ('$gold')," .
+                " bili = '$bili'," .
+                " love = love + ('$love')," .
+                " pay_points_2 = pay_points_2 + ('$pay_points_2')," .
                 " pay_points = pay_points + ('$pay_points')" .
                 " WHERE user_id = '$user_id' LIMIT 1";
         $this->query($sql);
     }
+	
+	
+	
+	
+	
+	/**
+     * 银元宝变更
+     * @param   int     $user_id        用户id
+     * @param   float   $user_money     可用余额变动
+     * @param   float   $frozen_money   冻结余额变动
+     * @param   int     $rank_points    等级积分变动
+     * @param   int     $pay_points     消费积分变动
+     * @param   string  $change_desc    变动说明
+     * @param   int     $change_type    变动类型：参见常量文件
+     * @return  void
+     */
+    function log_account_change_yin($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $gold=0,$change_desc = '', $change_type = ACT_OTHER) {
+        /* 插入帐户变动记录 */
+        $account_log = array(
+            'user_id' => $user_id,
+            'user_money' => $user_money,
+            'frozen_money' => $frozen_money,
+            'rank_points' => $rank_points,
+            'pay_points' => $pay_points,
+            'gold' => $gold,
+            'change_time' => gmtime(),
+            'change_desc' => $change_desc,
+            'change_type' => $change_type
+        );
+        $this->table = 'account_log';
+        $this->insert($account_log);
+        $sql="SELECT * FROM ". $this->pre .
+                "users WHERE user_id = '$user_id'";
+        $info = $this->row($sql);
+        $bili=$info['bili'];
+        if($gold>0){
+	        $sum=$info['gold']+$gold;
+	        $bili=$sum/800;
+        }
+        /* 更新用户信息 */
+        $sql = "UPDATE " . $this->pre .
+                "users SET user_money = user_money + ('$user_money')," .
+                " frozen_money = frozen_money + ('$frozen_money')," .
+                " rank_points = rank_points + ('$rank_points')," .
+                " gold = gold + ('$gold')," .
+                " bili = '$bili'," .
+                " pay_points = pay_points + ('$pay_points')" .
+                " WHERE user_id = '$user_id' LIMIT 1";
+        $this->query($sql);
+    }
+	
+	
+	
+	
 	
 	
 

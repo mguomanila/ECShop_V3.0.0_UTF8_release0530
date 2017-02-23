@@ -89,7 +89,7 @@ $(function() {
       
       <li class="yb_phone">028-8761-0179</li>
       <li class="yb_QQ">
-      	<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=417407904&amp;site=qq&amp;menu=yes&amp;from=message&amp;isappinstalled=0" title="即刻发送您的需求">在线咨询</a>
+      	<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=3275291540&amp;site=qq&amp;menu=yes&amp;from=message&amp;isappinstalled=0" title="即刻发送您的需求">在线咨询</a>
       </li>
       <li class="yb_ercode" style="height:53px;">微信二维码 <br>
         <img class="hd_qr" src="images/weixin.jpg" width="125" alt="关注你附近"> 

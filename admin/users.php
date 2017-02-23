@@ -508,8 +508,8 @@ include_once(ROOT_PATH . '/includes/cls_image.php');
 	}
 	if($other['job']!=1){
 		if($userinfo['job']==1){
-			$change_desc='兼职金钻,预支300金积分';
-    		log_account_change_vr($user_id, 0, 0, 0, (-1)*1280,0, $change_desc, ACT_SAVING);
+			$change_desc='兼职金钻,预支1280金积分';
+    		log_account_change_vr($user_id, 0, 0, 0, (-1)*1280,0, 0,$change_desc, ACT_SAVING);
     	}
 	}
 
@@ -878,7 +878,7 @@ function user_list()
         /* 分页大小 */
         $filter = page_and_size($filter);
         
-			$sql = "SELECT user_id, user_name, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time ".
+			$sql = "SELECT pay_points_2,user_id, user_name, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time ".
                 " FROM " . $GLOBALS['ecs']->table('users') . $ex_where .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];

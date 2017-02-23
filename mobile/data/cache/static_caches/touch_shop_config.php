@@ -99,7 +99,7 @@ scrollAmount=3><U><FONT color=red>
   'page_style' => '1',
   'recommend_order' => '0',
   'index_ad' => 'sys',
-  'can_invoice' => '1',
+  'can_invoice' => '0',
   'use_integral' => '1',
   'use_bonus' => '1',
   'use_surplus' => '1',

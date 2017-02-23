@@ -118,12 +118,12 @@ elseif ($_REQUEST['act'] == 'separate')
 
     $oid = (int)$_REQUEST['oid'];
 
-    $row = $db->getRow("SELECT o.order_sn, o.is_separate, (o.goods_amount - o.discount) AS goods_amount, o.user_id FROM " . $GLOBALS['ecs']->table('order_info') . " o".
+    $row = $db->getRow("SELECT o.precept,o.order_sn, o.is_separate, (o.goods_amount - o.discount) AS goods_amount, o.user_id FROM " . $GLOBALS['ecs']->table('order_info') . " o".
                     " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u ON o.user_id = u.user_id".
             " WHERE order_id = '$oid'");
 
     $order_sn = $row['order_sn'];
-
+	$precept=$row['precept'];
     if (empty($row['is_separate']))
     {
         $affiliate['config']['level_point_all'] = (float)$affiliate['config']['level_point_all'];
@@ -177,8 +177,16 @@ elseif ($_REQUEST['act'] == 'separate')
                 }
                 else
                 {
+                	
                     $info = sprintf($_LANG['separate_info'], $order_sn, $setmoney, $setpoint);
-                    log_account_change_vr($up_uid, $setmoney, 0, 0, 0, $setpoint,$info);
+                    if($precept != 1){
+                    log_account_change_vr($up_uid, $setmoney, 0, 0, 0, 0,$setpoint,$info);
+                    	
+                    }else{
+                    log_account_change_vr($up_uid, $setmoney, 0, 0, 0, $setpoint,0,$info);
+                    	
+                    }
+
                     write_affiliate_log($oid, $up_uid, $row['user_name'], $setmoney, $setpoint, $separate_by);
                 }
             }

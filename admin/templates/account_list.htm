@@ -33,6 +33,10 @@
       <th>{$lang.rank_points}</th>
       <th>{$lang.pay_points}</th>
       <th>{$lang.vr_points}</th>
+      <th>{$lang.pay_points_2}</th>
+      <th>{$lang.gold}</th>
+      
+      
     </tr>
     {foreach from=$account_list item=account}
     <tr>
@@ -81,6 +85,24 @@
           <span style="color:#FF0000">{$account.vr_points}</span>
         {else}
           {$account.vr_points}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.pay_points_2 gt 0}
+          <span style="color:#0000FF">+{$account.pay_points_2}</span>
+        {elseif $account.pay_points_2 lt 0}
+          <span style="color:#FF0000">{$account.pay_points_2}</span>
+        {else}
+          {$account.pay_points_2}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.gold gt 0}
+          <span style="color:#0000FF">+{$account.gold}</span>
+        {elseif $account.gold lt 0}
+          <span style="color:#FF0000">{$account.gold}</span>
+        {else}
+          {$account.gold}
         {/if}
       </td>
     </tr>

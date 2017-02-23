@@ -57,6 +57,7 @@ $_LANG['integrate_users'] = '会员数据整合';
 $_LANG['sync_users'] = '同步会员数据';
 $_LANG['users_manages'] = '会员添加/编辑';
 $_LANG['users_drop'] = '会员删除';
+$_LANG['users_shangfen'] = '上分管理';
 $_LANG['user_rank'] = '会员等级管理';
 $_LANG['feedback_priv'] = '会员留言管理';
 $_LANG['surplus_manage'] = '会员余额管理';

@@ -32,22 +32,6 @@ $data = array (
     'id' => '27',
     'name' => '大家电',
   ),
-  28 => 
-  array (
-    'cat_id' => '28',
-    'cat_name' => '平板电脑',
-    'measure_unit' => '',
-    'parent_id' => '27',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '0',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => 0,
-    'level' => 2,
-    'id' => '28',
-    'name' => '平板电脑',
-  ),
   32 => 
   array (
     'cat_id' => '32',
@@ -75,7 +59,7 @@ $data = array (
     'grade' => '0',
     'sort_order' => '50',
     'has_children' => '0',
-    'goods_num' => 0,
+    'goods_num' => '1',
     'level' => 2,
     'id' => '29',
     'name' => '家用空调',
@@ -111,6 +95,22 @@ $data = array (
     'level' => 2,
     'id' => '31',
     'name' => '洗衣机',
+  ),
+  28 => 
+  array (
+    'cat_id' => '28',
+    'cat_name' => '平板电脑',
+    'measure_unit' => '',
+    'parent_id' => '27',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => 0,
+    'level' => 2,
+    'id' => '28',
+    'name' => '平板电脑',
   ),
   3 => 
   array (
@@ -192,22 +192,6 @@ $data = array (
     'id' => '6',
     'name' => '手机',
   ),
-  9 => 
-  array (
-    'cat_id' => '9',
-    'cat_name' => '电池',
-    'measure_unit' => '',
-    'parent_id' => '6',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '0',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => 0,
-    'level' => 1,
-    'id' => '9',
-    'name' => '电池',
-  ),
   8 => 
   array (
     'cat_id' => '8',
@@ -223,6 +207,22 @@ $data = array (
     'level' => 1,
     'id' => '8',
     'name' => '耳机',
+  ),
+  9 => 
+  array (
+    'cat_id' => '9',
+    'cat_name' => '电池',
+    'measure_unit' => '',
+    'parent_id' => '6',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => 0,
+    'level' => 1,
+    'id' => '9',
+    'name' => '电池',
   ),
   19 => 
   array (

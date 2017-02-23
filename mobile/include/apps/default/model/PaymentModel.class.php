@@ -198,22 +198,21 @@ class PaymentModel extends BaseModel {
 
 						
                         /* 取得添加预付款的用户以及金额 */
-                        $sql = "SELECT user_id, amount FROM " . $this->pre .
+                        $sql = "SELECT user_id,friend_id, amount FROM " . $this->pre .
                                 "user_account WHERE id = '$pay_log[order_id]'";
                         $arr = $this->row($sql);
-                        
+                        if(!empty($arr['friend_id'])){
+                        $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[friend_id]'" ;
+                        	
+                        }else{
                         $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[user_id]'" ;
+                        	
+                        }
+
 						$userinfo=$this->row($sql);
 						$parent=$userinfo;
-						$lang_content=$userinfo['user_name'].'升级金钻收益';
-						for ($i=0; $i < $i+1; $i++) { 
-							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $parent[parent_id]";
-							$parent=$this->row($sql);
-							if($parent['user_type']!=1){
-                        		model('ClipsBase')->log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0, $lang_content, ACT_SAVING);
-								break;
-							}
-						}
+						$lang_content='编号:'.$pay_log['order_id'].';'.$userinfo['user_name'].'升级金钻收益';
+						
 						if($userinfo['user_type'] == 1)
 						{
 							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $userinfo[parent_id]";
@@ -223,13 +222,31 @@ class PaymentModel extends BaseModel {
 								$set=',parent_id = '.$parentinfo['ancestor_id'];
 							}
 						}
+						
+						for ($i=0; $i < $i+1; $i++) { 
+							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $parent[parent_id]";
+							$parent=$this->row($sql);
+							if($parent['user_type']!=1){
+                        		model('ClipsBase')->log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0, 0,$lang_content, ACT_JEWEL);
+								break;
+							}
+						}
                         
-                        
-						$sql='UPDATE ' . $this->pre .
+                        if(!empty($arr['friend_id'])){
+                        	$sql='UPDATE ' . $this->pre .
+                                "users SET user_type = 2" .$set.
+                                " WHERE user_id = '$arr[friend_id]'";
+
+                        }else{
+                        	
+                        	$sql='UPDATE ' . $this->pre .
                                 "users SET user_type = 2" .$set.
                                 " WHERE user_id = '$arr[user_id]'";
-						$this->query($sql);
                         }
+                        model('ClipsBase')->log_account_change_vr($arr['user_id'],0,0,0,0,128000,0,$lang_content,ACT_JEWEL);
+						
+						$this->query($sql);
+                    }
                 }
                 elseif($pay_log['order_type'] == PAY_INTEGRAL)
                 {
@@ -252,22 +269,33 @@ class PaymentModel extends BaseModel {
 
 						
                         /* 取得添加预付款的用户以及金额 */
-                        $sql = "SELECT user_id, integral_amount,friend_id FROM " . $this->pre .
+                        $sql = "SELECT precept,user_id, integral_amount,friend_id FROM " . $this->pre .
                                 "user_account WHERE id = '$pay_log[order_id]'";
                         $arr = $this->row($sql);
-
+						$love=$arr['integral_amount']*0.005;
+						
 						if(!empty($arr['friend_id'])){
 							$userid=$arr['user_id'];
-							$surplus_type[3]='好友积分充值;好友ID'.$userid;
-							
-							$user_integral=$arr['integral_amount']*0.15;
+							$surplus_type[3]='编号:'.$pay_log['order_id'].';好友积分充值;好友ID'.$userid;
+							if($arr['precept'] == 1){
+								$precept_val=0;
+							}else{
+								$precept_val=$arr['integral_amount'];
+								$arr['integral_amount']=0;
+							}
+
 							$sql = "SELECT * FROM " . $this->pre . "users WHERE user_id = '$userid'";
                         	$user_info = $this->row($sql);
                         	$sql = "SELECT * FROM " . $this->pre . "users WHERE user_id = '$user_info[parent_id]'";
                         	$userparent_info = $this->row($sql);
-							if($userparent_info['usser_type'] != 1){
-                        			model('ClipsBase')->log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1, $surplus_type[3], ACT_SAVING);
+                        	
+							$user_integral=$arr['integral_amount']*0.15;
+                    		$precept_val_integral=$precept_val*0.16;
+                    		if($userparent_info['user_type'] != 1){
+                        		model('ClipsBase')->log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1,$precept_val_integral*0.1, $surplus_type[3], ACT_SAVING);
 							}
+                        	
+							
 							
 							
 							
@@ -281,13 +309,13 @@ class PaymentModel extends BaseModel {
 								empty($share) && $share = array();
 								$share['item'][0]['level_money'] /= 100;
 								$share['item'][0]['level_point'] /= 100;
-                    			if($parent_id_info['user_type'] == 1){
 								
-                        			model('ClipsBase')->log_account_change_vr($userid_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][0]['level_point'], $surplus_type[3], ACT_SAVING);
-		                       	}else{
-                        			model('ClipsBase')->log_account_change_vr($userid_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][0]['level_money'], $surplus_type[3], ACT_SAVING);
-		                       		
+								if($parent_id_info['user_type'] != 1){
+                        			model('ClipsBase')->log_account_change_vr($userid_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][0]['level_money'],$precept_val*$share['item'][0]['level_point'], $surplus_type[3], ACT_SAVING);
 		                       	}
+//		                       	else{
+//                      			model('ClipsBase')->log_account_change_vr($userid_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][0]['level_money'],$precept_val*$share['item'][0]['level_money']*0.5, $surplus_type[3], ACT_SAVING);
+//		                       	}
                         	}
                         	if(!empty($parent_id_info['parent_id'])){
                         		$sql = "SELECT * FROM " . $this->pre . "users WHERE user_id = '$parent_id_info[parent_id]'";
@@ -296,21 +324,38 @@ class PaymentModel extends BaseModel {
 								empty($share) && $share = array();
 								$share['item'][1]['level_money'] /= 100;
 								$share['item'][1]['level_point'] /= 100;
-								if($parent_info['user_type'] == 1){
+								if($arr['precept'] == 1){
+									if($parent_info['user_type'] != 1){
+										
+	                        			model('ClipsBase')->log_account_change_vr($parent_id_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][1]['level_money'],0, $surplus_type[3], ACT_SAVING);
+											
+									}
+			                       	else{
+	                        			model('ClipsBase')->log_account_change_vr($parent_id_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][1]['level_point'],0, $surplus_type[3], ACT_SAVING);
+			                       		
+			                       	}
+								}
 								
-                        			model('ClipsBase')->log_account_change_vr($parent_id_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][1]['level_point'], $surplus_type[3], ACT_SAVING);
-		                       	}else{
-                        			model('ClipsBase')->log_account_change_vr($parent_id_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][1]['level_money'], $surplus_type[3], ACT_SAVING);
-		                       		
-		                       	}
                         	}
-                        	model('ClipsBase')->log_account_change_vr($userid, 0, 0, 0, 0,$arr['integral_amount']*0.15, $surplus_type[3], ACT_SAVING);
+                        	
+                    		model('ClipsBase')->log_account_change_vr($userid, 0, 0, 0, 0,$arr['integral_amount']*0.15,$precept_val*0.16, $surplus_type[3], ACT_SAVING);
+                        	
+
                         	
 						}
-                        /* 修改会员帐户金额 */
-                        
-                        model('ClipsBase')->log_account_change_vr($arr['user_id'], 0, 0, 0, 0,$arr['integral_amount'], $surplus_type[3], ACT_SAVING);
 
+                        /* 修改会员帐户金额 */
+                        if($arr['precept'] == 1){
+                    	model('ClipsBase')->log_account_change_vr($arr['user_id'], 0, 0, 0, 0,$arr['integral_amount']-$love,$precept_val, $surplus_type[3], ACT_SAVING,$love);
+                        	
+                        }else{
+                        	
+                    	model('ClipsBase')->log_account_change_vr($arr['user_id'], 0, 0, 0, 0,$arr['integral_amount'],$precept_val-$love, $surplus_type[3], ACT_SAVING,$love);
+                        }
+
+                        
+
+					
                     }
                 }elseif ($pay_log['order_type'] == PAY_SURPLUS) {
                     $sql = 'SELECT `id` FROM ' . $this->pre . "user_account WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";

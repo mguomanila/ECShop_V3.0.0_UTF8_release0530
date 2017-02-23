@@ -337,6 +337,12 @@ elseif ($_REQUEST['act'] == 'info')
     /* 取得订单商品总重量 */
     $weight_price = order_weight_price($order['order_id']);
     $order['total_weight'] = $weight_price['formated_weight'];
+    if($order['precept'] == 2){
+    	$order['precept_money'] =round($order['goods_amount']*0.05,2);
+    }else{
+    	$order['precept_money'] = 0.00;
+    }
+
 
     /* 参数赋值：订单 */
     $smarty->assign('order', $order);
@@ -937,7 +943,7 @@ elseif ($_REQUEST['act'] == 'delivery_ship')
             /* 计算并发放积分 */
             $integral = integral_to_give($order);
 
-            log_account_change_one($order['user_id'], 0, 0, intval($integral['rank_points']),intval($integral['custom_points']), sprintf($_LANG['order_gift_integral'], $order['order_sn']));
+            log_account_change_one($order['user_id'], 0, 0, intval($integral['rank_points']),intval($integral['custom_points']), $order['precept'],sprintf($_LANG['order_gift_integral'], $order['order_sn']));
 
             /* 发放红包 */
             send_order_bonus($order_id);
@@ -1099,8 +1105,14 @@ elseif ($_REQUEST['act'] == 'delivery_cancel_ship')
             /* 计算并退回积分 */
             $integral = integral_to_give($order);
 
+			if($order['protected'] != 1){
+			log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.00125,0,(-1) * intval($integral['custom_points'])*0.99875,sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
+				
+			}else{
+			log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.0006,(-1) * intval($integral['custom_points'])*0.9994, 0,sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
+				
+			}
 
-			log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.000005,(-1) * intval($integral['custom_points'])*0.9995, sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
             /* todo 计算并退回红包 */
             return_order_bonus($order_id);
         }
@@ -3999,8 +4011,14 @@ elseif ($_REQUEST['act'] == 'operate_post')
 
             /* 计算并退回积分 */
             $integral = integral_to_give($order);
+			if($order['protected'] != 1 ){
+	            log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.00125,0,(-1) * intval($integral['custom_points'])*0.99875,sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
+		
+			}else{
+	            log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.0006,(-1) * intval($integral['custom_points'])*0.9994, 0,sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
+		
+			}
 
-            log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.000005,(-1) * intval($integral['custom_points'])*0.9995, sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
 
             /* todo 计算并退回红包 */
             return_order_bonus($order_id);
@@ -4196,12 +4214,17 @@ elseif ($_REQUEST['act'] == 'operate_post')
 
             $goods_num = $db->query($sql);
             $goods_num = $db->fetchRow($goods_num);
-
             if ($goods_num['goods_number'] == $goods_num['send_number']) {
                 /* 计算并退回积分 */
                 $integral = integral_to_give($order);
+				if($order['protected'] != 1){
+                	log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.00125,0,(-1) * intval($integral['custom_points'])*0.99875, sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
+					
+				}else{
+                	log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.0006,(-1) * intval($integral['custom_points'])*0.9994,0, sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
+					
+				}
 
-                log_account_change_vr($order['user_id'], 0, 0, (-1) * intval($integral['rank_points']), (-1) * intval($integral['custom_points'])*0.000005,(-1) * intval($integral['custom_points'])*0.9995, sprintf($_LANG['return_order_gift_integral'], $order['order_sn']));
             }
             /* todo 计算并退回红包 */
             return_order_bonus($order_id);

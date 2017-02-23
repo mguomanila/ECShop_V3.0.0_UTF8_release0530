@@ -543,7 +543,7 @@ function order_weight_price($order_id)
  * @param   bool    $is_gb_deposit  是否团购保证金（如果是，应付款金额只计算商品总额和支付费用，可以获得的积分取 $gift_integral）
  * @return  array
  */
-function order_fee($order, $goods, $consignee)
+function order_fee($order, $goods, $consignee,$precept=1)
 {
     /* 初始化订单的扩展code */
     if (!isset($order['extension_code']))
@@ -736,7 +736,9 @@ function order_fee($order, $goods, $consignee)
         $max_amount      -= $use_bonus; // 积分最多还能支付的金额
 
     }
-
+		if($precept != 1){
+			$total['amount']=$total['amount']*1.05;
+		}
     /* 余额 */
     $order['surplus'] = $order['surplus'] > 0 ? $order['surplus'] : 0;
     if ($total['amount'] > 0)

@@ -71,12 +71,10 @@ $get_catid=isset($_GET['cat_id'])?$_GET['cat_id']:0;
 	        $asyn_last = intval(I('post.last')) + 1;
 
 
-
-
         $this->size = I('post.amount');
         $this->page = ($asyn_last > 0) ? ceil($asyn_last / $this->size) : 1;
 
-        $list = model('Alliance')->get_brands('brand', $this->size, $this->page,$_GET['cat_id']);
+        $list = model('Alliance')->get_brands('brand', $this->size, $this->page,$_GET['cat_id'],$_GET['cat_str']);
 
 		if($list){
 	        foreach ($list as $key => $value) {
@@ -99,7 +97,7 @@ $get_catid=isset($_GET['cat_id'])?$_GET['cat_id']:0;
 	        die(json_encode($sayList));
 	        exit();
 	   }else{
-	   		die('123');
+	   		die('未找到');
 	        exit();
 	   }
     }

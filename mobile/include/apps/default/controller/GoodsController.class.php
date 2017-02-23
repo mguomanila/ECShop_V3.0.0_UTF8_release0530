@@ -134,7 +134,25 @@ class GoodsController extends CommonController {
         $this->assign('page_title', $page_info['title']);
         $this->display('goods.dwt');
     }
-
+	
+	public function query(){
+        if($_GET['type'] == 0){
+        	$goods = model('Goods')->get_goods_info($_GET['goods_id']);
+        	$properties = model('Goods')->get_goods_properties($_GET['goods_id']);  // 获得商品的规格和属性
+        	$info[0]=$goods;
+        	$info[1]=$properties;
+        	
+        	$info = json_encode($info);
+        	
+			die($info);
+        }else{
+echo 1;
+//      	$goods = json_encode($goods);
+//			die($goods);
+		}
+	}
+	
+	
     /**
      * 商品信息 
      */
@@ -148,7 +166,7 @@ class GoodsController extends CommonController {
         $this->assign('title', L('detail_intro'));
         $this->display('goods_info.dwt');
     }
-
+	
     /**
      * 商品评论
      */

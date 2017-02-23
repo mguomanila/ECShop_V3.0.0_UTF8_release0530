@@ -158,19 +158,6 @@ $data = array (
   ),
   12 => 
   array (
-    'cat_id' => '9',
-    'cat_name' => '电池',
-    'measure_unit' => '',
-    'parent_id' => '6',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '0',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => 0,
-  ),
-  13 => 
-  array (
     'cat_id' => '8',
     'cat_name' => '耳机',
     'measure_unit' => '',
@@ -181,6 +168,19 @@ $data = array (
     'sort_order' => '50',
     'has_children' => '0',
     'goods_num' => '3',
+  ),
+  13 => 
+  array (
+    'cat_id' => '9',
+    'cat_name' => '电池',
+    'measure_unit' => '',
+    'parent_id' => '6',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => 0,
   ),
   14 => 
   array (
@@ -236,19 +236,6 @@ $data = array (
   ),
   18 => 
   array (
-    'cat_id' => '28',
-    'cat_name' => '平板电脑',
-    'measure_unit' => '',
-    'parent_id' => '27',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '0',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => 0,
-  ),
-  19 => 
-  array (
     'cat_id' => '32',
     'cat_name' => '冰箱',
     'measure_unit' => '',
@@ -260,7 +247,7 @@ $data = array (
     'has_children' => '0',
     'goods_num' => 0,
   ),
-  20 => 
+  19 => 
   array (
     'cat_id' => '29',
     'cat_name' => '家用空调',
@@ -271,9 +258,9 @@ $data = array (
     'grade' => '0',
     'sort_order' => '50',
     'has_children' => '0',
-    'goods_num' => 0,
+    'goods_num' => '1',
   ),
-  21 => 
+  20 => 
   array (
     'cat_id' => '30',
     'cat_name' => '家电配件',
@@ -286,10 +273,23 @@ $data = array (
     'has_children' => '0',
     'goods_num' => '1',
   ),
-  22 => 
+  21 => 
   array (
     'cat_id' => '31',
     'cat_name' => '洗衣机',
+    'measure_unit' => '',
+    'parent_id' => '27',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => 0,
+  ),
+  22 => 
+  array (
+    'cat_id' => '28',
+    'cat_name' => '平板电脑',
     'measure_unit' => '',
     'parent_id' => '27',
     'is_show' => '1',

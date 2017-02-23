@@ -3,6 +3,8 @@
 /* 访问控制 */
 defined('IN_ECTOUCH') or die('Deny Access');
 
+/*积分提现通道开关*/
+define('YD', false); 
 
 /* sendSMS短信信息 */
 define('SMS_NAME', '243559568');
@@ -165,7 +167,9 @@ define('ACT_DRAWING', 1);     // 帐户提款
 define('ACT_ADJUSTING', 2);     // 调节帐户
 define('ACT_OTHER', 99);     // 其他类型
 define('ACT_WECHAT', 3);     // 微信类型
+define('ACT_JEWEL', 4);     // 升级金钻
 define('ACT_POINTS', 5);     // 积分提现
+define('ACT_CHANGE', 6);     // 积分转换余额
 
 /* 密码加密方法 */
 define('PWD_MD5', 1);  //md5加密方式

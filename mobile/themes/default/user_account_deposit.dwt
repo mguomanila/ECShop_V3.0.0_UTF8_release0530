@@ -6,7 +6,9 @@
     <li><a href="{:url('User/account_log')}" >{$lang.view_application}</a></li>
 
 	<li><a href="{:url('User/account_raply')}" >{$lang.surplus_type_1}</a></li>
-	<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_99}</a></li>
+	<!--<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_99}</a></li>-->
+	<li><a href="{:url('User/account_change')}" >{$lang.surplus_type_6}</a></li>
+	
 	<!--<li class="active"><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
 	
 	<!-- {if $user_type eq 2|| $user_type eq 3} -->

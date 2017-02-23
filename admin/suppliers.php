@@ -428,10 +428,13 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update')))
     admin_priv('suppliers_manage');
     if ($_REQUEST['act'] == 'insert')
     {
+    	$sql="SELECT user_id FROM ". $ecs->table('users') . " where user_name = '$_POST[suppliers_name]'";
+        $user_supp=$db->getOne($sql);
     	$supp_cat_id=$_POST['supp_cat_id']?'|'.implode('|',$_POST['supp_cat_id']).'|':'';
 
         /* 提交值 */
         $suppliers = array('suppliers_name'   => trim($_POST['suppliers_name']),
+        					'user_id'=>$user_supp,
         					'trade_name'   => trim($_POST['trade_name']),
         					'suppliers_site'   => trim($_POST['suppliers_site']),
         					'X_coord'   => trim($_POST['X_coord']),
@@ -571,10 +574,15 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update')))
 
     if ($_REQUEST['act'] == 'update')
     {
+    	$sql="SELECT user_id FROM ". $ecs->table('users') . " where user_name = '$_POST[suppliers_name]'";
+        $user_supp=$db->getOne($sql);
+
+    	
         /* 提交值 */
         $suppliers = array('id'   => trim($_POST['id']));
     	$supp_cat_id=$_POST['supp_cat_id']?'|'.implode('|',$_POST['supp_cat_id']).'|':'';
         $suppliers['new'] = array('suppliers_name'   => trim($_POST['suppliers_name']),
+        							'user_id'=>$user_supp,
         							'trade_name'   => trim($_POST['trade_name']),
         					'suppliers_site'   => trim($_POST['suppliers_site']),
         					'X_coord'   => trim($_POST['X_coord']),

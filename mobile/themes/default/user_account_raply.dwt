@@ -6,7 +6,8 @@
     <li><a href="{:url('User/account_log')}" >{$lang.view_application}</a></li>
 
 	<li class="active"><a href="{:url('User/account_raply')}" >{$lang.surplus_type_1}</a></li>
-	<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_99}</a></li>
+	<!--<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_99}</a></li>-->
+	<li><a href="{:url('User/account_change')}" >{$lang.surplus_type_6}</a></li>
 	<!--<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
 	
 	<!-- {if $user_type eq 2|| $user_type eq 3} -->
@@ -21,7 +22,7 @@
     <ul class="o-info">
       <li>
         <div class="input-text"><b class="pull-left">{$lang.repay_money}：</b><span>
-          <input name="amount" placeholder="{$lang.repay_money}" type="text" class="inputBg_touch" value="" />
+          <input name="amount" id="zuidijifen" onblur="zuidi()" placeholder="{$lang.repay_money}" type="text" class="inputBg_touch" value="" />
           </span></div>
       </li>
       {if $user_bank.content eq false || $user_bank_name.content eq false || $bank_name.content eq false}
@@ -81,6 +82,25 @@
 	{/literal}
 </script>
 <script type="text/javascript">
+
+	function zuidi(){
+		var zdjf=$('#zuidijifen').val();
+		var yu=zdjf%100;
+		var msg='';
+		if(zdjf<100){
+			msg +=' - 提现金额最低为100 \n';
+		}
+		if(yu!=0){
+			msg +=' - 提现金额必须为100的倍数 \n';
+		}
+		if(msg){
+			$('#zuidijifen').val(0);
+			alert(msg)
+		}
+	}
+
+
+
 	        	/*******************************************************************************
  * 会员余额申请
  */

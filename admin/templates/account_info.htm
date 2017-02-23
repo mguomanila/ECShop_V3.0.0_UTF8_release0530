@@ -67,6 +67,24 @@
       {$lang.current_value}{$user.love}</td>
   </tr>
   <tr>
+    <td class="label">{$lang.label_pay_points_2}</td>
+    <td><select name="add_sub_pay_points_2" id="add_sub_pay_points">
+      <option value="1" selected="selected">{$lang.add}</option>
+      <option value="-1">{$lang.subtract}</option>
+    </select>
+      <input name="pay_points_2" type="text" id="pay_points" style="text-align:right" value="0" size="10" />
+      {$lang.current_value}{$user.pay_points_2}</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.label_gold}</td>
+    <td><select name="add_sub_gold" id="add_sub_pay_points">
+      <option value="1" selected="selected">{$lang.add}</option>
+      <option value="-1">{$lang.subtract}</option>
+    </select>
+      <input name="gold" type="text"  style="text-align:right" value="0" size="10" />
+      {$lang.current_value}{$user.gold}</td>
+  </tr>
+  <tr>
     <td colspan="2" align="center">
       <input type="submit" class="button" value="{$lang.button_submit}" />
       <input type="reset" class="button" value="{$lang.button_reset}" />

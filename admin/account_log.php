@@ -52,6 +52,7 @@ if ($_REQUEST['act'] == 'list')
     $smarty->assign('full_page',    1);
 
     $account_list = get_accountlist($user_id, $account_type);
+
     $smarty->assign('account_list', $account_list['account']);
     $smarty->assign('filter',       $account_list['filter']);
     $smarty->assign('record_count', $account_list['record_count']);
@@ -67,18 +68,23 @@ if ($_REQUEST['act'] == 'list')
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'user_account_list')
 {
+    admin_priv('users_shangfen');
+	
     /* 检查参数 */
   	
 	$start_time = !empty($_POST['start_time'])?local_strtotime($_POST['start_time']):0;
     $end_time   = !empty($_POST['end_time'])?local_strtotime($_POST['end_time']):0;
+    $shop   = !empty($_POST['shop'])?$_POST['shop']:0;
+    
     $smarty->assign('ur_here',      $_LANG['account_list']);
 
     $smarty->assign('full_page',    1);
 
-    $account_list = get_user_accountlist($user_id,$start_time,$end_time);
+    $account_list = get_user_accountlist($user_id,$start_time,$end_time,$shop);
 	
     $smarty->assign('start_time', $_POST['start_time']);
     $smarty->assign('end_time', $_POST['end_time']);
+    $smarty->assign('shop', $_POST['shop']);
 	
 	$smarty->assign('action_print','print');
     $smarty->assign('account_list', $account_list['account']);
@@ -134,11 +140,13 @@ elseif ($_REQUEST['act'] == 'query')
     	
     	$start_time = !empty($_REQUEST['start_time'])?$_REQUEST['start_time']:0;
     	$end_time   = !empty($_REQUEST['end_time'])?$_REQUEST['end_time']:0;
-
+    	$shop   = !empty($_REQUEST['shop'])?$_REQUEST['shop']:0;
+    	
 	    $smarty->assign('start_time', $_POST['start_time']);
     	$smarty->assign('end_time', $_POST['end_time']);
+    	$smarty->assign('shop', $_POST['shop']);
 	
-	    $account_list = get_user_accountlist($user_id, $start_time,$end_time);
+	    $account_list = get_user_accountlist($user_id, $start_time,$end_time,$shop);
 
 	    
 	    $smarty->assign('account_list', $account_list['account']);
@@ -212,16 +220,19 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
     $frozen_money   = floatval($_POST['add_sub_frozen_money']) * abs(floatval($_POST['frozen_money']));
     $rank_points    = floatval($_POST['add_sub_rank_points']) * abs(floatval($_POST['rank_points']));
     $pay_points     = floatval($_POST['add_sub_pay_points']) * abs(floatval($_POST['pay_points']));
+    $pay_points_2   = floatval($_POST['add_sub_pay_points_2']) * abs(floatval($_POST['pay_points_2']));
+    
 	$vr_points     	= floatval($_POST['add_sub_vr_points']) * abs(floatval($_POST['vr_points']));
 	$love     		= floatval($_POST['add_sub_love']) * abs(floatval($_POST['love']));
+	$gold     		= floatval($_POST['add_sub_gold']) * abs(floatval($_POST['gold']));
 	
-    if ($user_money == 0 && $frozen_money == 0 && $rank_points == 0 && $pay_points == 0 && $vr_points == 0 && $love == 0)
+    if ($user_money == 0 && $frozen_money == 0 && $rank_points == 0 && $pay_points == 0 && $pay_points_2 == 0 && $vr_points == 0 && $love == 0&&$gold==0)
     {
         sys_msg($_LANG['no_account_change']);
     }
 
     /* 保存 */
-    log_account_change_vr($user_id, $user_money, $frozen_money, $rank_points, $pay_points,$vr_points, $change_desc, ACT_ADJUSTING,$love);
+    log_account_change_vr($user_id, $user_money, $frozen_money, $rank_points, $pay_points,$vr_points,$gold, $change_desc, ACT_ADJUSTING,$love,$pay_points_2);
 
     /* 提示信息 */
     $links = array(
@@ -281,7 +292,7 @@ function get_accountlist($user_id, $account_type = '')
  *                  frozen_money表示冻结资金，rank_points表示等级积分，pay_points表示消费积分
  * @return  array
  */
-function get_user_accountlist($user_id,$start_time=0,$end_time=0, $change_type=2)
+function get_user_accountlist($user_id,$start_time=0,$end_time=0, $shop=0, $change_type=2)
 {
     /* 检查参数 */
 
@@ -293,12 +304,16 @@ function get_user_accountlist($user_id,$start_time=0,$end_time=0, $change_type=2
     if($end_time!=0){
     	$where .= " AND change_time < $end_time";
     }
+    if($shop!=0){
+    	$where .= " AND change_desc LIKE '消费%'";
+    }
 
     /* 初始化分页参数 */
     $filter = array(
         'user_id'       => $user_id,
 		'start_time'   => $start_time,
 		'end_time'     => $end_time,
+		'shop'     => $shop,
     );
 
     /* 查询记录总数，计算分页数 */

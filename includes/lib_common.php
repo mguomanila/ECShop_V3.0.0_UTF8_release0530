@@ -1976,7 +1976,7 @@ function fx_activity($fx_money){
 	
 	foreach($user_row as $key => $value){
 		$sql="SELECT * FROM". $GLOBALS['ecs']->table('account_log').
-		"WHERE user_id=".$value['user_id'] ." AND change_desc = '每月返现'  AND change_time BETWEEN $start AND $change_time";
+		"WHERE user_id=".$value['user_id'] ." AND change_desc = '每月返积分'  AND change_time BETWEEN $start AND $change_time";
 
 		$row=$GLOBALS['db']->getAll($sql);
 
@@ -2031,15 +2031,13 @@ function sm_fx_integral(){
 	$month = date("m");
 	$day = date("d");
 	$start = mktime(0,0,0,$month,$day,$year);//当天开始时间戳
-
-
 	
 	$sql_user="SELECT * FROM". $GLOBALS['ecs']->table('users')." WHERE vr_points <> 0";
 	$user_row=$GLOBALS['db']->getAll($sql_user);
 	
 	foreach($user_row as $key => $value){
 		$sql="SELECT * FROM". $GLOBALS['ecs']->table('account_log').
-		"WHERE user_id=".$value['user_id'] ."  AND change_desc = '每日返积分'  AND change_time BETWEEN $start AND $change_time";
+		"WHERE user_id=".$value['user_id'] ."  AND change_desc = '方案1每日返积分'  AND change_time BETWEEN $start AND $change_time";
 
 		$row=$GLOBALS['db']->getAll($sql);
 
@@ -2073,7 +2071,7 @@ function sm_fx_integral(){
 				        'pay_points'    => $pay_points,
 				        'vr_points'    	=> (-1)*$pay_points_100,
 				        'change_time'   => gmtime(),
-				        'change_desc'   => '每日返积分',
+				        'change_desc'   => '方案1每日返积分',
 				        'change_type'   => $type
 				    );
 				    $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
@@ -2091,6 +2089,87 @@ function sm_fx_integral(){
 		
 		
 	}
+
+	
+	
+	$sql_user="SELECT * FROM". $GLOBALS['ecs']->table('users')." WHERE gold<>0";
+	$user_row=$GLOBALS['db']->getAll($sql_user);
+	foreach ($user_row as $key => $value) {
+		$sql="SELECT * FROM". $GLOBALS['ecs']->table('account_log').
+		"WHERE user_id=".$value['user_id'] ."  AND change_desc = '方案2每日返积分'  AND change_time BETWEEN $start AND $change_time";
+
+		$row=$GLOBALS['db']->getAll($sql);
+		
+
+		if(!$row){
+			$type=ACT_SM_FX;
+			$sql_user_one="SELECT * FROM". $GLOBALS['ecs']->table('users').
+			"WHERE user_id=".$value['user_id'] ." LIMIT 1";
+			$user_row=$GLOBALS['db']->getAll($sql_user_one);
+			
+			if($user_row[0]['gold']>=40000){
+				if($user_row[0]['bili'] != 0){
+					$gold=$user_row[0]['bili'];
+				    /* 插入帐户变动记录 */
+				    $account_log = array(
+				        'user_id'      	=> $value['user_id'],
+				        'user_money'    => 0,
+				        'frozen_money'  => 0,
+				        'rank_points'   => 0,
+				        'pay_points_2'    => $gold,
+				        'gold'    		=> (-1)*$gold*100,
+				        'change_time'   => gmtime(),
+				        'change_desc'   => '方案2每日返积分',
+				        'change_type'   => $type
+				    );
+				    $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
+					
+				    /* 更新用户信息 */
+				    $sql_update = "UPDATE " . $GLOBALS['ecs']->table('users') .
+			            " SET gold = gold - ('$gold'*100)," .
+			            " pay_points_2 = pay_points_2 + ('$gold')" .
+			            " WHERE user_id = ".$value['user_id'] ." LIMIT 1";
+				    $GLOBALS['db']->query($sql_update);
+			   	}
+			}else{
+				if($user_row[0]['gold'] >=1700){
+					$pay_points=round($user_row[0]['gold']*0.000006,2);
+				}elseif($user_row[0]['gold'] < 1700 ){
+					$pay_points=0;
+				}
+				if($pay_points>0){
+					$pay_points_100=$pay_points*100;
+				}else{
+					$pay_points_100=0;
+				}
+
+				if($pay_points != 0){
+				    /* 插入帐户变动记录 */
+				    $account_log = array(
+				        'user_id'       => $value['user_id'],
+				        'user_money'    => 0,
+				        'frozen_money'  => 0,
+				        'rank_points'   => 0,
+				        'pay_points_2'    => $pay_points,
+				        'gold'    		=> (-1)*$pay_points_100,
+				        'change_time'   => gmtime(),
+				        'change_desc'   => '方案2每日返积分',
+				        'change_type'   => $type
+				    );
+				    $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
+					
+				    /* 更新用户信息 */
+				    $sql_update = "UPDATE " . $GLOBALS['ecs']->table('users') .
+			            " SET gold = gold - ('$pay_points_100')," .
+			            " pay_points_2 = pay_points_2 + ('$pay_points')" .
+			            " WHERE user_id = ".$value['user_id'] ." LIMIT 1";
+				    $GLOBALS['db']->query($sql_update);
+			   	}
+			}
+
+		}
+	}
+	
 	
 }
 
@@ -2151,7 +2230,7 @@ function log_account_change($user_id, $user_money = 0, $frozen_money = 0, $rank_
  * @param   int     $change_type    变动类型：参见常量文件
  * @return  void
  */
-function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0,$vr_points=0, $change_desc = '', $change_type = ACT_OTHER,$love=0)
+function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0,$vr_points=0,$gold=0, $change_desc = '', $change_type = ACT_OTHER,$love=0,$pay_points_2=0)
 {
 	if($_SESSION['admin_id']){
 		$admin_id=$_SESSION['admin_id'];
@@ -2166,14 +2245,86 @@ function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $ra
         'frozen_money'  => $frozen_money,
         'rank_points'   => $rank_points,
         'pay_points'    => $pay_points,
+        'pay_points_2' => $pay_points_2,
         'vr_points'    => $vr_points,
+        'gold'    => $gold,
+        'change_time'   => gmtime(),
+        'change_desc'   => $change_desc,
+        'change_type'   => $change_type,
+        'admin_id'   => $admin_id
+    );
+
+    $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
+	$sql="SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_id'";
+    
+	$info =  $GLOBALS['db']->getRow($sql);
+    $bili=$info['bili'];
+    if($gold>0){
+        $sum=$info['gold']+$gold;
+        $bili=$sum/80000;
+    }
+    
+    /* 更新用户信息 */
+    $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
+            " SET user_money = user_money + ('$user_money')," .
+            " frozen_money = frozen_money + ('$frozen_money')," .
+            " rank_points = rank_points + ('$rank_points')," .
+			" pay_points_2 = pay_points_2 + ('$pay_points_2')," .
+            " pay_points = pay_points + ('$pay_points')," .
+            " love = love + ('$love')," .
+            " bili = '$bili'," .
+            " gold = gold + ('$gold')," .
+            " vr_points = vr_points + ('$vr_points')" .
+            " WHERE user_id = '$user_id' LIMIT 1";
+//          echo $sql;
+    $GLOBALS['db']->query($sql);
+}
+
+
+
+
+/**
+ * 记录帐户变动
+ * @param   int     $user_id        用户id
+ * @param   float   $user_money     可用余额变动
+ * @param   float   $frozen_money   冻结余额变动
+ * @param   int     $rank_points    等级积分变动
+ * @param   int     $pay_points     消费积分变动
+ * @param   string  $change_desc    变动说明
+ * @param   int     $change_type    变动类型：参见常量文件
+ * @return  void
+ */
+function log_account_change_yin($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0,$gold=0, $change_desc = '', $change_type = ACT_OTHER,$love=0)
+{
+	if($_SESSION['admin_id']){
+		$admin_id=$_SESSION['admin_id'];
+	}else{
+		$admin_id=0;
+	}
+
+    /* 插入帐户变动记录 */
+    $account_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => $user_money,
+        'frozen_money'  => $frozen_money,
+        'rank_points'   => $rank_points,
+        'pay_points'    => $pay_points,
+        'gold'    => $gold,
         'change_time'   => gmtime(),
         'change_desc'   => $change_desc,
         'change_type'   => $change_type,
         'admin_id'   => $admin_id
     );
     $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
-	
+	$sql="SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_id'";
+    $info =  $GLOBALS['db']->getRow($sql);
+    $bili=$info['bili'];
+    if($gold>0){
+        $sum=$info['gold']+$gold;
+        $bili=$sum/80000;
+    }
+//	echo $bili;
+//	exit();
     /* 更新用户信息 */
     $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
             " SET user_money = user_money + ('$user_money')," .
@@ -2182,12 +2333,12 @@ function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $ra
 
             " pay_points = pay_points + ('$pay_points')," .
             " love = love + ('$love')," .
-            " vr_points = vr_points + ('$vr_points')" .
+            " bili = '$bili'," .
+            " gold = gold + ('$gold')" .
             " WHERE user_id = '$user_id' LIMIT 1";
 //          echo $sql;
     $GLOBALS['db']->query($sql);
 }
-
 
 
 
@@ -2208,21 +2359,36 @@ function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $ra
  * @param   int     $change_type    变动类型：参见常量文件
  * @return  void
  */
-function log_account_change_one($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $vr_points = 0, $change_desc = '', $change_type = ACT_OTHER)
+function log_account_change_one($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $vr_points = 0,$precept=1, $change_desc = '', $change_type = ACT_OTHER)
 {
 	$love=$vr_points*100*0.005;
-	$vr_points=$vr_points*100-$love;
-	$pay_points=$vr_points*0.000005;
 	
-	if(is_int($pay_points)&&$pay_points>0){
-		$vr_points=$vr_points-($pay_points*100);
+	$gold=0;
+	$pay_points=0.00;
+	if($precept != 1){
+		$gold = $vr_points*100-$love;
+		$pay_points_2=$gold/80000;
+		if($pay_points_2>0.01){
+			$gold=$gold-($pay_points_2*100);
+		}else{
+			$pay_points_2=0;
+		}
+		$sql="SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_id'";
+	    $info =  $GLOBALS['db']->getRow($sql);
+	    $bili=$info['bili'];
+	    if($gold>0){
+	        $sum=$info['gold']+$gold;
+	        $bili=$sum/80000;
+	    }
+	    $vr_points = 0;
 	}else{
-		if($pay_points<1&&$pay_points>0){
-			$pay_points=1;
+		$vr_points=$vr_points*100-$love;
+		$pay_points=$vr_points*0.000006;
+		
+		if($pay_points>0.01){
 			$vr_points=$vr_points-($pay_points*100);
 		}else{
-			$pay_points=round($pay_points);
-			$vr_points=$vr_points-($pay_points*100);
+			$pay_points=0;
 		}
 	}
 
@@ -2233,12 +2399,15 @@ function log_account_change_one($user_id, $user_money = 0, $frozen_money = 0, $r
         'frozen_money'  => $frozen_money,
         'rank_points'   => $rank_points,
         'pay_points'    => $pay_points,
+        'pay_points_2'  => $pay_points_2,
         'vr_points'    	=> $vr_points,
         'love'    		=> $love,
+        'gold'    		=> $gold,
         'change_time'   => gmtime(),
         'change_desc'   => $change_desc,
         'change_type'   => $change_type
     );
+
     $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
 	
     /* 更新用户信息 */
@@ -2248,6 +2417,8 @@ function log_account_change_one($user_id, $user_money = 0, $frozen_money = 0, $r
             " rank_points = rank_points + ('$rank_points')," .
             " vr_points = vr_points + ('$vr_points')," .
             " love = love + ('$love')," .
+            " gold = gold + ('$gold')," .
+            " bili ='$bili'," .
             " pay_points = pay_points + ('$pay_points')" .
             " WHERE user_id = '$user_id' LIMIT 1";
     $GLOBALS['db']->query($sql);

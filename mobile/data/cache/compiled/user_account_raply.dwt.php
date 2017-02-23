@@ -1,10 +1,13 @@
 <?php echo $this->fetch('library/user_header.lbi'); ?>
 <ul class="nav nav-tabs" role="tablist">
     <li><a href="<?php echo url('User/account_detail');?>" ><?php echo $this->_var['lang']['add_surplus_log']; ?></a></li>
-    <li><a href="<?php echo url('User/account_log');?>" ><?php echo $this->_var['lang']['view_application']; ?></a></li>
     <li><a href="<?php echo url('User/account_points');?>" ><?php echo $this->_var['lang']['view_points']; ?></a></li>
+    
+    <li><a href="<?php echo url('User/account_log');?>" ><?php echo $this->_var['lang']['view_application']; ?></a></li>
+
 	<li class="active"><a href="<?php echo url('User/account_raply');?>" ><?php echo $this->_var['lang']['surplus_type_1']; ?></a></li>
-	<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_99']; ?></a></li>
+	<!--<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_99']; ?></a></li>-->
+	<li><a href="<?php echo url('User/account_change');?>" ><?php echo $this->_var['lang']['surplus_type_6']; ?></a></li>
 	<!--<li><a href="<?php echo url('User/account_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_0']; ?></a></li>-->
 	
 	<?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3): ?>
@@ -19,7 +22,7 @@
     <ul class="o-info">
       <li>
         <div class="input-text"><b class="pull-left"><?php echo $this->_var['lang']['repay_money']; ?>：</b><span>
-          <input name="amount" placeholder="<?php echo $this->_var['lang']['repay_money']; ?>" type="text" class="inputBg_touch" value="" />
+          <input name="amount" id="zuidijifen" onblur="zuidi()" placeholder="<?php echo $this->_var['lang']['repay_money']; ?>" type="text" class="inputBg_touch" value="" />
           </span></div>
       </li>
       <?php if ($this->_var['user_bank']['content'] == false || $this->_var['user_bank_name']['content'] == false || $this->_var['bank_name']['content'] == false): ?>
@@ -81,6 +84,25 @@
 	
 </script>
 <script type="text/javascript">
+
+	function zuidi(){
+		var zdjf=$('#zuidijifen').val();
+		var yu=zdjf%100;
+		var msg='';
+		if(zdjf<100){
+			msg +=' - 提现金额最低为100 \n';
+		}
+		if(yu!=0){
+			msg +=' - 提现金额必须为100的倍数 \n';
+		}
+		if(msg){
+			$('#zuidijifen').val(0);
+			alert(msg)
+		}
+	}
+
+
+
 	        	/*******************************************************************************
  * 会员余额申请
  */

@@ -15,6 +15,8 @@
   		</a></dd>
   	 <dd> <a ><?php echo $this->_var['lang']['share_id']; ?>：<?php echo $this->_var['share_id']; ?></a></dd>
   </div>
+  
+  
 		<!--<p class="yhm"><?php echo $this->_var['info']['username']; ?>&nbsp;&nbsp;&nbsp;<a href="<?php echo url('user/account_jewel');?>" style="color: #fff;font-weight:0!important;">立即升级</a></p>-->
    <h4 class="out"><a href="<?php echo url('user/logout');?>" class="ect-colorf"><img src="themes/default/images/out.png" alt="" width="35"/></a></h4>
   <!--<dl class="pull-left" style="width: 70%;">
@@ -23,18 +25,33 @@
     </dt>
   </dl>-->
   
- 
+ 	<div style="position: fixed;top: 60vw;right: 3vw;color: #fff;border-radius: 50%;background: rgba(0,0,0,.3);width: 46px;height: 46px;text-align: center;line-height: 46px;z-index: 999;" id="gg">公告</div>
+	
+	<div style="display:none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,.8);z-index: 9998;" id="gg_bg"></div>
+	<div style="display:none;position: fixed;text-align: center;left: 0;top: 25vw;z-index: 9999;" id="gg_img"><img src="themes/default/images/gg.jpeg" alt="" width="100%"/></div>
+
+
 
 </div>
 
+
 <ul class="money">
-    	<li class="fl"><span><?php echo $this->_var['info']['integral']; ?></span><p>金积分</p><li>
-	    <li class="fl"><span><?php echo $this->_var['info']['vr_points']; ?></span><p>金元宝</p></li>
+    	<li ><span><?php echo $this->_var['info']['surplus']; ?></span><p>余额</p><li>
+	    <li class="fl" id="jybmx"><span><?php echo $this->_var['info']['vr_go']; ?></span><p>金元宝(总) </p></li>
 	    <li><span><?php echo $this->_var['info']['love']; ?></span><p><?php echo $this->_var['lang']['love']; ?></p></li>
     </ul>
     
-    
-    
+ <div id="jybfa">
+			<li><span><?php echo $this->_var['info']['vr_points']; ?></span><p>方案一金元宝</p></li>
+			<li><span><?php echo $this->_var['info']['gold']; ?></span><p>方案二金元宝</p></li>
+			<li style="border-top: 1px solid #ccc;"><span><?php echo $this->_var['info']['integral']; ?></span><p>方案一金积分</p></li>
+			<li style="border-top: 1px solid #ccc;"><span><?php echo $this->_var['info']['pay_points_2']; ?></span><p>方案二金积分</p></li>
+ </div>   
+<!--  
+  <div id="jjffa">
+			<li><span><?php echo $this->_var['info']['integral']; ?></span><p>方案一金积分</p></li>
+			<li><span><?php echo $this->_var['info']['pay_points_2']; ?></span><p>方案二金积分</p></li>
+ </div>   -->
 <section class="container-fluid user-nav">
   <ul class="row ect-row-nav text-center">
     <!--<a href="<?php echo url('user/not_pay_order_list');?>">
@@ -217,13 +234,35 @@
             return false;
    		});
     })
+    
+    
+    
+    $("#jybmx").on("click",function(){
+    	$("#jybfa").slideToggle();
+    	$("#jybmx p").toggleClass("jybmp");
+    	if($("#jjffa").css("display") != "none"){
+    		$("#jjffa").slideToggle();
+    		$("#jjfmx p").toggleClass("jybmp");
+    	}
+    })
+    
+    $("#jjfmx").on("click",function(){
+    	$("#jjffa").slideToggle();
+    	$("#jjfmx p").toggleClass("jybmp");
+    	if($("#jybfa").css("display") != "none"){
+    		$("#jybfa").slideToggle();
+    		$("#jybmx p").toggleClass("jybmp");
+    	}
+    })
 </script>
 <script type="text/javascript" src="themes/default/js/alertPopShow.js"></script>
 <!--<script type="text/javascript">
 //	$(function(){
 //		$('#demo2').on('click', function(){
 			var neirong='欢迎登陆沃尔迅积分奖励系统，在本商城消费的商品都将以金元宝的形式回赠到您的个人账户</br>系统规则：</br>1：购买多少金额的商品系统即回赠相应比例的金元宝到您的个人账户</br>2：用户获得的金元宝将每天按照万分之六左右的比例兑换成金积分，1金积分=1元</br>3：金积分可用于商城购买商品消费</br>4：提现会扣除相应金额的6%【税收及相关:手续费】</br>5：用户购买商品回赠的金元宝都将扣除千分之五作为爱心公益基金捐助';
-			popTipShow.alert('沃尔迅积分奖励系统',neirong, ['知道了'],
+			var fangjia='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;亲爱的会员们,你们好,由于我司春节期间员工放假时间为2017年01月21日至2017年02月05日,在此期间您的提现申请暂停操作,至2017年02月06日起恢复正常提现操作。</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	若您近期有提现需求,请在本周五（1月20日）中午12:00前提交申请,当日可完成提现交易,逾期则要顺延到年后处理。</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期间给您带来的不便,敬请谅解!沃尔迅易购领导携全体员工祝您节日快乐,身体健康!<p style="text-align: right;"></br>成都沃尔迅科技有限公司</br>2017年01月18日</p>	';
+
+			popTipShow.alert('关于春节假日期间会员提现操作暂停公告',fangjia, ['知道了'],
 				function(e){
 				  //callback 处理按钮事件		  
 				  var button = $(e.target).attr('class');
@@ -240,5 +279,20 @@
 //	   });
 //	})
 </script>-->
+
+
+<script type="text/javascript">
+	$("#gg").on("click",function(){
+		$("#gg_img").show("show");
+		$("#gg_bg").show("show");
+		$("body").css({"overflow":"hidden","position":"fixed","top":"0"})
+	});
+	
+	$("#gg_bg").on("click",function(){
+		$("#gg_img").hide("show");
+		$("#gg_bg").hide("show");
+		$("body").css({"overflow":"auto","position":"static"});
+	})
+</script>
 </body>
 </html>

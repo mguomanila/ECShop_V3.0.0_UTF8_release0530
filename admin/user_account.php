@@ -275,14 +275,14 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
         $change_desc = $amount > 0 ? $_LANG['surplus_type_0'] : $_LANG['surplus_type_1'];
         $change_type = $amount > 0 ? ACT_SAVING : ACT_DRAWING;
         if($process_type == 3){
-        	log_account_change_vr($user_id, $amount, 0, 0, 0,$integral, $change_desc, $change_type);	
+        	log_account_change_vr($user_id, $amount, 0, 0, 0,$integral, 0,$change_desc, $change_type);	
         }else{
-        	log_account_change_vr($user_id, $amount, 0, 0, $integral,0, $change_desc, $change_type);       	
+        	log_account_change_vr($user_id, $amount, 0, 0, $integral,0,0, $change_desc, $change_type);       	
         }
 
     }
     if(($process_type == 2||$process_type == 1) && $is_paid == 0){
-        log_account_change_vr($user_id, $amount, 0, 0, $integral,0, $change_desc, $change_type);
+        log_account_change_vr($user_id, $amount, 0, 0, $integral,0, 0,$change_desc, $change_type);
     	
     }
 
@@ -475,18 +475,18 @@ elseif ($_REQUEST['act'] == 'action')
             log_account_change($account['user_id'], $amount, 0, 0, 0, $_LANG['surplus_type_0'], ACT_SAVING);
 
         }elseif($is_paid == '1' && $account['process_type'] == '4'){
+        	if(empty($account['friend_id'])){
         	$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ." WHERE user_id = '$account[user_id]'" ;
+        		
+        	}else{
+        	$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ." WHERE user_id = '$account[friend_id]'" ;
+        		
+        	}
+
 			$userinfo=$GLOBALS['db']->getRow($sql);
 			$parent=$userinfo;
-			$lang_content=$userinfo['user_name'].'升级金钻收益';
-			for ($i=0; $i < $i+1; $i++) { 
-				$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ."users WHERE user_id = $parent[parent_id]";
-				$parent=$GLOBALS['db']->getRow($sql);
-				if($parent['user_type']!=1){
-            		log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0, $lang_content, ACT_SAVING);
-					break;
-				}
-			}
+			$lang_content='编号:'.$id.';'.$userinfo['user_name'].'升级金钻收益';
+			
 			if($userinfo['user_type'] == 1)
 			{
 				$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ." WHERE user_id = $userinfo[parent_id]";
@@ -496,9 +496,27 @@ elseif ($_REQUEST['act'] == 'action')
 					$set=',parent_id = '.$parentinfo['ancestor_id'];
 				}
 			}
+			for ($i=0; $i < $i+1; $i++) { 
+				$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ."users WHERE user_id = $parent[parent_id]";
+				$parent=$GLOBALS['db']->getRow($sql);
+				if($parent['user_type']!=1){
+            		log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0,0, $lang_content, ACT_SAVING);
+					break;
+				}
+			}
         	//如果是预付款，并且已完成, 更新此条记录，增加相应的余额
             update_user_account($id, $amount, $admin_note, $is_paid,0);
+            if(empty($account['friend_id'])){
+            	
             $sql="UPDATE ". $GLOBALS['ecs']->table('users') . "SET user_type = 2".$set." WHERE user_id = $account[user_id]";
+            	
+            }else{
+
+            	
+            $sql="UPDATE ". $GLOBALS['ecs']->table('users') . "SET user_type = 2".$set." WHERE user_id = $account[friend_id]";
+            	
+            }
+            		log_account_change_vr($account['user_id'], 0, 0, 0, 0,128000,0, $lang_content, ACT_SAVING);
             $GLOBALS['db']->query($sql);
         }
         elseif($is_paid == '1' && $account['process_type'] == '3'){
@@ -507,21 +525,35 @@ elseif ($_REQUEST['act'] == 'action')
 					$pd	 =strstr($account['user_id'],'|');
 					if(!empty($account['friend_id'])){
 						$userid=$account['user_id'];
-						
-						$user_integral=$account['integral_amount']*0.15;
+						if($account['precept'] == 1){
+							$precept_val=0;
+						}else{
+							$precept_val=$account['integral_amount'];
+							$integral=0;
+						}
+						$content='编号:'.$id.';好友积分充值;好友ID'.$userid;;
 						$sql = "SELECT * FROM ". $GLOBALS['ecs']->table('users') ." WHERE user_id = '$userid'";
+						
                     	$user_info =  $GLOBALS['db']->getRow($sql);
                     	$sql = "SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_info[parent_id]'";
                     	$userparent_info =  $GLOBALS['db']->getRow($sql);
-						if($userparent_info['usser_type'] != 1){
-                    		log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1, $_LANG['surplus_type_3'], ACT_SAVING);
+						if($userparent_info['user_type'] != 1){
+							
+							$user_integral=$integral*0.15;
+							$precept_val_integral=$precept_val*0.21;
+							
+                			log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1,$precept_val_integral*0.1, $content, ACT_SAVING);
+							
+
 						}
 						
 						
 						$account['user_id']=$account['friend_id'];
-						
+
 						//商家所得积分
-            			log_account_change_vr($userid,0,0,0,0,$integral*0.15,$_LANG['surplus_type_3'], ACT_SAVING);
+        				log_account_change_vr($userid,0,0,0,0,$integral*0.15,$precept_val*0.16,$content, ACT_SAVING);
+						
+						
 						//推荐人所得积分						
 						$sql="SELECT * FROM ". $GLOBALS['ecs']->table('users') ." WHERE user_id = $account[user_id]";
                     	$userid_info = $GLOBALS['db']->getRow($sql);
@@ -531,11 +563,15 @@ elseif ($_REQUEST['act'] == 'action')
                     	if(!empty($userid_info['parent_id'])){
                     		$affiliate['item'][0]['level_money']/=100;
                     		$affiliate['item'][0]['level_point']/=100;
-                    		if($parent_id_info['user_type'] == 1){
-                    			log_account_change_vr($userid_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][0]['level_point'],$_LANG['surplus_type_3'], ACT_SAVING);                    	
-                    		}else{
-                    			log_account_change_vr($userid_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][0]['level_money'],$_LANG['surplus_type_3'], ACT_SAVING);                    	
-                    		}
+                    		
+                    			if($parent_id_info['user_type'] != 1){
+                    				log_account_change_vr($userid_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][0]['level_money'],$precept_val*$affiliate['item'][0]['level_point'],$content, ACT_SAVING);                    	
+	                    		}
+//	                    		else{
+//	                    			log_account_change_vr($userid_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][0]['level_money'],$precept_val*$affiliate['item'][0]['level_money']*0.5,$_LANG['surplus_type_3'], ACT_SAVING);                    	
+//	                    		}
+                    		
+                    		
 
                     	}	
                     	if(!empty($parent_id_info['parent_id'])){
@@ -544,24 +580,44 @@ elseif ($_REQUEST['act'] == 'action')
 	                    	if(!empty($userid_info['parent_id'])){
 	                    		$affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
 	    						empty($affiliate) && $affiliate = array();
-	                    		$affiliate['item'][0]['level_money'] /= 100;
-	                    		$affiliate['item'][0]['level_point'] /= 100;
-	                    		if($parent_info['user_type'] == 0){
-	                    			log_account_change_vr($parent_id_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][0]['level_point'],$_LANG['surplus_type_3'], ACT_SAVING);                    	
-	                    		}else{
-	                    			log_account_change_vr($parent_id_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][0]['level_money'],$_LANG['surplus_type_3'], ACT_SAVING);                    	
+	                    		$affiliate['item'][1]['level_money'] /= 100;
+	                    		$affiliate['item'][1]['level_point'] /= 100;
+	                    		if($account['precept'] == 1){
+	                    			if($parent_info['user_type'] != 1){
+	                    				
+	                    				log_account_change_vr($parent_id_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][1]['level_money'],0,$content, ACT_SAVING);                    	
+	                    					
+	                    			}
+		                    		else{
+		                    			log_account_change_vr($parent_id_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][1]['level_point'],0,$content, ACT_SAVING);                    	
+		                    		}
 	                    		}
+	                    		
 	
 	                    	}
                     	}
 					}
+			$love=$account['integral_amount']*0.005;
 						
         	 //如果是预付款，并且已完成, 更新此条记录，增加相应的余额
-            update_user_account($id, $amount, $admin_note, $is_paid,$integral );
+        	 if($account['precept'] == 1){
+            	update_user_account($id, $amount, $admin_note, $is_paid,$integral );
+				//客户所得积分
+	            log_account_change_vr($account['user_id'], 0, 0, 0, 0, $integral-$love,$precept_val,$content, ACT_SAVING,$love);
+        	 	
+        	 }else{
+            	update_user_account($id, $amount, $admin_note, $is_paid,$precept_val );
+				//客户所得积分
+	            log_account_change_vr($account['user_id'], 0, 0, 0, 0, $integral,$precept_val-$love,$content, ACT_SAVING,$love);
+        	 	
+        	 }
+        	 
 
-            //客户所得积分
-            log_account_change_vr($account['user_id'], 0, 0, 0, 0, $integral,$_LANG['surplus_type_3'], ACT_SAVING);
 
+			
+
+			
+            
         }
  		//如果是退款申请, 并且已完成,更新此条记录,扣除相应的余额
         if ($is_paid == '1' && $account['process_type'] == '2')

@@ -1291,3 +1291,14 @@ input{border:0;outline:none}
 	color: #ccc;
 }
 
+
+
+.formSurplus_two,
+.formSurplus_one{
+	display: none;
+}
+.formSurplus_xz{
+	background: #e87e04;
+	border:0 none!important;
+	color: #fff;
+}

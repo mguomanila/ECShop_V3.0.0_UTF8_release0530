@@ -140,7 +140,26 @@
         <div id="collapseFive" class="panel-collapse collapse in">
           <input name="postscript" type="text" class="fuyan" placeholder="{$lang.please_order_postscript}">
         </div>
+        
+        <a data-toggle="collapse"  href="#collapseFive2">
+	        <p><b> 选择方案
+	        	
+        		 </b>
+	        </p>
+	        <i class="fa fa-angle-down"></i>
+        </a>
+        <div id="collapseFive2" class="panel-collapse collapse in">
+         			<span style="width: 49%;display: inline-block;box-sizing: border-box;text-align: center;"><input type="radio" name="precept" class="precept" checked="checked" id="" value="1" />方案一</span>
+         			<span style="width: 49%;display: inline-block;box-sizing: border-box;text-align: center;"><input type="radio" name="precept" class="precept" id="" value="2" />方案二</span>
+         			<p style="background: #e1e1e1;margin: 5px 0;padding: 10px;" id="ms">
+         				1、前一天总营业额的12%作为次日消费奖励总额。</br>
+				2、按剩余总额的万分之六左右每天全额奖励，后续消费叠加。</br>
+				3、最终解释权归成都沃尔迅科技有限公司所有。
+</p>
+        </div>
       </section>
+     
+      
       <section class="ect-margin-tb ect-margin-bottom0 ect-padding-lr checkout-select checkout-pro-list">
         <p><b>{$lang.goods_list}</b><span class="label ect-bg-colory"><!--{if $allow_edit_cart} --><a href="{:url('flow/index')}" class="ect-colorf">{$lang.modify}</a><!--{/if} --></span></p>
         <ul>
@@ -166,7 +185,10 @@
           </li>
           <!-- {/foreach} -->
         </ul>
+
         <!-- #BeginLibraryItem "/Library/order_total.lbi" --><!-- #EndLibraryItem --> </section>
+        
+        
       <div class="ect-padding-lr ect-padding-tb ect-margin-tb">
         <input type="submit" name="submit" value="{$lang.order_submit}" class="btn btn-info ect-btn-info ect-colorf ect-bg"/>
         <input type="hidden" name="step" value="done" />

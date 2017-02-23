@@ -1,10 +1,13 @@
 <?php echo $this->fetch('library/user_header.lbi'); ?>
 <ul class="nav nav-tabs" role="tablist">
     <li><a href="<?php echo url('User/account_detail');?>" ><?php echo $this->_var['lang']['add_surplus_log']; ?></a></li>
-    <li><a href="<?php echo url('User/account_log');?>" ><?php echo $this->_var['lang']['view_application']; ?></a></li>
     <li><a href="<?php echo url('User/account_points');?>" ><?php echo $this->_var['lang']['view_points']; ?></a></li>
+    
+    <li><a href="<?php echo url('User/account_log');?>" ><?php echo $this->_var['lang']['view_application']; ?></a></li>
+
 	<li><a href="<?php echo url('User/account_raply');?>" ><?php echo $this->_var['lang']['surplus_type_1']; ?></a></li>
-	<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_99']; ?></a></li>
+	<!--<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_99']; ?></a></li>-->
+	<li><a href="<?php echo url('User/account_change');?>" ><?php echo $this->_var['lang']['surplus_type_6']; ?></a></li>
 	<!--<li><a href="<?php echo url('User/account_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_0']; ?></a></li>-->
 	<?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3): ?>
 	<li ><a href="<?php echo url('User/integral_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_3']; ?></a></li>
@@ -16,8 +19,8 @@
   <div class="ect-bg-colorf flow-consignee">
     <ul class="o-info">
       <li>
-        <div class="input-text"><b class="pull-left">转账积分：</b><span>
-          <input id="vr" name="amount"  placeholder="1元人民币等于100金元宝" type="text" class="inputBg_touch amount" value="<?php echo htmlspecialchars($this->_var['order']['amount']); ?>" />
+        <div class="input-text"><b class="pull-left">转账金额：</b><span>
+          <input id="vr" name="amount"  placeholder="请输入您需要操作的金额" type="text" class="inputBg_touch amount" value="<?php echo htmlspecialchars($this->_var['order']['amount']); ?>" />
           </span></div>
       </li>
 

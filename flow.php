@@ -1336,6 +1336,7 @@ elseif ($_REQUEST['step'] == 'done')
 
     /* 取得购物类型 */
     $flow_type = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
+        $precept = isset($_POST['precept']) ? intval($_POST ['precept']) :1;
 
     /* 检查购物车中是否有商品 */
     $sql = "SELECT COUNT(*) FROM " . $ecs->table('cart') .
@@ -1522,7 +1523,7 @@ elseif ($_REQUEST['step'] == 'done')
         }
     }
     /* 订单中的总额 */
-    $total = order_fee($order, $cart_goods, $consignee);
+    $total = order_fee($order, $cart_goods, $consignee,$precept);
     $order['bonus']        = $total['bonus'];
     $order['goods_amount'] = $total['goods_price'];
     $order['discount']     = $total['discount'];
@@ -1643,7 +1644,7 @@ elseif ($_REQUEST['step'] == 'done')
         $parent_id = 0;
     }
     $order['parent_id'] = $parent_id;
-
+		$order ['precept']=$precept;
     /* 插入订单表 */
     $error_no = 0;
     do
@@ -1672,6 +1673,12 @@ elseif ($_REQUEST['step'] == 'done')
             " FROM " .$ecs->table('cart') .
             " WHERE session_id = '".SESS_ID."' AND rec_type = '$flow_type'";
     $db->query($sql);
+    
+    if($precept != 1){
+    	$sql="UPDATE ". $ecs->table('order_goods') ." SET precept = 2 WHERE order_id='$new_order_id'";
+        $db->query($sql);
+    }
+    
     /* 修改拍卖活动状态 */
     if ($order['extension_code']=='auction')
     {

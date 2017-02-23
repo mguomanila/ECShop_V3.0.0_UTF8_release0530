@@ -24,9 +24,11 @@ $_LANG['label_user_name'] = '当前会员：';
 $_LANG['label_user_money'] = '可用资金帐户：';
 $_LANG['label_frozen_money'] = '冻结资金帐户：';
 $_LANG['label_rank_points'] = '等级积分帐户：';
-$_LANG['label_pay_points'] = '金积分帐户：';
-$_LANG['label_vr_points'] = '金元宝帐户：';
+$_LANG['label_pay_points'] = '金积分一帐户：';
+$_LANG['label_pay_points_2'] = '金积分二帐户：';
+$_LANG['label_vr_points'] = '方案一帐户：';
 $_LANG['label_love'] = '爱心公益：';
+$_LANG['label_gold'] = '方案二帐户：';
 $_LANG['label_change_desc'] = '帐户变动原因：';
 
 $_LANG['change_time'] = '帐户变动时间';
@@ -34,8 +36,10 @@ $_LANG['change_desc'] = '帐户变动原因';
 $_LANG['user_money'] = '可用资金帐户';
 $_LANG['frozen_money'] = '冻结资金帐户';
 $_LANG['rank_points'] = '等级积分帐户';
-$_LANG['pay_points'] = '金积分帐户';
-$_LANG['vr_points'] = '金元宝帐户';
+$_LANG['pay_points'] = '金积分一帐户';
+$_LANG['pay_points_2'] = '金积分二帐户';
+$_LANG['vr_points'] = '方案一帐户';
+$_LANG['gold'] = '方案二帐户';
 $_LANG['user_name'] = '会员名称';
 $_LANG['admin_name'] = '操作管理员';
 

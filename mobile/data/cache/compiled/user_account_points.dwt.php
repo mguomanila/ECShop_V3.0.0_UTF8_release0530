@@ -6,7 +6,8 @@
     <li><a href="<?php echo url('User/account_log');?>" ><?php echo $this->_var['lang']['view_application']; ?></a></li>
 
 	<li><a href="<?php echo url('User/account_raply');?>" ><?php echo $this->_var['lang']['surplus_type_1']; ?></a></li>
-	<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_99']; ?></a></li>
+	<!--<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_99']; ?></a></li>-->
+	<li><a href="<?php echo url('User/account_change');?>" ><?php echo $this->_var['lang']['surplus_type_6']; ?></a></li>
 	<!--<li><a href="<?php echo url('User/account_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_0']; ?></a></li>-->
 	
 	<?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3): ?>
@@ -23,7 +24,7 @@
     foreach ($_from AS $this->_var['item']):
 ?>
     	<li>
-        	<p class="title"><span class="pull-left"><?php echo $this->_var['item']['change_time']; ?></span> <span class="pull-right"><?php echo $this->_var['item']['points']; ?></span></p>
+        	<p class="title"><span class="pull-left"><?php echo $this->_var['item']['change_time']; ?></span> <span class="pull-right"><?php if ($this->_var['item']['points'] != 0): ?><?php echo $this->_var['item']['points']; ?><?php else: ?><?php echo $this->_var['item']['points_2']; ?><?php endif; ?></span></p>
             <p class="content"><span class="remark pull-left"><?php echo $this->_var['item']['short_change_desc']; ?></span> <span class="pull-right text-right type"><?php echo $this->_var['item']['type']; ?></span></p>
         </li>
 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>

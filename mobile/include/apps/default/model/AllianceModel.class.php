@@ -130,7 +130,7 @@ class AllianceModel extends BaseModel {
      * @param type $page 
      * @return type
      */
-    function get_brands($app = 'brand', $size, $page,$cat_id=0) {
+    function get_brands($app = 'brand', $size, $page,$cat_id=0,$str=null) {
 
         $start = ($page - 1) * $size;
         $cat_str=get_children($cat_id);
@@ -139,10 +139,16 @@ class AllianceModel extends BaseModel {
         }else{
         	$where = "g.cat_id LIKE '%|$cat_id|%'" ;
         }
-        
-        $sql = "SELECT g.* FROM " . $this->pre . "suppliers g  "  . "WHERE $where   GROUP BY g.suppliers_id  DESC LIMIT $start , $size";
+        if($str!=null){
+        	$where .= " AND( g.trade_name LIKE'%$str%' OR (r.reg_field_id = 101 AND r.content LIKE'%$str%'))";
 
+        }
+
+        
+        $sql = "SELECT g.* FROM " . $this->pre . "suppliers g LEFT JOIN ecs_reg_extend_info r ON g.user_id = r.user_id "  . "WHERE $where   GROUP BY g.suppliers_id  DESC LIMIT $start , $size";
+//echo $sql;
         $res = $this->query($sql);
+//      print_r($res);
         
         $arr = array();
         

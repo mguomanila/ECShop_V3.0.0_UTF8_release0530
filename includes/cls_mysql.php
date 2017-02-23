@@ -613,19 +613,24 @@ class cls_mysql
         $sql = '';
         if ($mode == 'INSERT')
         {
+
             $fields = $values = array();
             foreach ($field_names AS $value)
             {
+
                 if (array_key_exists($value, $field_values) == true)
                 {
                     $fields[] = $value;
                     $values[] = "'" . $field_values[$value] . "'";
+ 
                 }
             }
 
             if (!empty($fields))
             {
+            	
                 $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $values) . ')';
+		
             }
         }
         else
@@ -647,7 +652,6 @@ class cls_mysql
 
         if ($sql)
         {
-
             return $this->query($sql, $querymode);
         }
         else

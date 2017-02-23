@@ -25,9 +25,9 @@
   <!--商品属性介绍-->
   <div class="goods-info ect-padding-tb"> 
     <!--商品描述-->
-    <section class="ect-margin-tb ect-margin-lr goods-title">
+    <section class="ect-margin-tb ect-margin-lr goods-title ">
       <h4 class="title pull-left">{$goods.goods_style_name}</h4>
-      <span class="pull-right text-center <!--{if $sc eq 1}-->ect-colory<!--{/if}--> ect-padding-lr" onClick="collect({$goods.goods_id})" id='ECS_COLLECT'> <i class="fa <!--{if $sc eq 1}-->fa-heart<!--{else}-->fa-heart-o<!--{/if}-->"></i><br>
+      <span class="pull-right text-center ect-margin-na  <!--{if $sc eq 1}-->ect-colory<!--{/if}--> ect-padding-lr" onClick="collect({$goods.goods_id})" id='ECS_COLLECT'> <i class="fa <!--{if $sc eq 1}-->fa-heart<!--{else}-->fa-heart-o<!--{/if}-->"></i><br>
       {$lang.btn_collect} </span>
     </section>
     
@@ -64,9 +64,9 @@
       <p>{$lang.goods_weight} {$goods.goods_weight}</p>
       <!-- {/if} -->
       <p><!--{if $goods.is_promote and $goods.gmt_end_time } 促销--><strong id="leftTime" class="price">{$lang.please_waiting}</strong><!--{/if}--></p>
-    	<p>购买此商品可使用：{$goods.integral}金积分</p>
+    	<!--<p>购买此商品可使用：{$goods.integral}金积分</p>-->
     </section>
-
+     	<a class="zxkf" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3275291540&site=qq&menu=yes" title="即刻发送您的需求"><img src="images/qq_2.png" alt="" width="16vw" style="position: absolute;left: 0vw; top: 3vw;"/>在线咨询</a>
     <!-- {if $promotion} 优惠活动 -->
     <section class="ect-margin-tb ect-margin-bottom0 ect-padding-tb goods-promotion ect-padding-lr ">
       <h5><b>{$lang.activity}：</b></h5>
@@ -126,7 +126,7 @@
           </div>
           <!-- {/foreach} --> 
         </div>
-        <div class="goods-num"> <span class="pull-left">{$lang.number}：</span> 
+        <div class="goods-num"> <span class="pull-left" style="line-height: 25px;">{$lang.number}：</span> 
           <!-- {if $goods.goods_id gt 0 && $goods.is_gift eq 0 && $goods.parent_id eq 0} 普通商品可修改数量 -->
           <div class="input-group pull-left wrap"><span class="input-group-addon sup" onClick="changePrice('1')">-</span>
             <input type="text" class="form-contro form-num"  name="number" id="goods_number" autocomplete="off" value="1" onFocus="back_goods_number()"  onblur="changePrice('2')"/>
@@ -136,13 +136,62 @@
           <!-- {/if} --> 
         </div>
       </section>
-      <section class="goods-more-a"> 
-      <a class="ect-padding-lr ect-padding-tb" href="{:url('goods/info',array('id'=>$this->_var['goods']['goods_id']))}"><span class="Text">{$lang.goods_brief}</span> <span class="pull-right"><i class="fa fa-chevron-right"></i></span></a> 
-      <a class="ect-padding-lr ect-padding-tb" href="{:url('goods/comment_list',array('id'=>$this->_var['goods']['goods_id']))}"><span class="Text">{$lang.goods_comment}</span> <span class="pull-right"><span class="ect-color">{$comments.count}</span>{$lang.comment_num} <span class="ect-color">{$comments.favorable}%</span>{$lang.favorable_comment} <i class="fa fa-chevron-right"></i></span></a> 
-      </section>
       <div class="ect-padding-lr ect-padding-tb goods-submit">
+      	
+      	
+      	
         <div><a type="botton" class="btn btn-info ect-btn-info ect-colorf ect-bg" href="javascript:addToCart_quick({$goods.goods_id})">{$lang.buy_now}</a></div>
       </div>
+      <section class="goods-more-a"> 
+      <a id="info_1" class="ect-padding-lr ect-padding-tb" onclick="query({$goods.goods_id},0)" style="width: 50%;display: inline-block;box-sizing: border-box;border-right: 1px solid #ccc;float: left;" <!--href="{:url('goods/info',array('id'=>$this->_var['goods']['goods_id']))}"-->><span class="Text">{$lang.goods_brief}</span> <span class="pull-right"><i class="fa fa-chevron-right"></i></span></a> 
+      <a id="info_2" class="ect-padding-lr ect-padding-tb" onclick="query({$goods.goods_id},1)" style="width: 50%;display: inline-block;box-sizing: border-box;float: left;"<!--href="{:url('goods/comment_list',array('id'=>$this->_var['goods']['goods_id']))}"-->><span class="Text">{$lang.goods_comment}</span> <span class="pull-right"><i class="fa fa-chevron-right"></i></span></a> 
+
+      </section>
+      
+      <div>
+      	<div class="tab-content" sc>
+      		<div class="tab-pane tab-info active" id="one">
+      			
+      		</div>
+      	</div>
+      	<div id="comments" style="display: none;">
+      		<!-- #BeginLibraryItem "/library/comments.lbi" -->
+				  <div id="ECS_COMMENT"> {* ECSHOP 提醒您：动态载入comments_list.lbi，显示评论列表和评论表单 *}{insert name='comments' type=$type id=$id}</div>
+				  <!-- #EndLibraryItem -->
+      	</div>
+      </div>
+      <style type="text/css">
+      	#ECS_COMMENT .nav {
+      		position: initial;
+      	}
+      </style>
+      <script type="text/javascript">
+      	function query(goods_id,type){
+      		if(type == 1){
+								$("#one").html('')
+      				$("#comments").css('display','block');
+      				$("#info_2").css({"background":"rgba(232,126,4,1)","color":"#fff"})
+      				$("#info_1").css({"background":"#fff","color":"#333"})
+      		}else{
+	      		$.ajax({
+	      			type:"get",
+							url:"{:url('goods/query')}",
+							data:"goods_id="+goods_id+"&type="+type,
+							dataType:"json",
+							success:function(result,status){
+								console.log(result[0]['goods_desc'])
+								
+								$("#one").html( result[0]['goods_desc'])
+      					$("#comments").css('display','none')
+      					$("#info_1").css({"background":"rgba(232,126,4,1)","color":"#fff"})
+      					$("#info_2").css({"background":"#fff","color":"#333"})
+								
+							}
+	      		});
+      		}
+      	}
+      </script>
+      
       <section class="user-tab ect-border-bottom0" style="display:none;">
         <div id="is-nav-tabs" style="height:3.15em; display:none;"></div>
         <!-- Nav tabs -->

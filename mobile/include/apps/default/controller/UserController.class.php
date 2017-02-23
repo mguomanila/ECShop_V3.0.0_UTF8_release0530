@@ -49,7 +49,9 @@ class UserController extends CommonController {
 		$info['user_img']='data/attached/images/'.$extend_info_arr123['content'];
         	
         }
-
+		$info['vr_go']=$info['vr_points']+$info['gold'];
+		$info['int']=$info['integral']+$info['pay_points_2'];
+		
         // 如果是显示页面，对页面进行相应赋值
         assign_template();
         $this->assign('action', $this->action);
@@ -466,7 +468,7 @@ class UserController extends CommonController {
         
         $size = I(C('page_size'), 5);
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
-        $where = 'user_id = ' . $this->user_id . ' AND pay_points <> 0';
+        $where = 'user_id = ' . $this->user_id . ' AND (pay_points <> 0 OR pay_points_2 <> 0)';
         $count = $this->model->table('account_log')->field('COUNT(*)')->where($where)->getOne();
         $this->pageLimit(url('user/account_points'), $size);
         $this->assign('pager', $this->pageShow($count));
@@ -492,7 +494,7 @@ class UserController extends CommonController {
     
         $size = I(C('page_size'), 5);
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
-        $count = $this->model->table('user_account')->field('COUNT(*)')->where("user_id = $this->user_id AND process_type ". db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_TRANSFER)))->getOne();
+        $count = $this->model->table('user_account')->field('COUNT(*)')->where("user_id = $this->user_id AND process_type ". db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,INTEGRAL_RETURN,INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_TRANSFER,ACT_CHANGE)))->getOne();
         $this->pageLimit(url('user/account_log'), $size);
         $this->assign('pager', $this->pageShow($count));    
     
@@ -600,11 +602,12 @@ class UserController extends CommonController {
                     break;
                 case 104:
                     $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
-                    $bank_name=$extend_info_list[$key];
+                    
+                    $user_bank_name=$extend_info_list[$key];
                     break;
                 case 105:
                     $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' :$temp_arr[$val['id']];
-                    $user_bank_name=$extend_info_list[$key];
+                    $bank_name=$extend_info_list[$key];
                     break;
                 default:
                     $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']];
@@ -629,6 +632,9 @@ class UserController extends CommonController {
      *  会员积分提现申请界面 
      */
     public function integral_raply(){
+    	if(!YD){
+    		show_message('积分提现通道已关闭',L('back_page_up'),'','info');
+    	}
         // 获取剩余余额
         $surplus_amount = model('ClipsBase')->get_user_surplus_points($this->user_id);
          // 用户资料
@@ -717,6 +723,24 @@ class UserController extends CommonController {
     }
     
     
+     /**
+     *  会员积分转余额界面 
+     */
+    public function account_change(){
+        $this->assign('title', L('label_user_surplus'));
+        $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $account    = model('ClipsBase')->get_surplus_info($surplus_id);
+
+    $user_type=get_user_type();
+		$this->assign('user_type', $user_type);
+
+		
+        $this->assign('payment', model('ClipsBase')->get_online_payment_list(false));
+        $this->assign('order',   $account);
+        $this->display('user_account_change.dwt');
+    }
+    
+    
     /**
      *  会员升级金钻界面 
      */
@@ -724,10 +748,8 @@ class UserController extends CommonController {
         $this->assign('title', L('label_user_surplus'));
         $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $account    = model('ClipsBase')->get_surplus_info($surplus_id);
-		$user_type=get_user_type();
-		if($user_type==2){
-			 show_message('您已是金钻会员，无需再次升级');
-		}
+    $user_type=get_user_type();
+		
 		$this->assign('user_type', $user_type);
         $this->assign('payment', model('ClipsBase')->get_online_payment_list(false));
         $this->assign('order',   $account);
@@ -816,6 +838,9 @@ class UserController extends CommonController {
 	    	}
             /* 判断是否有足够的余额的进行退款的操作 */
             $sur_amount = model('ClipsBase')->get_user_surplus($this->user_id);
+            if($amount<100 || $amount%100 !=0){
+            	show_message('提现金额最低为100,提现金额必须为100的倍数', L('back_page_up'), '', 'info');
+            }
             if ($amount > $sur_amount)
             {
                 $content = L('surplus_amount_error');
@@ -847,6 +872,10 @@ class UserController extends CommonController {
                 show_message($content, L('back_page_up'), '', 'info');
             }
         }elseif($surplus['process_type'] == 2){
+
+        	if(!YD){
+	    		show_message('积分提现通道已关闭',L('back_page_up'),'','info');
+        	}
         	//判断是否完善个人信息
 	    	$user_extend_info_list=model('Users')->get_user_field_info($this->user_id);
 
@@ -895,6 +924,7 @@ class UserController extends CommonController {
         }
         elseif($surplus['process_type'] == 3)
         {
+        	$surplus['precept']=isset($_POST['precept'])?$_POST['precept']:1;
         	$user_img=$_FILES['stub'];
         	if($amount>=1500){
         		if(!$user_img['name']){
@@ -943,12 +973,22 @@ class UserController extends CommonController {
             }
             else
             {
-                //插入会员账目明细
-                if($user_type==2){
-                	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(10000/15),$amount);
-                }else{
-                	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(11500/15),$amount);
-                }
+            	if($surplus['precept'] == 1){
+            		//插入会员账目明细
+		            if($user_type==2){
+		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(10000/15),$amount);
+		            }else{
+		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(11500/15),$amount);
+		            }
+            	}else{
+            		//插入会员账目明细
+		            if($user_type==2){
+		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(10000/21),$amount);
+		            }else{
+		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(11500/21),$amount);
+		            }
+            	}
+                
                 
             }
     
@@ -993,7 +1033,30 @@ class UserController extends CommonController {
     		if($amount == 0 || empty($amount)||$amount != 1280){
     			show_message('请输入正确金额', L('back_page_up'), '', 'info');
     		}
-    
+    		
+    		if($user_type == 2){
+    			$usertype=get_user_type();
+        		if($usertype == 1){
+                	show_message('请先自己升级金钻，才能给好友升级金钻');
+        		}
+        		$rest_user=get_assign_user_info($_POST['rest_user_name']);
+        		if($rest_user['user_id'] == $this->user_id){
+                	show_message('好友账户不能为自己');
+        		}
+    			$usertype=get_user_type($rest_user['user_id']);
+        		if($usertype != 1){
+                	show_message('该账户已是金钻，无需再次升级');
+        		}
+        		$surplus['user_note'] = '充值好友账户：'.$_POST['rest_user_name'].' | 好友ID：'.$rest_user['user_id'].' | '.$surplus['user_note'];        		
+    			$surplus['friend_id']=$rest_user['user_id'];
+    		}else{
+    			$usertype=get_user_type();
+				if($usertype != 1){
+                	show_message('该账户已是金钻，无需再次升级');
+        		}
+    		}
+			
+    		
             //获取支付方式名称
             $payment_info = array();
             $payment_info = model('Order')->payment_info($surplus['payment_id']);
@@ -1069,7 +1132,7 @@ class UserController extends CommonController {
 
         	
             /* 判断是否有足够的余额的进行退款的操作 */
-            $sur_amount = model('ClipsBase')->get_user_surplus_points($this->user_id);
+            $sur_amount = model('ClipsBase')->get_user_surplus($this->user_id);
             if ($amount > $sur_amount)
             {
                 $content = L('surplus_amount_error');
@@ -1094,7 +1157,7 @@ class UserController extends CommonController {
             //插入会员账目明细
             $amount = '-'.$amount;
             $surplus['payment'] = '';
-            $surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount,0,1);
+            $surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, 0,$amount,1);
             
 
     
@@ -1104,11 +1167,94 @@ class UserController extends CommonController {
             	$change_desc1 = L('surplus_type_5').',好友ID:'.$this->user_id;
             	$change_desc2 = L('surplus_type_5').',对象ID:'.$surplus['friend_id'];
             	
-        		model('ClipsBase')->log_account_change($this->user_id, 0, 0, 0,$amount, $change_desc2);
-        		model('ClipsBase')->log_account_change($surplus['friend_id'], 0, 0, 0,$amount*(-1), $change_desc1);
+        		model('ClipsBase')->log_account_change($this->user_id, $amount, 0, 0,0, $change_desc2);
+        		model('ClipsBase')->log_account_change($surplus['friend_id'],$amount*(-1), 0, 0,0, $change_desc1);
 				
             	
                 $content = L('surplus_transfer_ture');
+                show_message($content, L('back_account_log'), url('User/account_log'), 'info');
+            }
+            else
+            {
+                $content = $L('process_false');
+                show_message($content, L('back_page_up'), '', 'info');
+            }
+        }elseif($surplus['process_type'] == 6)
+        {
+        	
+
+			$integral_1 = isset($_POST['integral_1']) ? floatval($_POST['integral_1']) : 0;
+			$integral_2 = isset($_POST['integral_2']) ? floatval($_POST['integral_2']) : 0;
+			$change_type = isset($_POST['change_type']) ? $_POST['change_type'] : 1;
+        	
+            /* 判断是否有足够的余额的进行退款的操作 */
+            $sur_amount = model('ClipsBase')->get_user_surplus_points($this->user_id);
+            $sur_amount2 = model('ClipsBase')->get_user_surplus_points_2($this->user_id);
+//          echo $sur_amount;
+//              show_message('稍后开放', L('back_page_up'), '', 'info');
+            
+            if ($integral_1 > $sur_amount)
+            {
+                $content = L('surplus_amount_error');
+                show_message($content, L('back_page_up'), '', 'info');
+            }
+            
+            if($integral_2 > $sur_amount2){
+            	$content = L('surplus_amount_error');
+                show_message($content, L('back_page_up'), '', 'info');
+            }
+            
+          
+            
+
+			$jinjifen=0;
+    		if($change_type==1){
+    			if($integral_1 <=0 ){
+	            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
+	            }
+    			$jinjifen=$integral_1;
+    			$amount_sum=$integral_1*0.94;
+    			$amount_sum=round($amount_sum,2);
+				$surplus['user_note'] = '方案一金积分：'.$integral_1.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+
+    			
+    		}else{
+    			if($integral_2 <=0){
+	            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
+	            }
+    			$jinjifen=$integral_2;
+    			$amount_sum=$integral_2*0.87;
+    			$amount_sum=round($amount_sum,2);
+    			
+				$surplus['user_note'] = '方案二金积分：'.$integral_2.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+
+    		}
+    		
+    		
+			
+			
+            //插入会员账目明细
+
+            $surplus['payment'] = '';
+            $surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus,$jinjifen*(-1),$amount_sum,1);
+            
+			
+    
+            /* 如果成功提交 */
+            if ($surplus['rec_id'] > 0)
+            {
+            	$change_desc = L('surplus_type_6');
+
+            	
+				if($integral_1>0){
+        		model('ClipsBase')->log_account_change_vr($this->user_id,$amount_sum, 0, 0,$integral_1*(-1), 0,0,$change_desc,ACT_CHANGE,0,0);
+					
+				}else{
+        		model('ClipsBase')->log_account_change_vr($this->user_id,$amount_sum, 0, 0,0, 0,0,$change_desc,ACT_CHANGE,0,$integral_2*(-1));
+					
+				}
+				
+                $content = L('surplus_change_ture');
                 show_message($content, L('back_account_log'), url('User/account_log'), 'info');
             }
             else
@@ -2048,13 +2194,13 @@ class UserController extends CommonController {
 			$sql="SELECT user_id,sum(integral_amount) AS integral_amount FROM " . $this->model->pre ."user_account WHERE friend_id = $value[user_id] AND process_type = 3 AND is_paid = 1";
 			$res = $this->model->getRow($sql);
 			$res['integral_amount']=$res['integral_amount']?$res['integral_amount']:0;
-			if($user_type == '1'){
+//			if($user_type == '1'){
 				$res['integral_amount'] = $res['integral_amount'] * 0.05;
-			}elseif($value['user_type'] == '2') {
-				$res['integral_amount'] = $res['integral_amount'] * 0.1;
-			}elseif($value['user_type'] == '3'){
-				$res['integral_amount'] = $res['integral_amount'] * 0.1;
-			}
+//			}elseif($value['user_type'] == '2') {
+//				$res['integral_amount'] = $res['integral_amount'] * 0.1;
+//			}elseif($value['user_type'] == '3'){
+//				$res['integral_amount'] = $res['integral_amount'] * 0.1;
+//			}
 			$aff_arr[$key]['integral_amount']=$res['integral_amount'];
 		}
 		$this->assign('aff_arr', $aff_arr);

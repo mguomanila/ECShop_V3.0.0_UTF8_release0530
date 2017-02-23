@@ -18,6 +18,9 @@ if (!defined('IN_ECS'))
     die('Hacking attempt');
 }
 
+/*积分提现通道开关*/
+define('YD', false); 
+
 /* sendSMS短信信息 */
 define('SMS_NAME', '243559568');
 define('SMS_PWD', '137935DD6F982EC645FFEE023A5F5F55');
@@ -172,6 +175,7 @@ define('ACT_ADJUSTING',             2);     // 调节帐户
 define('ACT_SM_FX',            		4);     // 每日返现
 define('ACT_POINTS',            	5);     // 积分提现
 define('ACT_OTHER',                99);     // 其他类型
+define('ACT_CHANGE', 6);     // 积分转换余额
 
 /* 密码加密方法 */
 define('PWD_MD5',                   1);  //md5加密方式

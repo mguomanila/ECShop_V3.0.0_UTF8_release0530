@@ -39,7 +39,8 @@ $_LANG['label_transform_points'] = '积分兑换';
 $_LANG['label_logout'] = '退出';
 
 /* 会员余额(预付款) */
-$_LANG['add_surplus_log'] = '查看帐户明细';
+$_LANG['add_surplus_log'] = '余额明细';
+$_LANG['add_points_log'] = '积分明细';
 $_LANG['view_application'] = '查看申请记录';
 $_LANG['surplus_pro_type'] = '类型';
 $_LANG['repay_money'] = '提现金额';
@@ -51,6 +52,7 @@ $_LANG['surplus_type_1'] = '提现';
 $_LANG['surplus_type_2'] = '金积分提现';
 $_LANG['surplus_type_3'] = '金元宝充值';
 $_LANG['surplus_type_4'] = '升级金钻';
+$_LANG['surplus_type_6'] = '积分转换';
 $_LANG['deposit_money'] = '充值金额';
 $_LANG['process_notic'] = '会员备注';
 $_LANG['user_bank'] = '银行账号';
@@ -77,6 +79,7 @@ $_LANG['unit_yuan'] = '元';
 $_LANG['for_free'] = '赠品免费';
 $_LANG['surplus_amount_error'] = '您要申请提现的金额超过了您现有的余额，此操作将不可进行！';
 $_LANG['surplus_appl_submit'] = '您的提现申请已成功提交，请等待管理员的审核！';
+$_LANG['surplus_change_ture'] = '积分转换余额成功！';
 $_LANG['process_false'] = '此次操作失败，请返回重试！';
 $_LANG['confirm_remove_account'] = '您确定要删除此条记录吗？';
 $_LANG['back_page_up'] = '返回上一页';

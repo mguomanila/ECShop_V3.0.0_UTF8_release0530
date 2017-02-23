@@ -7,7 +7,7 @@
 	<header class="ect-header ect-margin-tb ect-margin-lr">
 		<a href="{:url('category/top_all')}" class="pull-left ect-icon ect-icon1 ect-icon-cate1"></a>
 		<div class="ect-header-div">
-			<button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;年终大促销</button>
+			<button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;平安车险正式上线</button>
 		</div>
 	</header>
 	<!--<header class="ect-header "> 

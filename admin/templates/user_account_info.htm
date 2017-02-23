@@ -34,12 +34,12 @@
           <input type="radio" name="process_type" value="0"
           {if $user_surplus.process_type eq 0} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 || $action eq "edit"}disabled="true" {/if} />{$lang.surplus_type_0}
           <input type="radio" name="process_type" value="1"
-          {if $user_surplus.process_type eq 1} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3|| $action eq "edit"}disabled="true" {/if} />{$lang.surplus_type_1}
+          {if $user_surplus.process_type eq 1} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 || $action eq "edit"}disabled="true" {/if} />{$lang.surplus_type_1}
 
           <input type="radio" name="process_type" value="2"
-          {if $user_surplus.process_type eq 2|| $action eq "edit"} checked="true"{/if}{if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3} disabled="true"{/if} />{$lang.surplus_type_2}
+          {if $user_surplus.process_type eq 2} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 || $action eq "edit"} disabled="true"{/if} />{$lang.surplus_type_2}
           <input type="radio" name="process_type" value="3"
-          {if $user_surplus.process_type eq 3|| $action eq "edit"} checked="true"{/if}{if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3} disabled="true"{/if} />{$lang.surplus_type_3}
+          {if $user_surplus.process_type eq 3} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 || $action eq "edit"} disabled="true"{/if} />{$lang.surplus_type_3}
           
         </td>
       </tr>

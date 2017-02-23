@@ -34,8 +34,8 @@ array('login','get_code_sms','act_login','check_sms', 'get_mobile_sms','get_pass
 
 /* 显示页面的action列表 */
 $ui_arr = array('register','get_code_sms','check_sms', 'get_mobile_sms','get_password_sms','login', 'profile', 'order_list', 'order_detail', 'address_list', 'collection_list',
-'message_list', 'tag_list', 'get_password', 'reset_password', 'booking_list', 'add_booking', 'account_raply','integral_raply','integral_deposit',
-'account_deposit', 'account_log', 'account_detail', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list','validate_email','track_packages', 'transform_points','qpassword_name', 'get_passwd_question', 'check_answer','delivery_info');
+'message_list', 'tag_list', 'get_password', 'reset_password', 'booking_list', 'add_booking', 'account_raply','account_change','integral_raply','integral_deposit',
+'account_deposit', 'account_log', 'account_detail','account_points', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list','validate_email','track_packages', 'transform_points','qpassword_name', 'get_passwd_question', 'check_answer','delivery_info');
 
 /* 未登录处理 */
 if (empty($_SESSION['user_id']))
@@ -1626,7 +1626,9 @@ elseif ($action == 'account_raply')
 /* 会员积分提现申请界面 */
 elseif ($action == 'integral_raply')
 {
-
+	if(!YD){
+		show_message('积分提现通道已关闭',$_LANG['back_page_up'], '', 'info');
+	}
 	$sql="SELECT reg_field_id, content FROM ".$ecs->table('reg_extend_info').
 	"WHERE user_id = $user_id AND reg_field_id IN (103,104,105)";
 	$extend_info_arr123 = $db->getAll($sql);
@@ -1656,6 +1658,19 @@ elseif ($action == 'account_deposit')
 }
 /* 会员预付款界面 */
 elseif ($action == 'integral_deposit')
+{
+    include_once(ROOT_PATH . 'includes/lib_clips.php');
+
+    $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+    $account    = get_surplus_info($surplus_id);
+	$user_type=get_user_type();
+	$smarty->assign('user_type',   $user_type);
+    $smarty->assign('payment', get_online_payment_list(false));
+    $smarty->assign('order',   $account);
+    $smarty->display('user_transaction.dwt');
+}
+/* 会员预付款界面 */
+elseif ($action == 'account_change')
 {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -1721,6 +1736,72 @@ $user_type=get_user_type();
     $smarty->display('user_transaction.dwt');
 }
 
+
+/* 会员账目明细界面 */
+elseif ($action == 'account_points')
+{
+    include_once(ROOT_PATH . 'includes/lib_clips.php');
+$user_type=get_user_type();
+	$smarty->assign('user_type',   $user_type);
+    $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
+
+    $account_type = 'pay_points';
+    $account_type_2 = 'pay_points_2';
+
+    /* 获取记录条数 */
+    $sql = "SELECT COUNT(*) FROM " .$ecs->table('account_log').
+           " WHERE user_id = '$user_id'" .
+           " AND ($account_type <> 0 OR $account_type_2 <> 0) AND change_type IN (0,1,4,5,99)";
+    $record_count = $db->getOne($sql);
+
+    //分页函数
+    $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
+
+    //获取剩余余额
+    $surplus_amount = get_user_integral($user_id);
+    if (empty($surplus_amount))
+    {
+        $surplus_amount = 0;
+    }
+
+    //获取余额记录
+    $account_log = array();
+    $sql = "SELECT * FROM " . $ecs->table('account_log') .
+           " WHERE user_id = '$user_id'" .
+           " AND ($account_type <> 0 OR $account_type_2 <> 0)  AND change_type IN (0,1,4,5,99,6)" .
+           " ORDER BY log_id DESC";
+    $res = $GLOBALS['db']->selectLimit($sql, $pager['size'], $pager['start']);
+    while ($row = $db->fetchRow($res))
+    {
+        $row['change_time'] = local_date($_CFG['date_format'], $row['change_time']);
+        if($row['pay_points'] != 0){
+        $row['type'] = $row[$account_type] > 0 ? $_LANG['account_inc'] : $_LANG['account_dec'];
+        	
+        }else{
+        $row['type'] = $row[$account_type_2] > 0 ? $_LANG['account_inc'] : $_LANG['account_dec'];
+        	
+        }
+
+        $row['user_money'] = price_format(abs($row['user_money']), false);
+        $row['frozen_money'] = price_format(abs($row['frozen_money']), false);
+        $row['rank_points'] = abs($row['rank_points']);
+        $row['pay_points'] = abs($row['pay_points']);
+        $row['pay_points_2'] = abs($row['pay_points_2']);
+        
+        $row['short_change_desc'] = sub_str($row['change_desc'], 60);
+        $row['amount'] = $row[$account_type].'金积分';
+        $row['amount_2'] = $row[$account_type_2].'金积分';
+        
+        $account_log[] = $row;
+    }
+
+    //模板赋值
+    $smarty->assign('surplus_amount', price_format($surplus_amount, false));
+    $smarty->assign('account_log',    $account_log);
+    $smarty->assign('pager',          $pager);
+    $smarty->display('user_transaction.dwt');
+}
+
 /* 会员充值和提现申请记录 */
 elseif ($action == 'account_log')
 {
@@ -1732,7 +1813,7 @@ $user_type=get_user_type();
     /* 获取记录条数 */
     $sql = "SELECT COUNT(*) FROM " .$ecs->table('user_account').
            " WHERE user_id = '$user_id'" .
-           " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL));
+           " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL,ACT_CHANGE));
     $record_count = $db->getOne($sql);
 
     //分页函数
@@ -1763,10 +1844,10 @@ elseif ($action == 'act_account')
 	$user_type=$_POST['user_type'];
     $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
     $integral = isset($_POST['integral']) ? floatval($_POST['integral']) : 0;
-    if ($amount <= 0)
-    {
-        show_message($_LANG['amount_gt_zero']);
-    }
+//  if ($amount <= 0)
+//  {
+//      show_message($_LANG['amount_gt_zero']);
+//  }
 	$user_bank		=isset($_POST['user_bank']) ? '银行账户：'.trim($_POST['user_bank']).' | ' : '';
 	$user_bank_name	=isset($_POST['user_bank_name']) ? '账户姓名：'.trim($_POST['user_bank_name']).' | ' : '';
 	$bank_name	=isset($_POST['bank_name']) ? '开户银行：'.trim($_POST['bank_name']).' | ' : '';
@@ -1795,6 +1876,10 @@ elseif ($action == 'act_account')
     	}
         /* 判断是否有足够的余额的进行退款的操作 */
         $sur_amount = get_user_surplus($user_id);
+        if($amount<100 || $amount%100!=0){
+    		$content='提现金积分最低为100,提现金积分必须为100的倍数';
+            show_message($content, $_LANG['back_page_up'], '', 'info');
+    	}
         if ($amount > $sur_amount)
         {
             $content = $_LANG['surplus_amount_error'];
@@ -1820,6 +1905,9 @@ elseif ($action == 'act_account')
             show_message($content, $_LANG['back_page_up'], '', 'info');
         }
     }elseif($surplus['process_type'] == 2){
+    	if(!YD){
+			show_message('积分提现通道已关闭',$_LANG['back_page_up'], '', 'info');
+		}
     	//判断是否完善个人信息
     	$user_extend_info_list=get_user_field_info($user_id);
     	foreach ($user_extend_info_list as $key => $value) {
@@ -1865,6 +1953,7 @@ elseif ($action == 'act_account')
         }
     }
     elseif($surplus['process_type'] == 3){
+        $surplus['precept']=isset($_POST['precept'])?$_POST['precept']:1;
 
 		include_once(ROOT_PATH . 'includes/cls_image.php');
 		if($amount>=1500){
@@ -1919,7 +2008,14 @@ elseif ($action == 'act_account')
 	        else
 	        {
 	            //插入会员账目明细
+	            if($surplus['precept'] == 1){
 	            $surplus['rec_id'] = insert_user_account_integral($surplus, $amount*(10000/15),$amount);
+	            	
+	            }else{
+	            $surplus['rec_id'] = insert_user_account_integral($surplus, $amount*(10000/21),$amount);
+	            	
+	            }
+
 	        }
 			$surplus['user_id']=$rest_user['user_id'];
 	        //取得支付信息，生成支付代码
@@ -1980,7 +2076,14 @@ elseif ($action == 'act_account')
 	        else
 	        {
 	            //插入会员账目明细
+	             if($surplus['precept'] == 1){
 	            $surplus['rec_id'] = insert_user_account_integral($surplus, $amount*(11500/15),$amount);
+	             	
+	             }else{
+	            $surplus['rec_id'] = insert_user_account_integral($surplus, $amount*(11500/21),$amount);
+	             	
+	             }
+
 	        }
 	
 	        //取得支付信息，生成支付代码
@@ -2017,6 +2120,75 @@ elseif ($action == 'act_account')
 	        $smarty->assign('order',   $order);
 	        $smarty->display('user_transaction.dwt');
     	}
+    }elseif($surplus['process_type'] == 6){
+
+    	$integral_1 = isset($_POST['integral_1']) ? floatval($_POST['integral_1']) : 0;
+		$integral_2 = isset($_POST['integral_2']) ? floatval($_POST['integral_2']) : 0;
+		$change_type = isset($_POST['change_type']) ? $_POST['change_type'] : 1;
+    	
+        /* 判断是否有足够的余额的进行退款的操作 */
+        $sur_amount_1 = get_user_integral($user_id);
+        $sur_amount_2 = get_user_integral_2($user_id);
+        
+        if ($integral_1 > $sur_amount_1)
+        {
+            $content = $_LANG['surplus_amount_error'];
+            show_message($content, $_LANG['back_page_up'], '', 'info');
+        }
+        if ($integral_2 > $sur_amount_2)
+        {
+            $content = $_LANG['surplus_amount_error'];
+            show_message($content, $_LANG['back_page_up'], '', 'info');
+        }
+
+		$jinjifen=0;
+		if($change_type==1){
+			if($integral_1 <=0 ){
+            	show_message('请输入正确金额', $_LANG['back_page_up'], '', 'info');
+            }
+			$jinjifen=$integral_1;
+			$amount_sum=$integral_1*0.94;
+			$amount_sum=round($amount_sum,2);
+			$surplus['user_note'] = '方案一金积分：'.$integral_1.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+
+			
+		}else{
+			if($integral_2 <=0){
+            	show_message('请输入正确金额', $_LANG['back_page_up'], '', 'info');
+            }
+			$jinjifen=$integral_2;
+			$amount_sum=$integral_2*0.87;
+			$amount_sum=round($amount_sum,2);
+			
+			$surplus['user_note'] = '方案二金积分：'.$integral_2.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+
+		}
+
+        //插入会员账目明细
+//      $amount = '-'.$amount;
+        $surplus['payment'] = '';
+        $surplus['rec_id']  = insert_user_account_integral($surplus,$jinjifen*(-1), $amount_sum,1);
+
+        /* 如果成功提交 */
+        if ($surplus['rec_id'] > 0)
+        {
+        	if($change_type==1){
+        	log_account_change_vr($user_id, $amount_sum, 0, 0, $integral_1*(-1), 0,0,$_LANG['surplus_type_6'], ACT_CHANGE,0,0);
+        		
+        	}else{
+        	log_account_change_vr($user_id, $amount_sum, 0, 0, 0,0,0, $_LANG['surplus_type_6'], ACT_CHANGE,0,$integral_2*(-1));
+        		
+        	}
+
+        	
+            $content = $_LANG['surplus_change_ture'];
+            show_message($content, $_LANG['back_account_log'], 'user.php?act=account_log', 'info');
+        }
+        else
+        {
+            $content = $_LANG['process_false'];
+            show_message($content, $_LANG['back_page_up'], '', 'info');
+        }
     }
     /* 如果是会员预付款，跳转到下一步，进行线上支付的操作 */
     else

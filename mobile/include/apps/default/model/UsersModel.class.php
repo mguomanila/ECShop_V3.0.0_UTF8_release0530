@@ -1494,7 +1494,7 @@ class UsersModel extends BaseModel {
      * @param   bool    $is_gb_deposit  是否团购保证金（如果是，应付款金额只计算商品总额和支付费用，可以获得的积分取 $gift_integral）
      * @return  array
      */
-    function order_fee($order, $goods, $consignee) {
+    function order_fee($order, $goods, $consignee,$precept=1) {
         /* 初始化订单的扩展code */
         if (!isset($order['extension_code'])) {
             $order['extension_code'] = '';
@@ -1639,6 +1639,7 @@ class UsersModel extends BaseModel {
         // 红包和积分最多能支付的金额为商品总额
         $max_amount = $total['goods_price'] == 0 ? $total['goods_price'] : $total['goods_price'] - $bonus_amount;
 
+		
         /* 计算订单总额 */
         if ($order['extension_code'] == 'group_buy' && $group_buy['deposit'] > 0) {
             $total['amount'] = $total['goods_price'];
@@ -1660,6 +1661,11 @@ class UsersModel extends BaseModel {
             $max_amount -= $use_bonus; // 积分最多还能支付的金额
         }
 
+		if($precept != 1){
+			$total['amount']=$total['amount']*1.05;
+		}
+
+		
         /* 余额 */
         $order['surplus'] = $order['surplus'] > 0 ? $order['surplus'] : 0;
         if ($total['amount'] > 0) {
@@ -1964,7 +1970,7 @@ class UsersModel extends BaseModel {
         // 获取余额记录
         $account_log = array();
         
-        $sql = 'SELECT * FROM ' . $this->pre . "account_log WHERE user_id = " . $user_id . ' AND pay_points <> 0 AND change_type IN (0,1,4,5,99)' .
+        $sql = 'SELECT * FROM ' . $this->pre . "account_log WHERE user_id = " . $user_id . ' AND (pay_points <> 0 OR pay_points_2 <> 0) AND change_type IN (0,1,4,5,99,6)' .
         " ORDER BY log_id DESC limit " . $start . ',' . $num;
 
         $res = $this->query($sql);
@@ -1976,7 +1982,14 @@ class UsersModel extends BaseModel {
         
         foreach ($res as $k => $v) {
             $res[$k]['change_time'] = local_date(C('date_format'), $v['change_time']);
-            $res[$k]['type'] = $v['pay_points'] > 0 ? L('account_inc') : L('account_dec');
+            if($v['pay_points'] != 0){
+            	$res[$k]['type'] = $v['pay_points'] > 0 ? L('account_inc') : L('account_dec');
+            	
+            }else{
+            	$res[$k]['type'] = $v['pay_points_2'] > 0 ? L('account_inc') : L('account_dec');
+            	
+            }
+
             $res[$k]['user_money'] = price_format(abs($v['user_money']), false);
             $res[$k]['frozen_money'] = price_format(abs($v['frozen_money']), false);
             $res[$k]['rank_points'] = abs($v['rank_points']);
@@ -1984,6 +1997,8 @@ class UsersModel extends BaseModel {
             $res[$k]['short_change_desc'] = sub_str($v['change_desc'], 60);
             $res[$k]['amount'] = $v['user_money'];
             $res[$k]['points'] = $v['pay_points'];
+            $res[$k]['points_2'] = $v['pay_points_2'];
+            
             
         }
         

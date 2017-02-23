@@ -22,6 +22,13 @@
         &nbsp;&nbsp;时间末点&nbsp;&nbsp;<input name="end_time" type="text" id="end_time" size="22" value='{if $end_time}{$end_time}{/if}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>
       </td>
     </tr>
+    <tr>
+      
+      <td>
+        <input name="shop" type="checkbox" {if $shop eq 1}checked="checked"{/if} id="shop" size="22" value="1"  />
+      </td>
+      <td class="label">消费</td>
+    </tr>
    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="搜索"/>
   </form>
  
@@ -45,6 +52,8 @@
       <th>{$lang.rank_points}</th>
       <th>{$lang.pay_points}</th>
       <th>{$lang.vr_points}</th>
+      <th>{$lang.pay_points_2}</th>
+      <th>{$lang.gold}</th>
     </tr>
     {foreach from=$account_list item=account}
     <tr>
@@ -95,6 +104,24 @@
           <span style="color:#FF0000">{$account.vr_points}</span>
         {else}
           {$account.vr_points}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.pay_points_2 gt 0}
+          <span style="color:#0000FF">+{$account.pay_points_2}</span>
+        {elseif $account.pay_points_2 lt 0}
+          <span style="color:#FF0000">{$account.pay_points_2}</span>
+        {else}
+          {$account.pay_points_2}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.gold gt 0}
+          <span style="color:#0000FF">+{$account.gold}</span>
+        {elseif $account.gold lt 0}
+          <span style="color:#FF0000">{$account.gold}</span>
+        {else}
+          {$account.gold}
         {/if}
       </td>
     </tr>

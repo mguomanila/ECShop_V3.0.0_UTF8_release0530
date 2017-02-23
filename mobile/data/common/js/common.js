@@ -6,10 +6,11 @@ function get_asynclist(url, src) {
 
     $(window).scroll(function() {
 	    
-       	if ($(window).scrollTop() == $(document).height() - $(window).height()) { 	
+       	if (($(window).scrollTop() >= $(document).height() - $(window).height()-10) && ($(window).scrollTop() <= $(document).height() - $(window).height()+15)&& ($(window).scrollTop() != $(document).height() - $(window).height()) ) { 	
+
             $('.get_more').click();
-            console.log( $(document).height())
-             console.log( $(window).height())
+//          console.log( $(document).height())
+//           console.log( $(window).height())
         }
     });
 }

@@ -375,10 +375,10 @@ function insert_user_account($surplus, $amount)
  *
  * @return  int
  */
-function insert_user_account_integral($surplus, $amount,$str=0)
+function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
 {
-	$data="user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid,integral_amount";
-	$val="'$surplus[user_id]', '', '$str', '".gmtime()."', 0, '', '$surplus[user_note]', '$surplus[process_type]', '$surplus[payment]', 0,'$amount'";
+	$data="user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid,integral_amount,precept";
+	$val="'$surplus[user_id]', '', '$str', '".gmtime()."', 0, '', '$surplus[user_note]', '$surplus[process_type]', '$surplus[payment]','$paid','$amount','$surplus[precept]'";
 	if(isset($surplus['friend_id'])){
 		$data =$data. ',friend_id';
 		$val =$val.",$surplus[friend_id]";
@@ -549,7 +549,7 @@ function get_account_log($user_id, $num, $start)
     $account_log = array();
     $sql = 'SELECT * FROM ' .$GLOBALS['ecs']->table('user_account').
            " WHERE user_id = '$user_id'" .
-           " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL)) .
+           " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL,ACT_CHANGE)) .
            " ORDER BY add_time DESC";
     $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
@@ -715,6 +715,21 @@ function get_user_integral($user_id)
 }
 
 /**
+ * 查询会员积分余额的数量
+ * @access  public
+ * @param   int     $user_id        会员ID
+ * @return  int
+ */
+function get_user_integral_2($user_id)
+{
+	
+    $sql = "SELECT SUM(pay_points_2) FROM " .$GLOBALS['ecs']->table('account_log').
+           " WHERE user_id = '$user_id'";
+
+    return $GLOBALS['db']->getOne($sql);
+}
+
+/**
  * 获取用户中心默认页面所需的数据
  *
  * @access  public
@@ -726,14 +741,19 @@ function get_user_default($user_id)
 {
     $user_bonus = get_user_bonus();
 
-    $sql = "SELECT love,vr_points, pay_points, user_money, credit_line, last_login, is_validated FROM " .$GLOBALS['ecs']->table('users'). " WHERE user_id = '$user_id'";
+    $sql = "SELECT gold,love,vr_points, pay_points,pay_points_2, user_money, credit_line, last_login, is_validated FROM " .$GLOBALS['ecs']->table('users'). " WHERE user_id = '$user_id'";
     $row = $GLOBALS['db']->getRow($sql);
     $info = array();
     $info['username']  = stripslashes($_SESSION['user_name']);
     $info['shop_name'] = $GLOBALS['_CFG']['shop_name'];
 	$info['vr_points']  = $row['vr_points'];
+	$info['gold']  = $row['gold'];
+	$info['vr_go']=$info['gold']+$info['vr_points'];
+	
 	$info['love']  = $row['love'];
     $info['integral']  = $row['pay_points'] ;
+    $info['integral_2']  = $row['pay_points_2'] ;
+    
     /* 增加是否开启会员邮件验证开关 */
     $info['is_validate'] = ($GLOBALS['_CFG']['member_email_validate'] && !$row['is_validated'])?0:1;
     $info['credit_line'] = $row['credit_line'];
