@@ -27,7 +27,7 @@
         		&nbsp;&nbsp;
         		<input type="radio" class="jinzuan" checked="checked" name="sj_type" value="1" style="opacity: 0;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        			&nbsp;&nbsp;&nbsp;
-       			<input type="radio" class="vip" name="sj_type" value="2" style="opacity: 0;"/>
+<!--       			<input type="radio" class="vip" name="sj_type" value="2" style="opacity: 0;"/>-->
         	</span>
           	
         </div>

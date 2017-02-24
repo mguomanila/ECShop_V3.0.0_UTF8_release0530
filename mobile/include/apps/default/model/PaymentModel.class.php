@@ -247,8 +247,7 @@ class PaymentModel extends BaseModel {
 						
 						$this->query($sql);
                     }
-                }
-                elseif($pay_log['order_type'] == PAY_VIP)
+                }elseif($pay_log['order_type'] == PAY_VIP)
                 {
                 	$sql = 'SELECT `id` FROM ' . $this->pre . "user_account WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
                     $res = $this->row($sql);
@@ -266,54 +265,14 @@ class PaymentModel extends BaseModel {
                         $sql = "SELECT user_id,friend_id, amount FROM " . $this->pre .
                                 "user_account WHERE id = '$pay_log[order_id]'";
                         $arr = $this->row($sql);
-                        if(!empty($arr['friend_id'])){
-                        $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[friend_id]'" ;
-                        	
-                        }else{
-                        $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[user_id]'" ;
-                        	
-                        }
 
-						$userinfo=$this->row($sql);
-//						$parent=$userinfo;
-//						$lang_content='编号:'.$pay_log['order_id'].';'.$userinfo['user_name'].'升级金钻收益';
-//						
-//						if($userinfo['user_type'] == 1)
-//						{
-//							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $userinfo[parent_id]";
-//							$parentinfo=$this->row($sql);
-							$set='';
-//							if($parentinfo['user_type'] == 1){
-//								$set=',parent_id = '.$parentinfo['ancestor_id'];
-//							}
-//						}
-//						
-//						for ($i=0; $i < $i+1; $i++) { 
-//							$sql='SELECT * FROM '. $this->pre ."users WHERE user_id = $parent[parent_id]";
-//							$parent=$this->row($sql);
-//							if($parent['user_type']!=1){
-//                      		model('ClipsBase')->log_account_change_vr($parent['user_id'], 300, 0, 0, 0,0, 0,$lang_content, ACT_JEWEL);
-//								break;
-//							}
-//						}
-//                      
-//                      if(!empty($arr['friend_id'])){
-//                      	$sql='UPDATE ' . $this->pre .
-//                              "users SET user_type = 2" .$set.
-//                              " WHERE user_id = '$arr[friend_id]'";
-//
-//                      }else{
-//                      	
-                        	$sql='UPDATE ' . $this->pre .
-                                "users SET vip_type = 2" .$set.
-                                " WHERE user_id = '$arr[user_id]'";
-//                      }
-//                      model('ClipsBase')->log_account_change_vr($arr['user_id'],0,0,0,0,128000,0,$lang_content,ACT_JEWEL);
-//						
+                    	$sql='UPDATE ' . $this->pre .
+                            "users SET vip_type = 2 ".
+                            " WHERE user_id = '$arr[user_id]'";
+				
 						$this->query($sql);
-//                  }
-                }
-                elseif($pay_log['order_type'] == PAY_INTEGRAL)
+					}
+                }elseif($pay_log['order_type'] == PAY_INTEGRAL)
                 {
                 	$sql = 'SELECT `id` FROM ' . $this->pre . "user_account WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
                     $res = $this->row($sql);

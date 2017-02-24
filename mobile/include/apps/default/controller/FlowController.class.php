@@ -427,6 +427,14 @@ class FlowController extends CommonController {
 
         /* 对商品信息赋值 */
         $cart_goods = model('Order')->cart_goods($flow_type); // 取得商品列表，计算合计
+        $info = model('ClipsBase')->get_user_default($_SESSION ['user_id']);
+		$vip=$info['vip_type']!=2?($info['user_type'] == 1?1:2):$info['vip_type'];
+        foreach ($cart_goods as $key => $value) {
+        	$goods_info=model('Goods')->get_goods_info($value['goods_id']);
+        	if($goods_info['is_vip'] != 0 && $vip!=2){
+            	show_message('购物车中有商品为VIP会员限定款，如需购买请升级VIP', '点击前往', url('user/account_jewel'), 'warning');
+        	}
+        }
         $this->assign('goods_list', $cart_goods);
 
         /* 对是否允许修改购物车赋值 */
@@ -440,6 +448,8 @@ class FlowController extends CommonController {
         $this->assign('config', C('CFG'));
         // 取得订单信息
         $order = model('Order')->flow_order_info();
+//      print_r($order);
+//      exit()
         $this->assign('order', $order);
 
         /* 计算折扣 */

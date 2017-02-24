@@ -741,7 +741,7 @@ function get_user_default($user_id)
 {
     $user_bonus = get_user_bonus();
 
-    $sql = "SELECT gold,love,vr_points, pay_points,pay_points_2, user_money, credit_line, last_login, is_validated FROM " .$GLOBALS['ecs']->table('users'). " WHERE user_id = '$user_id'";
+    $sql = "SELECT user_type,vip_type,gold,love,vr_points, pay_points,pay_points_2, user_money, credit_line, last_login, is_validated FROM " .$GLOBALS['ecs']->table('users'). " WHERE user_id = '$user_id'";
     $row = $GLOBALS['db']->getRow($sql);
     $info = array();
     $info['username']  = stripslashes($_SESSION['user_name']);
@@ -753,6 +753,8 @@ function get_user_default($user_id)
 	$info['love']  = $row['love'];
     $info['integral']  = $row['pay_points'] ;
     $info['integral_2']  = $row['pay_points_2'] ;
+    $info['vip_type']  = $row['vip_type'] ;
+    $info['user_type']  = $row['user_type'] ;
     
     /* 增加是否开启会员邮件验证开关 */
     $info['is_validate'] = ($GLOBALS['_CFG']['member_email_validate'] && !$row['is_validated'])?0:1;

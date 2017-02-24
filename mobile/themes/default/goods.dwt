@@ -26,7 +26,7 @@
   <div class="goods-info ect-padding-tb"> 
     <!--商品描述-->
     <section class="ect-margin-tb ect-margin-lr goods-title ">
-      <h4 class="title pull-left">{$goods.goods_style_name}</h4>
+      <h4 class="title pull-left">{$goods.goods_style_name}&nbsp;&nbsp;{if $goods.is_vip eq 1}<span style="color: red;font-weight: 700;">(VIP专享)</span>{/if}</h4>
       <span class="pull-right text-center ect-margin-na  <!--{if $sc eq 1}-->ect-colory<!--{/if}--> ect-padding-lr" onClick="collect({$goods.goods_id})" id='ECS_COLLECT'> <i class="fa <!--{if $sc eq 1}-->fa-heart<!--{else}-->fa-heart-o<!--{/if}-->"></i><br>
       {$lang.btn_collect} </span>
     </section>

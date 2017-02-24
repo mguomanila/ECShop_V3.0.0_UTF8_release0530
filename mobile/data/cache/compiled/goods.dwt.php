@@ -30,7 +30,7 @@ if ($this->_foreach['no']['total'] > 0):
   <div class="goods-info ect-padding-tb"> 
     
     <section class="ect-margin-tb ect-margin-lr goods-title ">
-      <h4 class="title pull-left"><?php echo $this->_var['goods']['goods_style_name']; ?></h4>
+      <h4 class="title pull-left"><?php echo $this->_var['goods']['goods_style_name']; ?>&nbsp;&nbsp;<?php if ($this->_var['goods']['is_vip'] == 1): ?><span style="color: red;font-weight: 700;">(VIP专享)</span><?php endif; ?></h4>
       <span class="pull-right text-center ect-margin-na  <?php if ($this->_var['sc'] == 1): ?>ect-colory<?php endif; ?> ect-padding-lr" onClick="collect(<?php echo $this->_var['goods']['goods_id']; ?>)" id='ECS_COLLECT'> <i class="fa <?php if ($this->_var['sc'] == 1): ?>fa-heart<?php else: ?>fa-heart-o<?php endif; ?>"></i><br>
       <?php echo $this->_var['lang']['btn_collect']; ?> </span>
     </section>
@@ -255,20 +255,20 @@ if ($this->_foreach['spec']['total'] > 0):
       </div>
       <div class="bd">
         <ul>
-          <?php $_from = $this->_var['related_goods']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'goods_0_79255100_1487754966');$this->_foreach['goods'] = array('total' => count($_from), 'iteration' => 0);
+          <?php $_from = $this->_var['related_goods']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'goods_0_19043000_1487901356');$this->_foreach['goods'] = array('total' => count($_from), 'iteration' => 0);
 if ($this->_foreach['goods']['total'] > 0):
-    foreach ($_from AS $this->_var['goods_0_79255100_1487754966']):
+    foreach ($_from AS $this->_var['goods_0_19043000_1487901356']):
         $this->_foreach['goods']['iteration']++;
 ?>
-          <li><a href="<?php echo $this->_var['goods_0_79255100_1487754966']['url']; ?>"><img _src="<?php echo $this->_var['goods_0_79255100_1487754966']['goods_thumb']; ?>" src="<?php echo $this->_var['goods_0_79255100_1487754966']['goods_thumb']; ?>" /></a>
+          <li><a href="<?php echo $this->_var['goods_0_19043000_1487901356']['url']; ?>"><img _src="<?php echo $this->_var['goods_0_19043000_1487901356']['goods_thumb']; ?>" src="<?php echo $this->_var['goods_0_19043000_1487901356']['goods_thumb']; ?>" /></a>
             <p class="ect-color"> 
-              <?php if ($this->_var['goods_0_79255100_1487754966']['promote_price']): ?> 
-              <?php echo $this->_var['goods_0_79255100_1487754966']['formated_promote_price']; ?>
+              <?php if ($this->_var['goods_0_19043000_1487901356']['promote_price']): ?> 
+              <?php echo $this->_var['goods_0_19043000_1487901356']['formated_promote_price']; ?>
               <?php else: ?> 
-              <?php echo $this->_var['goods_0_79255100_1487754966']['shop_price']; ?>
+              <?php echo $this->_var['goods_0_19043000_1487901356']['shop_price']; ?>
               <?php endif; ?> 
             </p>
-            <p class="text-left"><?php echo $this->_var['goods_0_79255100_1487754966']['short_name']; ?></p>
+            <p class="text-left"><?php echo $this->_var['goods_0_19043000_1487901356']['short_name']; ?></p>
           </li>
           <?php if ($this->_foreach['goods']['iteration'] % 3 == 0): ?></ul><ul><?php endif; ?>
           <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>

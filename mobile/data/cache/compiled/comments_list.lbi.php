@@ -13,15 +13,15 @@
     <div class="tab-content">
       <div class="tab-pane tab-msg <?php if ($this->_var['rank'] == 0): ?> active<?php endif; ?>" id="one">
         <ul class="msg">
-          <?php $_from = $this->_var['comment_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'comment_0_90655700_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['comment_0_90655700_1487754966']):
+          <?php $_from = $this->_var['comment_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'comment');if (count($_from)):
+    foreach ($_from AS $this->_var['comment']):
 ?>
           <li>
-            <p><?php echo $this->_var['comment_0_90655700_1487754966']['content']; ?></p>
-            <p><?php echo $this->_var['lang']['comment_rank']; ?>：<span><img src="__TPL__/images/stars<?php echo $this->_var['comment_0_90655700_1487754966']['rank']; ?>.png" class="star" alt="<?php echo $this->_var['comment_0_90655700_1487754966']['comment_rank']; ?>" /></span></p>
-            <p><span class="pull-left"><?php echo $this->_var['lang']['username']; ?>：<?php if ($this->_var['comment_0_90655700_1487754966']['username']): ?><?php echo htmlspecialchars($this->_var['comment_0_90655700_1487754966']['username']); ?><?php else: ?><?php echo $this->_var['lang']['anonymous']; ?><?php endif; ?></span><span class="pull-right"><?php echo $this->_var['comment_0_90655700_1487754966']['add_time']; ?></span></p>
-            <?php if ($this->_var['comment_0_90655700_1487754966']['re_content']): ?>
-            <p><?php echo $this->_var['lang']['admin_username']; ?><span><?php echo $this->_var['comment_0_90655700_1487754966']['re_content']; ?></span></p>
+            <p><?php echo $this->_var['comment']['content']; ?></p>
+            <p><?php echo $this->_var['lang']['comment_rank']; ?>：<span><img src="__TPL__/images/stars<?php echo $this->_var['comment']['rank']; ?>.png" class="star" alt="<?php echo $this->_var['comment']['comment_rank']; ?>" /></span></p>
+            <p><span class="pull-left"><?php echo $this->_var['lang']['username']; ?>：<?php if ($this->_var['comment']['username']): ?><?php echo htmlspecialchars($this->_var['comment']['username']); ?><?php else: ?><?php echo $this->_var['lang']['anonymous']; ?><?php endif; ?></span><span class="pull-right"><?php echo $this->_var['comment']['add_time']; ?></span></p>
+            <?php if ($this->_var['comment']['re_content']): ?>
+            <p><?php echo $this->_var['lang']['admin_username']; ?><span><?php echo $this->_var['comment']['re_content']; ?></span></p>
 			<?php endif; ?>
           </li>
           <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
@@ -31,10 +31,10 @@
           <form name="selectPageForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
             <?php if ($this->_var['pager']['styleid'] == 0): ?>
             <div id="pager" style="padding:1em 0" class="text-right"> <?php echo $this->_var['lang']['pager_1']; ?><?php echo $this->_var['pager']['record_count']; ?><?php echo $this->_var['lang']['pager_2']; ?><?php echo $this->_var['lang']['pager_3']; ?><?php echo $this->_var['pager']['page_count']; ?><?php echo $this->_var['lang']['pager_4']; ?> <span> <a href="<?php echo $this->_var['pager']['page_prev']; ?>"><?php echo $this->_var['lang']['page_prev']; ?></a>&nbsp;&nbsp;&nbsp;<a href="<?php echo $this->_var['pager']['page_next']; ?>"><?php echo $this->_var['lang']['page_next']; ?></a> </span> 
-              <?php $_from = $this->_var['pager']['search']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_90955800_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_90955800_1487754966']):
+              <?php $_from = $this->_var['pager']['search']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_20979100_1487919817');if (count($_from)):
+    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_20979100_1487919817']):
 ?>
-              <input type="hidden" name="<?php echo $this->_var['key']; ?>" value="<?php echo $this->_var['item_0_90955800_1487754966']; ?>" />
+              <input type="hidden" name="<?php echo $this->_var['key']; ?>" value="<?php echo $this->_var['item_0_20979100_1487919817']; ?>" />
               <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?> 
             </div>
             <?php else: ?> 
@@ -45,15 +45,15 @@
       </div>
       <div class="tab-pane tab-msg<?php if ($this->_var['rank'] == 1): ?> active<?php endif; ?>" id="two">
         <ul class="msg">
-          <?php $_from = $this->_var['comment_fav']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'comment_0_91055800_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['comment_0_91055800_1487754966']):
+          <?php $_from = $this->_var['comment_fav']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'comment');if (count($_from)):
+    foreach ($_from AS $this->_var['comment']):
 ?>
           <li>
-            <p><?php echo $this->_var['comment_0_91055800_1487754966']['content']; ?></p>
-            <p><?php echo $this->_var['lang']['comment_rank']; ?>：<span><img src="__TPL__/images/stars<?php echo $this->_var['comment_0_91055800_1487754966']['rank']; ?>.png" class="star" alt="<?php echo $this->_var['comment_0_91055800_1487754966']['comment_rank']; ?>" /></span></p>
-            <p><span class="pull-left"><?php echo $this->_var['lang']['username']; ?>：<?php if ($this->_var['comment_0_91055800_1487754966']['username']): ?><?php echo htmlspecialchars($this->_var['comment_0_91055800_1487754966']['username']); ?><?php else: ?><?php echo $this->_var['lang']['anonymous']; ?><?php endif; ?></span><span class="pull-right"><?php echo $this->_var['comment_0_91055800_1487754966']['add_time']; ?></span></p>
-            <?php if ($this->_var['comment_0_91055800_1487754966']['re_content']): ?>
-            <p><?php echo $this->_var['lang']['admin_username']; ?><span><?php echo $this->_var['comment_0_91055800_1487754966']['re_content']; ?></span></p>
+            <p><?php echo $this->_var['comment']['content']; ?></p>
+            <p><?php echo $this->_var['lang']['comment_rank']; ?>：<span><img src="__TPL__/images/stars<?php echo $this->_var['comment']['rank']; ?>.png" class="star" alt="<?php echo $this->_var['comment']['comment_rank']; ?>" /></span></p>
+            <p><span class="pull-left"><?php echo $this->_var['lang']['username']; ?>：<?php if ($this->_var['comment']['username']): ?><?php echo htmlspecialchars($this->_var['comment']['username']); ?><?php else: ?><?php echo $this->_var['lang']['anonymous']; ?><?php endif; ?></span><span class="pull-right"><?php echo $this->_var['comment']['add_time']; ?></span></p>
+            <?php if ($this->_var['comment']['re_content']): ?>
+            <p><?php echo $this->_var['lang']['admin_username']; ?><span><?php echo $this->_var['comment']['re_content']; ?></span></p>
 			<?php endif; ?>
           </li>
           <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
@@ -63,10 +63,10 @@
           <form name="selectPageForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
             <?php if ($this->_var['pager_fav']['styleid'] == 0): ?>
             <div id="pager" style="padding:1em 0" class="text-right"> <?php echo $this->_var['lang']['pager_1']; ?><?php echo $this->_var['pager_fav']['record_count']; ?><?php echo $this->_var['lang']['pager_2']; ?><?php echo $this->_var['lang']['pager_3']; ?><?php echo $this->_var['pager_fav']['page_count']; ?><?php echo $this->_var['lang']['pager_4']; ?> <span> <a href="<?php echo $this->_var['pager_fav']['page_prev']; ?>"><?php echo $this->_var['lang']['page_prev']; ?></a>&nbsp;&nbsp;&nbsp;<a href="<?php echo $this->_var['pager_fav']['page_next']; ?>"><?php echo $this->_var['lang']['page_next']; ?></a> </span> 
-              <?php $_from = $this->_var['pager_fav']['search']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_91355800_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_91355800_1487754966']):
+              <?php $_from = $this->_var['pager_fav']['search']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_21379100_1487919817');if (count($_from)):
+    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_21379100_1487919817']):
 ?>
-              <input type="hidden" name="<?php echo $this->_var['key']; ?>" value="<?php echo $this->_var['item_0_91355800_1487754966']; ?>" />
+              <input type="hidden" name="<?php echo $this->_var['key']; ?>" value="<?php echo $this->_var['item_0_21379100_1487919817']; ?>" />
               <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?> 
             </div>
             <?php else: ?> 
@@ -77,15 +77,15 @@
       </div>
       <div class="tab-pane tab-msg<?php if ($this->_var['rank'] == 2): ?> active<?php endif; ?>" id="three">
         <ul class="msg">
-          <?php $_from = $this->_var['comment_med']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'comment_0_91455800_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['comment_0_91455800_1487754966']):
+          <?php $_from = $this->_var['comment_med']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'comment');if (count($_from)):
+    foreach ($_from AS $this->_var['comment']):
 ?>
           <li>
-            <p><?php echo $this->_var['comment_0_91455800_1487754966']['content']; ?></p>
-            <p><?php echo $this->_var['lang']['comment_rank']; ?>：<span><img src="__TPL__/images/stars<?php echo $this->_var['comment_0_91455800_1487754966']['rank']; ?>.png" class="star" alt="<?php echo $this->_var['comment_0_91455800_1487754966']['comment_rank']; ?>" /></span></p>
-            <p><span class="pull-left"><?php echo $this->_var['lang']['username']; ?>：：<?php if ($this->_var['comment_0_91455800_1487754966']['username']): ?><?php echo htmlspecialchars($this->_var['comment_0_91455800_1487754966']['username']); ?><?php else: ?><?php echo $this->_var['lang']['anonymous']; ?><?php endif; ?></span><span class="pull-right"><?php echo $this->_var['comment_0_91455800_1487754966']['add_time']; ?></span></p>
-            <?php if ($this->_var['comment_0_91455800_1487754966']['re_content']): ?>
-            <p><?php echo $this->_var['lang']['admin_username']; ?><span><?php echo $this->_var['comment_0_91455800_1487754966']['re_content']; ?></span></p>
+            <p><?php echo $this->_var['comment']['content']; ?></p>
+            <p><?php echo $this->_var['lang']['comment_rank']; ?>：<span><img src="__TPL__/images/stars<?php echo $this->_var['comment']['rank']; ?>.png" class="star" alt="<?php echo $this->_var['comment']['comment_rank']; ?>" /></span></p>
+            <p><span class="pull-left"><?php echo $this->_var['lang']['username']; ?>：：<?php if ($this->_var['comment']['username']): ?><?php echo htmlspecialchars($this->_var['comment']['username']); ?><?php else: ?><?php echo $this->_var['lang']['anonymous']; ?><?php endif; ?></span><span class="pull-right"><?php echo $this->_var['comment']['add_time']; ?></span></p>
+            <?php if ($this->_var['comment']['re_content']): ?>
+            <p><?php echo $this->_var['lang']['admin_username']; ?><span><?php echo $this->_var['comment']['re_content']; ?></span></p>
 			<?php endif; ?>
           </li>
           <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
@@ -95,10 +95,10 @@
           <form name="selectPageForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
             <?php if ($this->_var['pager_med']['styleid'] == 0): ?>
             <div id="pager" style="padding:1em 0" class="text-right"> <?php echo $this->_var['lang']['pager_1']; ?><?php echo $this->_var['pager_med']['record_count']; ?><?php echo $this->_var['lang']['pager_2']; ?><?php echo $this->_var['lang']['pager_3']; ?><?php echo $this->_var['pager_med']['record_count']; ?><?php echo $this->_var['lang']['pager_4']; ?> <span> <a href="<?php echo $this->_var['pager_med']['page_prev']; ?>"><?php echo $this->_var['lang']['page_prev']; ?></a>&nbsp;&nbsp;&nbsp;<a href="<?php echo $this->_var['pager_bad']['page_next']; ?>"><?php echo $this->_var['lang']['page_next']; ?></a> </span> 
-              <?php $_from = $this->_var['pager_med']['search']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_91855800_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_91855800_1487754966']):
+              <?php $_from = $this->_var['pager_med']['search']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_21779100_1487919817');if (count($_from)):
+    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_21779100_1487919817']):
 ?>
-              <input type="hidden" name="<?php echo $this->_var['key']; ?>" value="<?php echo $this->_var['item_0_91855800_1487754966']; ?>" />
+              <input type="hidden" name="<?php echo $this->_var['key']; ?>" value="<?php echo $this->_var['item_0_21779100_1487919817']; ?>" />
               <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?> 
             </div>
             <?php else: ?> 
@@ -109,15 +109,15 @@
       </div>
       <div class="tab-pane tab-msg<?php if ($this->_var['rank'] == 3): ?> active<?php endif; ?>" id="four">
         <ul class="msg">
-          <?php $_from = $this->_var['comment_bad']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'comment_0_91955800_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['comment_0_91955800_1487754966']):
+          <?php $_from = $this->_var['comment_bad']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'comment');if (count($_from)):
+    foreach ($_from AS $this->_var['comment']):
 ?>
           <li>
-            <p><?php echo $this->_var['comment_0_91955800_1487754966']['content']; ?></p>
-            <p><?php echo $this->_var['lang']['comment_rank']; ?>：<span><img src="__TPL__/images/stars<?php echo $this->_var['comment_0_91955800_1487754966']['rank']; ?>.png" class="star" alt="<?php echo $this->_var['comment_0_91955800_1487754966']['comment_rank']; ?>" /></span></p>
-            <p><span class="pull-left"><?php echo $this->_var['lang']['username']; ?>：：<?php if ($this->_var['comment_0_91955800_1487754966']['username']): ?><?php echo htmlspecialchars($this->_var['comment_0_91955800_1487754966']['username']); ?><?php else: ?><?php echo $this->_var['lang']['anonymous']; ?><?php endif; ?></span><span class="pull-right"><?php echo $this->_var['comment_0_91955800_1487754966']['add_time']; ?></span></p>
-            <?php if ($this->_var['comment_0_91955800_1487754966']['re_content']): ?>
-            <p><?php echo $this->_var['lang']['admin_username']; ?><span><?php echo $this->_var['comment_0_91955800_1487754966']['re_content']; ?></span></p>
+            <p><?php echo $this->_var['comment']['content']; ?></p>
+            <p><?php echo $this->_var['lang']['comment_rank']; ?>：<span><img src="__TPL__/images/stars<?php echo $this->_var['comment']['rank']; ?>.png" class="star" alt="<?php echo $this->_var['comment']['comment_rank']; ?>" /></span></p>
+            <p><span class="pull-left"><?php echo $this->_var['lang']['username']; ?>：：<?php if ($this->_var['comment']['username']): ?><?php echo htmlspecialchars($this->_var['comment']['username']); ?><?php else: ?><?php echo $this->_var['lang']['anonymous']; ?><?php endif; ?></span><span class="pull-right"><?php echo $this->_var['comment']['add_time']; ?></span></p>
+            <?php if ($this->_var['comment']['re_content']): ?>
+            <p><?php echo $this->_var['lang']['admin_username']; ?><span><?php echo $this->_var['comment']['re_content']; ?></span></p>
 			<?php endif; ?>
           </li>
           <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
@@ -127,10 +127,10 @@
           <form name="selectPageForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
             <?php if ($this->_var['pager_bad']['styleid'] == 0): ?>
             <div id="pager" style="padding:1em 0" class="text-right"> <?php echo $this->_var['lang']['pager_1']; ?><?php echo $this->_var['pager_bad']['record_count']; ?><?php echo $this->_var['lang']['pager_2']; ?><?php echo $this->_var['lang']['pager_3']; ?><?php echo $this->_var['pager_bad']['record_count']; ?><?php echo $this->_var['lang']['pager_4']; ?> <span> <a href="<?php echo $this->_var['pager_bad']['page_prev']; ?>"><?php echo $this->_var['lang']['page_prev']; ?></a>&nbsp;&nbsp;&nbsp;<a href="<?php echo $this->_var['pager_bad']['page_next']; ?>"><?php echo $this->_var['lang']['page_next']; ?></a> </span> 
-              <?php $_from = $this->_var['pager_bad']['search']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_92155800_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_92155800_1487754966']):
+              <?php $_from = $this->_var['pager_bad']['search']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_22079200_1487919817');if (count($_from)):
+    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_22079200_1487919817']):
 ?>
-              <input type="hidden" name="<?php echo $this->_var['key']; ?>" value="<?php echo $this->_var['item_0_92155800_1487754966']; ?>" />
+              <input type="hidden" name="<?php echo $this->_var['key']; ?>" value="<?php echo $this->_var['item_0_22079200_1487919817']; ?>" />
               <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?> 
             </div>
             <?php else: ?> 
@@ -191,10 +191,10 @@
 </div>
 <script type="text/javascript">
 //<![CDATA[
-<?php $_from = $this->_var['lang']['cmt_lang']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_92455800_1487754966');if (count($_from)):
-    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_92455800_1487754966']):
+<?php $_from = $this->_var['lang']['cmt_lang']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item_0_22279200_1487919817');if (count($_from)):
+    foreach ($_from AS $this->_var['key'] => $this->_var['item_0_22279200_1487919817']):
 ?>
-var <?php echo $this->_var['key']; ?> = "<?php echo $this->_var['item_0_92455800_1487754966']; ?>";
+var <?php echo $this->_var['key']; ?> = "<?php echo $this->_var['item_0_22279200_1487919817']; ?>";
 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 
 /**

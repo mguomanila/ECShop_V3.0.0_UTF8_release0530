@@ -498,6 +498,23 @@ elseif ($_REQUEST['step'] == 'checkout')
 
     /* 对商品信息赋值 */
     $cart_goods = cart_goods($flow_type); // 取得商品列表，计算合计
+    
+    include_once('includes/lib_clips.php');
+    include_once('includes/lib_goods.php');
+   
+    $info = get_user_default($_SESSION ['user_id']);
+//  print_r($info);
+////   echo $info['vip_type'];
+////  echo $info['user_type'];
+//  exit();
+	$vip=$info['vip_type']!=2?($info['user_type'] == 1?1:2):$info['vip_type'];
+    foreach ($cart_goods as $key => $value) {
+    	$goods_info=get_goods_info($value['goods_id']);
+    	if($goods_info['is_vip'] != 0 && $vip!=2){
+        	show_message('购物车中有商品为VIP会员限定款，如需购买请在手机端升级VIP');
+    	}
+    }
+    
     $smarty->assign('goods_list', $cart_goods);
 
     /* 对是否允许修改购物车赋值 */

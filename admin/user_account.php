@@ -529,39 +529,13 @@ elseif ($_REQUEST['act'] == 'action')
         	}
 
 			$userinfo=$GLOBALS['db']->getRow($sql);
-//			$parent=$userinfo;
-//			$lang_content='编号:'.$id.';'.$userinfo['user_name'].'升级金钻收益';
-//			
-//			if($userinfo['user_type'] == 1)
-//			{
-//				$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ." WHERE user_id = $userinfo[parent_id]";
-//				$parentinfo=$GLOBALS['db']->getRow($sql);
-				$set='';
-//				if($parentinfo['user_type'] == 1){
-//					$set=',parent_id = '.$parentinfo['ancestor_id'];
-//				}
-//			}
-//			for ($i=0; $i < $i+1; $i++) { 
-//				$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ."users WHERE user_id = $parent[parent_id]";
-//				$parent=$GLOBALS['db']->getRow($sql);
-//				if($parent['user_type']!=1){
-//          		log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0,0, $lang_content, ACT_SAVING);
-//					break;
-//				}
-//			}
-//      	//如果是预付款，并且已完成, 更新此条记录，增加相应的余额
+
+			$set='';
+
             update_user_account($id, $amount, $admin_note, $is_paid,0);
-//          if(empty($account['friend_id'])){
-//          	
+        	
             $sql="UPDATE ". $GLOBALS['ecs']->table('users') . "SET vip_type = 2".$set." WHERE user_id = $account[user_id]";
-//          	
-//          }else{
-//
-//          	
-//          $sql="UPDATE ". $GLOBALS['ecs']->table('users') . "SET user_type = 2".$set." WHERE user_id = $account[friend_id]";
-//          	
-//          }
-//          		log_account_change_vr($account['user_id'], 0, 0, 0, 0,128000,0, $lang_content, ACT_SAVING);
+
             $GLOBALS['db']->query($sql);
         }
         elseif($is_paid == '1' && $account['process_type'] == '3'){
