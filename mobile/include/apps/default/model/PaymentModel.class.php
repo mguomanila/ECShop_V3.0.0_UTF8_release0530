@@ -149,7 +149,12 @@ class PaymentModel extends BaseModel {
                             " order_amount = 0 " .
                             "WHERE order_id = '$order_id'";
                     $this->query($sql);
-
+					
+					$sql = 'UPDATE ' . $this->pre .
+                            "installment SET is_paid = '" . $pay_status . "', " .
+                            "WHERE order_id = '$order_id'";
+                    $this->query($sql);
+					
                     /* 记录订单操作记录 */
                     model('OrderBase')->order_action($order_sn, OS_CONFIRMED, SS_UNSHIPPED, $pay_status, $note, L('buyer'));
 

@@ -319,6 +319,12 @@ class ClipsBaseModel extends BaseModel {
 		}
         return $this->insert($data);
     }
+    
+    public function insert_installment_account($arr){
+    	$this->table = 'installment_account';
+//  	print_r($arr);
+        return $this->insert($arr);
+    }
 
 /**
  * 插入会员账目明细

@@ -3572,7 +3572,17 @@ elseif ($_REQUEST['act'] == 'operate_post')
             $arr['shipping_status'] = SS_RECEIVED;
             $order['shipping_status'] = SS_RECEIVED;
         }
+
+        $sql="SELECT * FROM ". $ecs->table('installment') ." WHERE order_id = $order_id";
+        $install=$db->getRow($sql);
+
+        if($install){
+        	$sql = "UPDATE ". $ecs->table('installment') ." SET is_paid =".PS_PAYED." WHERE order_id = $order_id";
+        	$db->query($sql);
+        }
+//      exit();
         update_order($order_id, $arr);
+        
         //订单支付后，创建订单到淘打
         include_once(ROOT_PATH."includes/cls_matrix.php");
         $matrix = new matrix();
@@ -3598,6 +3608,13 @@ elseif ($_REQUEST['act'] == 'operate_post')
             'money_paid'    => 0,
             'order_amount'  => $order['money_paid']
         );
+        $sql="SELECT * FROM ". $ecs->table('installment') ." WHERE order_id = $order_id";
+        $install=$db->getRow($sql);
+
+        if($install){
+        	$sql = "UPDATE ". $ecs->table('installment') ." SET is_paid =".PS_UNPAYED." WHERE order_id = $order_id";
+        	$db->query($sql);
+        }
         update_order($order_id, $arr);
 
         /* todo 处理退款 */

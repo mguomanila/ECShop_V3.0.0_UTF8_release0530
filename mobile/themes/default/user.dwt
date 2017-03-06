@@ -66,6 +66,13 @@
     <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/order_list_lnk.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.order_list_lnk}</p>
     </li>
+    
+    <a href="{:url('user/user_installment')}">
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_share.png" style="height: 54px;width: 54px;">
+      <p class="text-center">分期活动</p>
+    </li>
+    </a>
+    
     </a> <a href="{:url('user/address_list')}">
     <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_address.png" style="height: 54px;width: 54px;">
       <p class="text-center">{$lang.label_address}</p>

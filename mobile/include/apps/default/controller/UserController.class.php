@@ -2270,6 +2270,87 @@ class UserController extends CommonController {
         $this->display('user_share.dwt');
     }
     
+    public function user_installment(){
+//  	echo gmtime();
+
+    	$sql = "SELECT * FROM (". $this->model->pre ."installment as i LEFT JOIN ". $this->model->pre ."order_info as o ON i.order_id = o.order_id) LEFT JOIN ".$this->model->pre."goods as g ON i.goods_id = g.goods_id WHERE o.user_id = $this->user_id AND o.pay_status = 2 AND i.is_paid = 2";
+    	$user_i_list=$this->model->query($sql);
+    	$list=array();
+    	if($user_i_list){
+	    	foreach ($user_i_list as $key => $value) {
+	    		$value['goods_name'] = mb_strlen($value['goods_name'])>=11?mb_substr($value['goods_name'],0,'11').'...':$value['goods_name'];
+	    		$num_arr1 = explode(',',$value['num_arr']);
+	    		foreach ($num_arr1 as $k => $v) {
+	    			$num_arr[$v]=$v;
+	    		}
+//	    		array_shift($num_arr);
+	    		$value['num_arr']=array();
+	    		for ($i=1; $i <= $value['num']; $i++) { 
+	    			$val = array();
+	    			$val['str'] = $num_arr[$i];
+	    			$sql = "SELECT * FROM ". $this->model->pre ."installment_account WHERE user_id = $this->user_id AND num = $i AND order_id = '$value[order_id]' AND installment_id = '$value[id]'";
+    				$m=$this->model->getRow($sql);
+	    			$val['status'] = !empty($m)?$m['is_paid']:(($value['pay_time']+(30*24*60*60*($i-1))) < gmtime()?1:9);
+	    			$value['num_arr'][$i]=$val;
+	    		}
+				$list[$key] = $value;
+	    	}
+    	}
+//  	print_r($num_arr);
+    	$count=count($list);
+    	$this->assign('count',$count);
+    	$this->assign('list',$list);
+        $this->display('user_installment.dwt');
+    	
+    }
+    
+    public function installment_account(){
+
+    	
+    	$arr = array(
+    		'user_id'      	=> $this->user_id,
+    		'num'			=> isset($_GET['level'])?$_GET['level']:'',
+    		'order_id'		=> isset($_GET['order_id'])?$_GET['order_id']:'',
+    		'installment_id'=> isset($_GET['id'])?$_GET['id']:'',
+    		'goods_id'		=> isset($_GET['goods_id'])?$_GET['goods_id']:'',
+    		'process_type'	=> isset($_GET['type'])?$_GET['type']:'',
+    		
+    	);
+    	$sql = "SELECT * FROM ". $this->model->pre ."installment_account WHERE num = '$arr[num]' AND order_id = '$arr[order_id]' AND goods_id = '$arr[goods_id]' AND installment_id = '$arr[installment_id]'";
+    	$yn=$this->model->getRow($sql);
+    	if($yn){
+    		$content=array('status'=>2);
+    		print_r($content);
+    		exit();
+    	}
+    	$sql = "SELECT * FROM ". $this->model->pre ."installment WHERE id = '$arr[installment_id]'";
+    	$if=$this->model->getRow($sql);
+    	if(!$if){
+    		$content=array('status'=>3);
+    		print_r($content);
+    		exit();
+    	}
+    	$sql = "SELECT * FROM (". $this->model->pre ."installment as i LEFT JOIN ". $this->model->pre ."order_info as o ON i.order_id = o.order_id) LEFT JOIN ".$this->model->pre."goods as g ON i.goods_id = g.goods_id WHERE o.user_id = $this->user_id AND g.goods_id = '$arr[goods_id]' AND i.id = '$arr[installment_id]'";
+    	$list=$this->model->getRow($sql);
+    	if(!$list){
+    		$content=array('status'=>3);
+    		print_r($content);
+    		exit();
+    	}
+    	$arr['goods_name'] = $list['goods_name'];
+    	$arr['add_time'] = gmtime();
+    	$arr['is_paid'] = 0;
+    	$paid= model('ClipsBase')->insert_installment_account($arr);
+		if($paid){
+			$content=array('status'=>1);
+    		print_r($content);
+    		exit();
+		}else{
+			$content=array('status'=>0);
+    		print_r($content);
+    		exit();
+		}
+    }
     
     public function my_vip(){
     	$sql="SELECT user_id,user_type,user_name,from_unixtime(reg_time) AS reg_time,love FROM " . $this->model->pre .'users' ." WHERE parent_id = $this->user_id ORDER BY reg_time DESC";

@@ -1044,7 +1044,7 @@ class FlowController extends CommonController {
             'mobile_order' => 1,
             'mobile_pay' => 1
         );
-
+		
         /* 扩展信息 */
         if (isset($_SESSION ['flow_type']) && intval($_SESSION ['flow_type']) != CART_GENERAL_GOODS) {
             $order ['extension_code'] = $_SESSION ['extension_code'];
@@ -1250,7 +1250,19 @@ class FlowController extends CommonController {
 
         /* 插入订单商品 */
         $sql = "INSERT INTO " . $this->model->pre . "order_goods( " . "order_id, goods_id, goods_name, goods_sn, product_id, goods_number, market_price, " . "goods_price, goods_attr, is_real, extension_code, parent_id, is_gift, goods_attr_id) " . " SELECT '$new_order_id', goods_id, goods_name, goods_sn, product_id, goods_number, market_price, " . "goods_price, goods_attr, is_real, extension_code, parent_id, is_gift, goods_attr_id" . " FROM " . $this->model->pre . "cart WHERE session_id = '" . SESS_ID . "' AND rec_type = '$flow_type'";
+
         $this->model->query($sql);
+        
+
+        $sql = "SELECT * FROM ". $this->model->pre ."order_goods WHERE order_id = $new_order_id AND goods_attr LIKE '分期活动%'";
+        $arr = $this->model->query($sql);
+ 
+        $sql = "INSERT INTO " . $this->model->pre . "installment( " . "rec_id, num, goods_id, order_id) " . " SELECT rec_id, substring(goods_attr,6,2) as goods_attr, goods_id, '$new_order_id'" . " FROM " . $this->model->pre . "order_goods WHERE goods_attr LIKE '分期活动%' AND order_id = '" . $new_order_id . "'";
+        $this->model->query($sql);
+        
+
+
+		
         if($precept != 1){
         	$sql="UPDATE " . $this->model->pre . "order_goods SET precept = 2 WHERE order_id='$new_order_id'";
         	$this->model->query($sql);
@@ -1344,7 +1356,7 @@ class FlowController extends CommonController {
                 }
             }
         }
-
+		
         // 销量
         model('Flow')->add_touch_goods($flow_type, $order ['extension_code']);
         /* 清空购物车 */
