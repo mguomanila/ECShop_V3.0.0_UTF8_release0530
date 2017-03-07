@@ -67,7 +67,7 @@ if ($_REQUEST['act'] == 'list')
     $smarty->assign('ur_here',       $_LANG['09_user_account']);
     $smarty->assign('id',            $user_id);
     $smarty->assign('payment_list',  $payment);
-    $smarty->assign('action_link',   array('text' => $_LANG['surplus_add'], 'href'=>'user_account.php?act=add'));
+//  $smarty->assign('action_link',   array('text' => $_LANG['surplus_add'], 'href'=>'user_installment_account.php?act=add'));
 
     $list = account_list();
 
@@ -150,7 +150,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit')
     $smarty->assign('user_name',        $user_name);
     if ($_REQUEST['act'] == 'add')
     {
-        $href = 'installment_account.php?act=list';
+        $href = 'user_installment_account.php?act=list';
     }
     else
     {
@@ -395,7 +395,7 @@ elseif ($_REQUEST['act'] == 'check')
     $smarty->assign('process_type', $process_type);
     $smarty->assign('user_name',    $user_name);
     $smarty->assign('id',           $id);
-    $smarty->assign('action_link',  array('text' => $_LANG['09_user_account'],
+    $smarty->assign('action_link',  array('text' => '分期活动领取申请',
     'href'=>'user_installment_account.php?act=list&' . list_link_postfix()));
 
     /* 页面显示 */
@@ -696,11 +696,12 @@ function account_list()
         $filter = page_and_size($filter);
 
         /* 查询数据 */
-        $sql  = "SELECT ua.*, u.user_name,o.order_sn FROM(" .
+        $sql  = "SELECT ua.*, u.user_name,o.order_sn,r.content FROM(" .
             $GLOBALS['ecs']->table('installment_account'). ' AS ua LEFT JOIN ' .
             $GLOBALS['ecs']->table('users'). ' AS u ON ua.user_id = u.user_id) LEFT JOIN'.
-            $GLOBALS['ecs']->table('order_info'). ' AS o ON o.order_id = ua.order_id'.
-            $where . "ORDER by " . $filter['sort_by'] . " " .$filter['sort_order']. " LIMIT ".$filter['start'].", ".$filter['page_size'];
+            $GLOBALS['ecs']->table('order_info'). ' AS o ON o.order_id = ua.order_id LEFT JOIN'.
+            $GLOBALS['ecs']->table('reg_extend_info'). ' AS r ON ua.user_id = r.user_id '.
+            $where . " AND r.reg_field_id = 101 ORDER by " . $filter['sort_by'] . " " .$filter['sort_order']. " LIMIT ".$filter['start'].", ".$filter['page_size'];
 
         $filter['keywords'] = stripslashes($filter['keywords']);
         set_filter($filter, $sql);

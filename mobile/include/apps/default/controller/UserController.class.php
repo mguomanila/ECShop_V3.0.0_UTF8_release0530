@@ -2320,20 +2320,23 @@ class UserController extends CommonController {
     	$yn=$this->model->getRow($sql);
     	if($yn){
     		$content=array('status'=>2);
-    		print_r($content);
+    		$content = json_encode($content);
+    		echo($content);
     		exit();
     	}
     	$sql = "SELECT * FROM ". $this->model->pre ."installment WHERE id = '$arr[installment_id]'";
     	$if=$this->model->getRow($sql);
     	if(!$if){
     		$content=array('status'=>3);
-    		print_r($content);
+    		$content = json_encode($content);
+    		echo($content);
     		exit();
     	}
     	$sql = "SELECT * FROM (". $this->model->pre ."installment as i LEFT JOIN ". $this->model->pre ."order_info as o ON i.order_id = o.order_id) LEFT JOIN ".$this->model->pre."goods as g ON i.goods_id = g.goods_id WHERE o.user_id = $this->user_id AND g.goods_id = '$arr[goods_id]' AND i.id = '$arr[installment_id]'";
     	$list=$this->model->getRow($sql);
     	if(!$list){
-    		$content=array('status'=>3);
+    		$content=array('status'=>4);
+    		$content = json_encode($content);
     		print_r($content);
     		exit();
     	}
@@ -2343,11 +2346,13 @@ class UserController extends CommonController {
     	$paid= model('ClipsBase')->insert_installment_account($arr);
 		if($paid){
 			$content=array('status'=>1);
-    		print_r($content);
+			$content = json_encode($content);
+    		echo ($content);
     		exit();
 		}else{
 			$content=array('status'=>0);
-    		print_r($content);
+			$content = json_encode($content);
+    		echo($content);
     		exit();
 		}
     }

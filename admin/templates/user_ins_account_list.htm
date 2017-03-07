@@ -80,6 +80,7 @@
 <table cellpadding="3" cellspacing="1">
   <tr>
     <th><a href="javascript:listTable.sort('user_name', 'DESC'); ">会员名</a>{$sort_user_name}</th>
+    <th>真实姓名{$sort_user_name}</th>
     <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">操作日期</a>{$sort_add_time}</th>
     <th><a href="javascript:listTable.sort('process_type', 'DESC'); ">类型</a>{$sort_process_type}</th>
     <th><a href="javascript:listTable.sort('amount', 'DESC'); "></a>商品名</th>
@@ -92,7 +93,10 @@
   {foreach from=$list item=item}
   <tr>
     <td>{if $item.user_name}{$item.user_name}{else}{$lang.no_user}{/if}</td>
+    <td align="center">{$item.content}</td>
+    
     <td align="center">{$item.add_date}</td>
+
     <td align="center">{$item.process_type_name}</td>
     <td align="right">{$item.goods_name}</td>
     <td align="right">{$item.order_sn}</td>

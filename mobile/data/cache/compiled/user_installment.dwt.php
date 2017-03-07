@@ -32,13 +32,13 @@ if ($this->_foreach['affdb']['total'] > 0):
 	      <?php if ($this->_var['v']['status'] == 1 && $this->_var['v']['str']): ?>
 	      <td  colspan="2" style="color: #888;">已领取</td>
 	      <?php elseif ($this->_var['v']['status'] == 1 && $this->_var['v']['str'] == ''): ?>
-	      <td  colspan="2" style="color: #EC971F;"onclick="apply(<?php echo $this->_var['level_1']; ?>,<?php echo $this->_var['val']['id']; ?>,<?php echo $this->_var['val']['order_id']; ?>,<?php echo $this->_var['val']['goods_id']; ?>);">可领取</td>
+	      <td  colspan="2" style="color: #EC971F;" onclick="apply(<?php echo $this->_var['level_1']; ?>,<?php echo $this->_var['val']['id']; ?>,<?php echo $this->_var['val']['order_id']; ?>,<?php echo $this->_var['val']['goods_id']; ?>,this);">可领取</td>
 	      <?php elseif ($this->_var['v']['status'] == 9): ?>
 	      <td  colspan="2">未领取</td>
 	      <?php elseif ($this->_var['v']['status'] == 0): ?>
-	      <td  colspan="2">领取中</td>
+	      <td  colspan="2" style="color: #EC971F;">领取中</td>
 	      <?php elseif ($this->_var['v']['status'] == 2): ?>
-	      <td  colspan="2">发货中</td>
+	      <td  colspan="2" style="color: #EC971F;">发货中</td>
 	      <?php endif; ?>
     	</tr>
 	    	
@@ -67,14 +67,24 @@ if ($this->_foreach['affdb']['total'] > 0):
 			}
 		}
 	}
-	function apply(level,id,order_id,goods_id){
+	function apply(level,id,order_id,goods_id,obj){
 		$.ajax({
 			type:"get",
 			url:"<?php echo url('user/installment_account');?>",
 			data:"level="+level+"&id="+id+"&order_id="+order_id+"&goods_id="+goods_id+"&type=1",
 			dataType:"json",
 			success:function(result,status){
-				console.log(result);
+				if(result.status == 1){
+					$(obj).html("领取中")
+				}else if(result.status == 2){
+					alert('错误编码：'+result.status+'\n该申请已存在');
+				}else if(result.status == 3){
+					alert('错误编码：'+result.status+'\n未找到此分期商品');
+				}else if(result.status == 4){
+					alert('错误编码：'+result.status+'\n未找到此订单');
+				}else if(result.status == 0){
+					alert('错误编码：'+result.status+'\n未知错误');
+				}
 			}
 		});
 	}

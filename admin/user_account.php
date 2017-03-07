@@ -863,7 +863,7 @@ function account_list()
         }
         else
         {
-            $where .= " AND ua.process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_TRANSFER,SURPLUS_VIP));
+            $where .= " AND ua.process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_VIP));
         }
         if($filter['stub_status'] != '' && $filter['stub_status'] != -1){
 

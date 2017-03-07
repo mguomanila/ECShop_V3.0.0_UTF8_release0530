@@ -192,22 +192,6 @@ $data = array (
     'id' => '6',
     'name' => '手机',
   ),
-  9 => 
-  array (
-    'cat_id' => '9',
-    'cat_name' => '电池',
-    'measure_unit' => '',
-    'parent_id' => '6',
-    'is_show' => '1',
-    'show_in_nav' => '0',
-    'grade' => '0',
-    'sort_order' => '50',
-    'has_children' => '0',
-    'goods_num' => 0,
-    'level' => 1,
-    'id' => '9',
-    'name' => '电池',
-  ),
   8 => 
   array (
     'cat_id' => '8',
@@ -223,6 +207,22 @@ $data = array (
     'level' => 1,
     'id' => '8',
     'name' => '耳机',
+  ),
+  9 => 
+  array (
+    'cat_id' => '9',
+    'cat_name' => '电池',
+    'measure_unit' => '',
+    'parent_id' => '6',
+    'is_show' => '1',
+    'show_in_nav' => '0',
+    'grade' => '0',
+    'sort_order' => '50',
+    'has_children' => '0',
+    'goods_num' => 0,
+    'level' => 1,
+    'id' => '9',
+    'name' => '电池',
   ),
   19 => 
   array (
