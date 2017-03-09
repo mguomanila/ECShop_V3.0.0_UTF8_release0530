@@ -47,8 +47,10 @@
  <div id="jybfa">
 			<li><span><?php echo $this->_var['info']['vr_points']; ?></span><p>方案一金元宝</p></li>
 			<li><span><?php echo $this->_var['info']['gold']; ?></span><p>方案二金元宝</p></li>
+			<li><span><?php if ($this->_var['info']['fangan3']): ?><?php echo $this->_var['info']['fangan3']; ?><?php else: ?>0<?php endif; ?></span><p>方案三金元宝</p></li>
 			<li style="border-top: 1px solid #ccc;"><span><?php echo $this->_var['info']['integral']; ?></span><p>方案一金积分</p></li>
 			<li style="border-top: 1px solid #ccc;"><span><?php echo $this->_var['info']['pay_points_2']; ?></span><p>方案二金积分</p></li>
+			<li style="border-top: 1px solid #ccc;"><span><?php if ($this->_var['info']['pay_points_3']): ?><?php echo $this->_var['info']['pay_points_3']; ?><?php else: ?>0<?php endif; ?></span><p>方案三金积分</p></li>
  </div>   
 <!--  
   <div id="jjffa">
@@ -66,18 +68,20 @@
     <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/order_list_lnk.png" style="height: 54px;width: 54px;">
       <p class="text-center"><?php echo $this->_var['lang']['order_list_lnk']; ?></p>
     </li>
-    
+    </a> 
     <a href="<?php echo url('user/user_installment');?>">
-    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_share.png" style="height: 54px;width: 54px;">
+    <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_installment.png" style="height: 54px;width: 54px;">
       <p class="text-center">分期活动</p>
     </li>
     </a>
     
-    </a> <a href="<?php echo url('user/address_list');?>">
+    
+    <!--<a href="<?php echo url('user/address_list');?>">
     <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_address.png" style="height: 54px;width: 54px;">
       <p class="text-center"><?php echo $this->_var['lang']['label_address']; ?></p>
     </li>
-    </a> <a href="<?php echo url('user/account_detail');?>">
+    </a> -->
+    <a href="<?php echo url('user/account_detail');?>">
     <li class="col-sm-3 col-xs-3"><img src="__TPL__/images/label_user_surplus.png" style="height: 54px;width: 54px;">
       <p class="text-center"><?php echo $this->_var['lang']['label_user_surplus']; ?></p>
     </li>

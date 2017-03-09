@@ -221,18 +221,20 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
     $rank_points    = floatval($_POST['add_sub_rank_points']) * abs(floatval($_POST['rank_points']));
     $pay_points     = floatval($_POST['add_sub_pay_points']) * abs(floatval($_POST['pay_points']));
     $pay_points_2   = floatval($_POST['add_sub_pay_points_2']) * abs(floatval($_POST['pay_points_2']));
+    $pay_points_3   = floatval($_POST['add_sub_pay_points_3']) * abs(floatval($_POST['pay_points_3']));
     
 	$vr_points     	= floatval($_POST['add_sub_vr_points']) * abs(floatval($_POST['vr_points']));
 	$love     		= floatval($_POST['add_sub_love']) * abs(floatval($_POST['love']));
 	$gold     		= floatval($_POST['add_sub_gold']) * abs(floatval($_POST['gold']));
+	$fangan3    	= floatval($_POST['add_sub_fangan3']) * abs(floatval($_POST['fangan3']));
 	
-    if ($user_money == 0 && $frozen_money == 0 && $rank_points == 0 && $pay_points == 0 && $pay_points_2 == 0 && $vr_points == 0 && $love == 0&&$gold==0)
+    if ($user_money == 0 && $frozen_money == 0 && $rank_points == 0 && $pay_points == 0 && $pay_points_2 == 0 && $pay_points_3 == 0 && $vr_points == 0 && $love == 0&&$gold==0&&$fangan3==0)
     {
         sys_msg($_LANG['no_account_change']);
     }
 
     /* 保存 */
-    log_account_change_vr($user_id, $user_money, $frozen_money, $rank_points, $pay_points,$vr_points,$gold, $change_desc, ACT_ADJUSTING,$love,$pay_points_2);
+    log_account_change_vr($user_id, $user_money, $frozen_money, $rank_points, $pay_points,$vr_points,$gold, $change_desc, ACT_ADJUSTING,$love,$pay_points_2,$fangan3,$pay_points_3);
 
     /* 提示信息 */
     $links = array(

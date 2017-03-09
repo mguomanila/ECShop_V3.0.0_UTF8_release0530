@@ -35,6 +35,8 @@
       <th>{$lang.vr_points}</th>
       <th>{$lang.pay_points_2}</th>
       <th>{$lang.gold}</th>
+      <th>金积分三账户</th>
+      <th>方案三账户</th>
       
       
     </tr>
@@ -103,6 +105,24 @@
           <span style="color:#FF0000">{$account.gold}</span>
         {else}
           {$account.gold}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.pay_points_3 gt 0}
+          <span style="color:#0000FF">+{$account.pay_points_3}</span>
+        {elseif $account.pay_points_3 lt 0}
+          <span style="color:#FF0000">{$account.pay_points_3}</span>
+        {else}
+          {$account.pay_points_3}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.fangan3 gt 0}
+          <span style="color:#0000FF">+{$account.fangan3}</span>
+        {elseif $account.fangan3 lt 0}
+          <span style="color:#FF0000">{$account.fangan3}</span>
+        {else}
+          {$account.fangan3}
         {/if}
       </td>
     </tr>

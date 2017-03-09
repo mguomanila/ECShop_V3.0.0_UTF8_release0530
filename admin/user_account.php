@@ -546,9 +546,14 @@ elseif ($_REQUEST['act'] == 'action')
 						$userid=$account['user_id'];
 						if($account['precept'] == 1){
 							$precept_val=0;
-						}else{
+							$fangan3=0;
+						}elseif($account['precept'] == 1){
 							$precept_val=$account['integral_amount'];
 							$integral=0;
+						}else{
+							$fangan3=$account['integral_amount'];
+							$integral=0;
+							$precept_val=0;
 						}
 						$content='编号:'.$id.';好友积分充值;好友ID'.$userid;;
 						$sql = "SELECT * FROM ". $GLOBALS['ecs']->table('users') ." WHERE user_id = '$userid'";
@@ -560,9 +565,11 @@ elseif ($_REQUEST['act'] == 'action')
 							
 							$user_integral=$integral*0.15;
 							$precept_val_integral=$precept_val*0.21;
+							if($account['precept'] != 3){
+								
 							
                 			log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1,$precept_val_integral*0.1, $content, ACT_SAVING);
-							
+							}
 
 						}
 						
@@ -570,7 +577,7 @@ elseif ($_REQUEST['act'] == 'action')
 						$account['user_id']=$account['friend_id'];
 
 						//商家所得积分
-        				log_account_change_vr($userid,0,0,0,0,$integral*0.15,$precept_val*0.16,$content, ACT_SAVING);
+        				log_account_change_vr($userid,$fangan3*(30/13200)*0.1,0,0,0,$integral*0.15,$precept_val*0.16,$content, ACT_SAVING);
 						
 						
 						//推荐人所得积分						
@@ -582,14 +589,14 @@ elseif ($_REQUEST['act'] == 'action')
                     	if(!empty($userid_info['parent_id'])){
                     		$affiliate['item'][0]['level_money']/=100;
                     		$affiliate['item'][0]['level_point']/=100;
-                    		
+                    		if($account['precept'] != 3){
                     			if($parent_id_info['user_type'] != 1){
                     				log_account_change_vr($userid_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][0]['level_money'],$precept_val*$affiliate['item'][0]['level_point'],$content, ACT_SAVING);                    	
 	                    		}
 //	                    		else{
 //	                    			log_account_change_vr($userid_info['parent_id'],0,0,0,0,$integral*$affiliate['item'][0]['level_money'],$precept_val*$affiliate['item'][0]['level_money']*0.5,$_LANG['surplus_type_3'], ACT_SAVING);                    	
 //	                    		}
-                    		
+                    		}
                     		
 
                     	}	
@@ -624,10 +631,15 @@ elseif ($_REQUEST['act'] == 'action')
 				//客户所得积分
 	            log_account_change_vr($account['user_id'], 0, 0, 0, 0, $integral-$love,$precept_val,$content, ACT_SAVING,$love);
         	 	
-        	 }else{
+        	 }elseif($account['precept'] == 2){
             	update_user_account($id, $amount, $admin_note, $is_paid,$precept_val );
 				//客户所得积分
 	            log_account_change_vr($account['user_id'], 0, 0, 0, 0, $integral,$precept_val-$love,$content, ACT_SAVING,$love);
+        	 	
+        	 }else{
+            	update_user_account($id, $amount, $admin_note, $is_paid,$fangan3 );
+        	 	
+	            log_account_change_vr($account['user_id'], 0, 0, 0, 0, $integral,$precept_val,$content, ACT_SAVING,$love,0,$fangan3-$love);
         	 	
         	 }
         	 

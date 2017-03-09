@@ -308,9 +308,15 @@ class PaymentModel extends BaseModel {
 							$surplus_type[3]='编号:'.$pay_log['order_id'].';好友积分充值;好友ID'.$userid;
 							if($arr['precept'] == 1){
 								$precept_val=0;
-							}else{
+								$fangan3=0;
+							}elseif($arr['precept'] == 2){
 								$precept_val=$arr['integral_amount'];
 								$arr['integral_amount']=0;
+								$fangan3=0;
+							}else{
+								$fangan3=$arr['integral_amount'];
+								$arr['integral_amount']=0;
+								$precept_val=0;
 							}
 
 							$sql = "SELECT * FROM " . $this->pre . "users WHERE user_id = '$userid'";
@@ -320,10 +326,11 @@ class PaymentModel extends BaseModel {
                         	
 							$user_integral=$arr['integral_amount']*0.15;
                     		$precept_val_integral=$precept_val*0.16;
-                    		if($userparent_info['user_type'] != 1){
-                        		model('ClipsBase')->log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1,$precept_val_integral*0.1, $surplus_type[3], ACT_SAVING);
-							}
-                        	
+                    		if($arr['precept'] != 3){
+	                    		if($userparent_info['user_type'] != 1){
+	                        		model('ClipsBase')->log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1,$precept_val_integral*0.1, $surplus_type[3], ACT_SAVING);
+								}
+                        	}
 							
 							
 							
@@ -338,13 +345,14 @@ class PaymentModel extends BaseModel {
 								empty($share) && $share = array();
 								$share['item'][0]['level_money'] /= 100;
 								$share['item'][0]['level_point'] /= 100;
-								
-								if($parent_id_info['user_type'] != 1){
-                        			model('ClipsBase')->log_account_change_vr($userid_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][0]['level_money'],$precept_val*$share['item'][0]['level_point'], $surplus_type[3], ACT_SAVING);
-		                       	}
-//		                       	else{
-//                      			model('ClipsBase')->log_account_change_vr($userid_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][0]['level_money'],$precept_val*$share['item'][0]['level_money']*0.5, $surplus_type[3], ACT_SAVING);
-//		                       	}
+								if($arr['precept'] != 3){
+									if($parent_id_info['user_type'] != 1){
+	                        			model('ClipsBase')->log_account_change_vr($userid_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][0]['level_money'],$precept_val*$share['item'][0]['level_point'], $surplus_type[3], ACT_SAVING);
+			                       	}
+	//		                       	else{
+	//                      			model('ClipsBase')->log_account_change_vr($userid_info['parent_id'], 0, 0, 0, 0,$arr['integral_amount']*$share['item'][0]['level_money'],$precept_val*$share['item'][0]['level_money']*0.5, $surplus_type[3], ACT_SAVING);
+	//		                       	}
+								}
                         	}
                         	if(!empty($parent_id_info['parent_id'])){
                         		$sql = "SELECT * FROM " . $this->pre . "users WHERE user_id = '$parent_id_info[parent_id]'";
@@ -367,7 +375,7 @@ class PaymentModel extends BaseModel {
 								
                         	}
                         	
-                    		model('ClipsBase')->log_account_change_vr($userid, 0, 0, 0, 0,$arr['integral_amount']*0.15,$precept_val*0.16, $surplus_type[3], ACT_SAVING);
+                    		model('ClipsBase')->log_account_change_vr($userid, $fangan3*(30/13200)*0.1, 0, 0, 0,$arr['integral_amount']*0.15,$precept_val*0.16, $surplus_type[3], ACT_SAVING);
                         	
 
                         	
@@ -377,9 +385,12 @@ class PaymentModel extends BaseModel {
                         if($arr['precept'] == 1){
                     	model('ClipsBase')->log_account_change_vr($arr['user_id'], 0, 0, 0, 0,$arr['integral_amount']-$love,$precept_val, $surplus_type[3], ACT_SAVING,$love);
                         	
-                        }else{
+                        }elseif($arr['precept'] == 1){
                         	
                     	model('ClipsBase')->log_account_change_vr($arr['user_id'], 0, 0, 0, 0,$arr['integral_amount'],$precept_val-$love, $surplus_type[3], ACT_SAVING,$love);
+                        }else{
+                    	model('ClipsBase')->log_account_change_vr($arr['user_id'], 0, 0, 0, 0,$arr['integral_amount'],$precept_val, $surplus_type[3], ACT_SAVING,$love,0,$fangan3-$love);
+                        	
                         }
 
                         

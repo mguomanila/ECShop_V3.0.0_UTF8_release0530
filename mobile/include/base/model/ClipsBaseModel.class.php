@@ -620,6 +620,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
         $condition['user_id'] = $user_id;
         return $this->field('SUM(pay_points_2)', $condition);
     }
+    public function get_user_surplus_points_3($user_id) {
+        $this->table = 'account_log';
+        $condition['user_id'] = $user_id;
+        return $this->field('SUM(pay_points_3)', $condition);
+    }
 
     /**
      * 查询会员的红包金额
@@ -649,13 +654,15 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
     public function get_user_default($user_id) {
         $user_bonus = $this->get_user_bonus();
 
-        $sql = "SELECT vip_type,pay_points_2,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
+        $sql = "SELECT vip_type,pay_points_2,pay_points_3,fangan3,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
         $row = $this->row($sql);
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
         $info['shop_name'] = C('shop_name');
         $info['integral'] =$row['pay_points']  ;
         $info['pay_points_2'] =$row['pay_points_2']  ;
+        $info['pay_points_3'] =$row['pay_points_3']  ;
+        $info['fangan3'] =$row['fangan3']  ;
         
         $info['vr_points'] =  $row['vr_points'] ;
         $info['mobile_phone'] =  $row['mobile_phone'] ;
@@ -962,7 +969,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
      * @param   int     $change_type    变动类型：参见常量文件
      * @return  void
      */
-    function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $vr_points=0,$gold=0,$change_desc = '', $change_type = ACT_OTHER,$love=0,$pay_points_2=0) {
+    function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $vr_points=0,$gold=0,$change_desc = '', $change_type = ACT_OTHER,$love=0,$pay_points_2=0,$fangan3=0,$pay_points_3=0) {
         /* 插入帐户变动记录 */
         $account_log = array(
             'user_id' => $user_id,
@@ -972,7 +979,9 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
             'pay_points' => $pay_points,
             'vr_points' => $vr_points,
             'gold' => $gold,
+            'fangan3' => $fangan3,
             'pay_points_2' => $pay_points_2,
+            'pay_points_3' => $pay_points_3,
             'change_time' => gmtime(),
             'change_desc' => $change_desc,
             'change_type' => $change_type
@@ -988,6 +997,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
 	        $sum=$info['gold']+$gold;
 	        $bili=$sum/80000;
         }
+        $bili3=$info['bili3'];
+        if($fangan3>0){
+	        $sum3=$info['fangan3']+$fangan3;
+	        $bili3=$sum3/72000;
+        }
         /* 更新用户信息 */
         $sql = "UPDATE " . $this->pre .
                 "users SET user_money = user_money + ('$user_money')," .
@@ -995,8 +1009,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
                 " rank_points = rank_points + ('$rank_points')," .
                 " vr_points = vr_points + ('$vr_points')," .
                 " gold = gold + ('$gold')," .
+                " fangan3 = fangan3 + ('$fangan3')," .
                 " bili = '$bili'," .
+                " bili3 = '$bili3'," .
                 " love = love + ('$love')," .
+                " pay_points_3 = pay_points_3 + ('$pay_points_3')," .
                 " pay_points_2 = pay_points_2 + ('$pay_points_2')," .
                 " pay_points = pay_points + ('$pay_points')" .
                 " WHERE user_id = '$user_id' LIMIT 1";
@@ -1041,6 +1058,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
 	        $sum=$info['gold']+$gold;
 	        $bili=$sum/800;
         }
+        $bili3=$info['bili3'];
+        if($fangan3>0){
+	        $sum3=$info['fangan3']+$fangan3;
+	        $bili3=$sum3/720;
+        }
         /* 更新用户信息 */
         $sql = "UPDATE " . $this->pre .
                 "users SET user_money = user_money + ('$user_money')," .
@@ -1048,6 +1070,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
                 " rank_points = rank_points + ('$rank_points')," .
                 " gold = gold + ('$gold')," .
                 " bili = '$bili'," .
+                " bili3 = '$bili3'," .
                 " pay_points = pay_points + ('$pay_points')" .
                 " WHERE user_id = '$user_id' LIMIT 1";
         $this->query($sql);

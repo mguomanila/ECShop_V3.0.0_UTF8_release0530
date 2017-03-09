@@ -1,11 +1,13 @@
-<!-- #BeginLibraryItem "/library/user_header.lbi" --><!-- #EndLibraryItem --> 
+<?php echo $this->fetch('library/user_header.lbi'); ?> 
 <script type="text/javascript">
-	  {foreach from=$lang.profile_js item=item key=key}
-		var {$key} = "{$item}";
-	  {/foreach}
+	  <?php $_from = $this->_var['lang']['profile_js']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item');if (count($_from)):
+    foreach ($_from AS $this->_var['key'] => $this->_var['item']):
+?>
+		var <?php echo $this->_var['key']; ?> = "<?php echo $this->_var['item']; ?>";
+	  <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 	  
 	</script>
-<form name="formEdit"  id="myform" action="{:url('user/profile')}" method="post" enctype="multipart/form-data" onSubmit="return userEdit();">
+<form name="formEdit"  id="myform" action="<?php echo url('user/profile');?>" method="post" enctype="multipart/form-data" onSubmit="return userEdit();">
 	<div class="grbox">
 		<div class="grzl grjh">
 			<a>个人资料</a>
@@ -17,62 +19,64 @@
   <section class="flow-consignee ect-bg-colorf" style="display: ;">
     <ul class="grul grblock">
       <li>
-        <div class="input-text"><b class="pull-left" >{$lang.email}：</b><span>
-          <input name="email" type="text" placeholder="{$lang.no_emaill}"  value="{$profile.email}">
+        <div class="input-text"><b class="pull-left" ><?php echo $this->_var['lang']['email']; ?>：</b><span>
+          <input name="email" type="text" placeholder="<?php echo $this->_var['lang']['no_emaill']; ?>"  value="<?php echo $this->_var['profile']['email']; ?>">
           </span></div>
       </li>
       <li>
-        <div class="input-text"><b class="pull-left" >{$lang.sex}：</b><span>
-        	<input type="radio" name="sex" value="0" {if $profile.sex==0}checked="checked"{/if} />
-        	 {$lang.secrecy}&nbsp;&nbsp;
-          <input type="radio" name="sex" value="1" {if $profile.sex==1}checked="checked"{/if} />
-          {$lang.male}&nbsp;&nbsp;
-          <input type="radio" name="sex" value="2" {if $profile.sex==2}checked="checked"{/if} />
-        {$lang.female}&nbsp;&nbsp;  
+        <div class="input-text"><b class="pull-left" ><?php echo $this->_var['lang']['sex']; ?>：</b><span>
+        	<input type="radio" name="sex" value="0" <?php if ($this->_var['profile']['sex'] == 0): ?>checked="checked"<?php endif; ?> />
+        	 <?php echo $this->_var['lang']['secrecy']; ?>&nbsp;&nbsp;
+          <input type="radio" name="sex" value="1" <?php if ($this->_var['profile']['sex'] == 1): ?>checked="checked"<?php endif; ?> />
+          <?php echo $this->_var['lang']['male']; ?>&nbsp;&nbsp;
+          <input type="radio" name="sex" value="2" <?php if ($this->_var['profile']['sex'] == 2): ?>checked="checked"<?php endif; ?> />
+        <?php echo $this->_var['lang']['female']; ?>&nbsp;&nbsp;  
         </span></div>
       </li>
       
-      {foreach from=$extend_info_list item=field} 
-      <!-- {if $field.id eq 6} -->
+      <?php $_from = $this->_var['extend_info_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'field');if (count($_from)):
+    foreach ($_from AS $this->_var['field']):
+?> 
+      <?php if ($this->_var['field']['id'] == 6): ?>
       <!--<li>
         <div class="form-select"> <i class="fa fa-sort"></i>
           <select name="sel_question">
-            <option value='0'>{$lang.sel_question}</option>
+            <option value='0'><?php echo $this->_var['lang']['sel_question']; ?></option>
             
-            {html_options options=$passwd_questions selected=$profile.passwd_question}
+            <?php echo $this->html_options(array('options'=>$this->_var['passwd_questions'],'selected'=>$this->_var['profile']['passwd_question'])); ?>
           
           </select>
         </div>
       </li>
       <li>
-        <div class="input-text"><b class="pull-left"  {if $field.is_need} id="extend_field{$field.id}i"{/if}>{$lang.passwd_answer}:</b> <span>
-          <input placeholder="{$lang.passwd_answer}" name="passwd_answer" type="text" value="{$profile.passwd_answer}" />
+        <div class="input-text"><b class="pull-left"  <?php if ($this->_var['field']['is_need']): ?> id="extend_field<?php echo $this->_var['field']['id']; ?>i"<?php endif; ?>><?php echo $this->_var['lang']['passwd_answer']; ?>:</b> <span>
+          <input placeholder="<?php echo $this->_var['lang']['passwd_answer']; ?>" name="passwd_answer" type="text" value="<?php echo $this->_var['profile']['passwd_answer']; ?>" />
           </span></div>
       </li>-->
-      <!-- {elseif $field.id eq 103 ||$field.id eq 104 ||$field.id eq 105} -->
-      <!--{elseif $field.id eq 106}-->
+      <?php elseif ($this->_var['field']['id'] == 103 || $this->_var['field']['id'] == 104 || $this->_var['field']['id'] == 105): ?>
+      <?php elseif ($this->_var['field']['id'] == 106): ?>
     
 <li style="height: 95px">
         <div class="input-text">
-        	<b class="pull-left" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}:</b>
+        	<b class="pull-left" <?php if ($this->_var['field']['is_need']): ?>id="extend_field<?php echo $this->_var['field']['id']; ?>i"<?php endif; ?>><?php echo $this->_var['field']['reg_field_name']; ?>:</b>
         	<span id="preview" class="preview">
 
          
-                <img id="imghead" border="0" src="images/photo_icon.png" width="90" height="90" style="margin-left: 0;" onclick="$('#previewImg').click();">
+                <img id="imghead" border="0" src="themes/default/images/photo_icon.png" width="90" height="90" style="margin-left: 0;" onclick="$('#previewImg').click();">
                     
 
         </span>
-            <input type="file" name="extend_field{$field.id}" onchange="previewImage(this)" style="display: none;" id="previewImg">
+            <input type="file" name="extend_field<?php echo $this->_var['field']['id']; ?>" onchange="previewImage(this)" style="display: none;" id="previewImg">
         </div>
      </li>
      <script type="text/javascript" src="__TPL__/js/img_pre.js" ></script> 
-      <!-- {else} -->
+      <?php else: ?>
       <li>
-        <div class="input-text"><b class="pull-left" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}:</b><span>
-          <input name="extend_field{$field.id}" type="text" {if $field.id eq 5}readonly id="mobile" class="mobile ccc"{/if} value="{$field.content}" placeholder="{$field.reg_field_name}">
+        <div class="input-text"><b class="pull-left" <?php if ($this->_var['field']['is_need']): ?>id="extend_field<?php echo $this->_var['field']['id']; ?>i"<?php endif; ?>><?php echo $this->_var['field']['reg_field_name']; ?>:</b><span>
+          <input name="extend_field<?php echo $this->_var['field']['id']; ?>" type="text" <?php if ($this->_var['field']['id'] == 5): ?>readonly id="mobile" class="mobile ccc"<?php endif; ?> value="<?php echo $this->_var['field']['content']; ?>" placeholder="<?php echo $this->_var['field']['reg_field_name']; ?>">
 
         </span>
-        {if $field.id eq 5} <p style="float: right;position: relative;z-index: 100;" class="exph">更换手机</p>{/if}
+        <?php if ($this->_var['field']['id'] == 5): ?> <p style="float: right;position: relative;z-index: 100;" class="exph">更换手机</p><?php endif; ?>
         </div>
       </li>
 
@@ -81,30 +85,32 @@
 			
  			 
  			
-      <!-- {/if} --> 
-      {/foreach}
+      <?php endif; ?> 
+      <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
       </li>
  				<li>
         <div class="input-text"><b class="pull-left" >收货地址：</b><span>
-          <a href="{:url('user/address_list')}">更换收货地址</a>
+          <a href="<?php echo url('user/address_list');?>">更换收货地址</a>
          </span></div>
       </li>
     </ul>
     <ul class="yhkul">
-      {foreach from=$arr item=field} 
+      <?php $_from = $this->_var['arr']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'field');if (count($_from)):
+    foreach ($_from AS $this->_var['field']):
+?> 
     	
     	<li>
-        <div class="input-text"><b class="pull-left" >{$field.reg_field_name}：</b><span>
-          <input name="extend_field{$field.id}" id="extend_field{$field.id}" class="bank ccc" readonly type="text" placeholder="{$field.reg_field_name}"  value="{$field.content}">
+        <div class="input-text"><b class="pull-left" ><?php echo $this->_var['field']['reg_field_name']; ?>：</b><span>
+          <input name="extend_field<?php echo $this->_var['field']['id']; ?>" id="extend_field<?php echo $this->_var['field']['id']; ?>" class="bank ccc" readonly type="text" placeholder="<?php echo $this->_var['field']['reg_field_name']; ?>"  value="<?php echo $this->_var['field']['content']; ?>">
          </span></div>
       </li>
-      {/foreach}
+      <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
       <p style="position: relative;z-index: 100;display: block;width: 100%;text-align: right;float: left;margin-top: 15px;" class="exph2">绑定银行账户</p>
 
       
       <!--<input type="" name="bank_code" id="bank_code" value="" />-->
       <li style="text-align: center;background: #e1e1e1;"  class="none2">
-				验证手机：{$profile.mobile_phone}
+				验证手机：<?php echo $this->_var['profile']['mobile_phone']; ?>
 			</li>
 			<li class="none2">
  				<div class="input-text">
@@ -129,7 +135,7 @@
   <div class="two-btn ect-padding-tb ect-padding-lr ect-margin-tb text-center">
  <input name="session" type="hidden" value="mobile_code" />
   	
-    <input name="submit" type="submit" value="{$lang.confirm_edit}" class="btn btn-info sss" />
+    <input name="submit" type="submit" value="<?php echo $this->_var['lang']['confirm_edit']; ?>" class="btn btn-info sss" />
   </div>
 </form>
 <style type="text/css">
@@ -146,7 +152,7 @@
 
 	<div class="code_tc" style="display: none;background: #fff;">
  				<li style="text-align: center;padding-top: 5%;" class="">
-					验证手机：{$profile.mobile_phone}
+					验证手机：<?php echo $this->_var['profile']['mobile_phone']; ?>
 				</li>
 				
 	 			<li class="code_tc_yz">
@@ -212,8 +218,8 @@
 	  		
 	  		$.ajax({
 				type:"post",
-				url:"{:url('user/get_code')}",
-				data:'mobile_phone='+{$profile.mobile_phone}+'&session='+session,
+				url:"<?php echo url('user/get_code');?>",
+				data:'mobile_phone='+<?php echo $this->_var['profile']['mobile_phone']; ?>+'&session='+session,
 				dataType:"text",
 				async:true
 			});
@@ -232,8 +238,8 @@
 	  
 	  	 $.ajax({
 	  	 	type:"post",
-	  	 	url:"{:url('user/verify_code')}",
-				data:'mobile_phone='+{$profile.mobile_phone}+'&session='+session+'&verify_code='+$("#mobile_code").val(),
+	  	 	url:"<?php echo url('user/verify_code');?>",
+				data:'mobile_phone='+<?php echo $this->_var['profile']['mobile_phone']; ?>+'&session='+session+'&verify_code='+$("#mobile_code").val(),
 	  	 	dataType:"text",
 				success:function(result,status){	
 					var result=JSON.parse(result)
@@ -291,8 +297,8 @@
 	  		
 	  		$.ajax({
 				type:"post",
-				url:"{:url('user/get_code')}",
-				data:'mobile_phone='+{$profile.mobile_phone}+'&session='+session,
+				url:"<?php echo url('user/get_code');?>",
+				data:'mobile_phone='+<?php echo $this->_var['profile']['mobile_phone']; ?>+'&session='+session,
 				dataType:"text",
 				async:true
 			});
@@ -359,6 +365,6 @@
      		return false
      	})
 </script>
-<!-- #BeginLibraryItem "/library/search.lbi" --><!-- #EndLibraryItem --> <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
-<!-- #BeginLibraryItem "/library/nav.lbi" --><!-- #EndLibraryItem -->
+<?php echo $this->fetch('library/search.lbi'); ?> <?php echo $this->fetch('library/page_footer.lbi'); ?>
+<?php echo $this->fetch('library/nav.lbi'); ?>
 </body></html>

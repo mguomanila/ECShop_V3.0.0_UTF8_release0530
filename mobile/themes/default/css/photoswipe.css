@@ -780,7 +780,7 @@ div.ps-toolbar-play div.ps-toolbar-content
 	float: left;
 	box-sizing: border-box;
 	border-right: 1px solid #e1e1e1;
-	width: 50%;
+	width: 33.333%;
 	text-align: center;
 }
 #jybfa li span,
@@ -853,7 +853,8 @@ div.ps-toolbar-play div.ps-toolbar-content
 
 
 #duihuan,
-#duihuan1{
+#duihuan1,
+#duihuan2{
 	display: none;
 }
 

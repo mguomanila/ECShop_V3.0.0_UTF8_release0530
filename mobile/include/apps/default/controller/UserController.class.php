@@ -40,6 +40,7 @@ class UserController extends CommonController {
         }else{
         	$info['user_type']='普通会员';
         }
+
 		$ex_where = "user_id =".$this->user_id." AND reg_field_id=106";
         $extend_info_arr123 = $this->model->table('reg_extend_info')
                 ->field('reg_field_id, content')
@@ -926,6 +927,9 @@ class UserController extends CommonController {
         {
         	$surplus['precept']=isset($_POST['precept'])?$_POST['precept']:1;
         	$user_img=$_FILES['stub'];
+        	if($amount<3000){
+        		show_message('方案三最低充值3000RMB',L('back_page_up'), '', 'info');
+        	}
         	if($amount>=1500){
         		if(!$user_img['name']){
                     show_message('请上传票据',L('back_page_up'), '', 'info');
@@ -980,13 +984,15 @@ class UserController extends CommonController {
 		            }else{
 		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(11500/15),$amount);
 		            }
-            	}else{
+            	}elseif($surplus['precept'] == 2){
             		//插入会员账目明细
 		            if($user_type==2){
 		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(10000/21),$amount);
 		            }else{
 		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(11500/21),$amount);
 		            }
+            	}else{
+            		$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(1320/3),$amount);
             	}
                 
                 
@@ -1270,11 +1276,14 @@ class UserController extends CommonController {
 
 			$integral_1 = isset($_POST['integral_1']) ? floatval($_POST['integral_1']) : 0;
 			$integral_2 = isset($_POST['integral_2']) ? floatval($_POST['integral_2']) : 0;
+			$integral_3 = isset($_POST['integral_3']) ? floatval($_POST['integral_3']) : 0;
+			
 			$change_type = isset($_POST['change_type']) ? $_POST['change_type'] : 1;
         	
             /* 判断是否有足够的余额的进行退款的操作 */
             $sur_amount = model('ClipsBase')->get_user_surplus_points($this->user_id);
             $sur_amount2 = model('ClipsBase')->get_user_surplus_points_2($this->user_id);
+            $sur_amount3 = model('ClipsBase')->get_user_surplus_points_3($this->user_id);
 //          echo $sur_amount;
 //              show_message('稍后开放', L('back_page_up'), '', 'info');
             
@@ -1285,6 +1294,10 @@ class UserController extends CommonController {
             }
             
             if($integral_2 > $sur_amount2){
+            	$content = L('surplus_amount_error');
+                show_message($content, L('back_page_up'), '', 'info');
+            }
+            if($integral_3 > $sur_amount3){
             	$content = L('surplus_amount_error');
                 show_message($content, L('back_page_up'), '', 'info');
             }
@@ -1303,7 +1316,7 @@ class UserController extends CommonController {
 				$surplus['user_note'] = '方案一金积分：'.$integral_1.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
     			
-    		}else{
+    		}elseif($change_type==2){
     			if($integral_2 <=0){
 	            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
 	            }
@@ -1312,6 +1325,16 @@ class UserController extends CommonController {
     			$amount_sum=round($amount_sum,2);
     			
 				$surplus['user_note'] = '方案二金积分：'.$integral_2.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+
+    		}else{
+    			if($integral_3 <=0){
+	            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
+	            }
+    			$jinjifen=$integral_3;
+    			$amount_sum=$integral_3;
+    			$amount_sum=round($amount_sum,2);
+    			
+				$surplus['user_note'] = '方案三金积分：'.$integral_3.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
     		}
     		
@@ -1334,8 +1357,11 @@ class UserController extends CommonController {
 				if($integral_1>0){
         		model('ClipsBase')->log_account_change_vr($this->user_id,$amount_sum, 0, 0,$integral_1*(-1), 0,0,$change_desc,ACT_CHANGE,0,0);
 					
-				}else{
+				}elseif($integral_2>0){
         		model('ClipsBase')->log_account_change_vr($this->user_id,$amount_sum, 0, 0,0, 0,0,$change_desc,ACT_CHANGE,0,$integral_2*(-1));
+					
+				}else{
+        		model('ClipsBase')->log_account_change_vr($this->user_id,$amount_sum, 0, 0,0, 0,0,$change_desc,ACT_CHANGE,0,0,0,$integral_3*(-1));
 					
 				}
 				

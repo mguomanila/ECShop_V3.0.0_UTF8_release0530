@@ -28,7 +28,7 @@
         </div>
       </li>
       
-       <li style="padding: 1em 0.6em 1.7em;" id="duihuan">
+       <li style="padding: 1em 0.6em 2.3em;" id="duihuan">
      	
      	<div class="input-text" style="height: 10vw;">
       	  <span  style="left: 15vw;">
@@ -49,7 +49,7 @@
       </li>
     
      
-     <li style="padding: 1em 0.6em 1.7em;" id="duihuan1">
+     <li style="padding: 1em 0.6em 2.3em;" id="duihuan1">
      	
      	<div class="input-text" style="height: 10vw;">
       	  <span style="left: 15vw;">
@@ -61,6 +61,28 @@
          
       	</div>
      	
+     </li>
+     
+      <li>
+        <div class="input-text" style="text-align: center;">
+        	<b class="pull-left" style="line-height: 30px;margin-left: 15vw;">方案三金积分</b>
+          	<div class="integral_2_fa"  id="integral_sev">选择</div>
+        </div>
+      </li>
+    
+     
+     <li style="padding: 1em 0.6em 2.3em;" id="duihuan2">
+     	
+     	<div class="input-text" style="height: 10vw;">
+      	  <span style="left: 15vw;">
+      		<input name="integral_3" id="duihuan2_ip"  placeholder="金积分" type="text" class="inputBg_touch" value="" style="width: 20%;border: 1px solid #ccc;height: 8vw;;padding: 5px;margin-top: 3vw;"/>
+          </span>
+          <a style="display: inline-block;position:absolute ; left: 13%;top:12vw;font-size: 12px;" class="integral_1_ye">总积分数：{if $info.pay_points_3}{$info.pay_points_3}{else}0{/if}</a>
+          <div style="display: inline-block;position:absolute ; right: 45%;"> <img src="images/gt.png" alt="" />  </div>
+          <div style="display: inline-block;position:absolute ; left: 63%;top: 4vw">余额:<a id="integral_1_ye" class="duihuan2_ye"></a></div>
+        
+      	</div>
+     	 <p style="text-align: center; color: red;font-size: 18px;font-weight: 700;display: none;">请输入550的倍数</p>
      </li>
       	
       
@@ -178,33 +200,57 @@ function submitSurplus() {
 
 <script type="text/javascript">
 	$("#integral_one").on("click",function(){
-		$(this).toggleClass("integral_1_fa");
-		$("#duihuan").slideToggle("show");
-		if($("#duihuan1").css("display") == "none"){
-			
-		}else{
-			$("#duihuan1").slideToggle("show");
-			$("#integral_two").toggleClass("integral_1_fa");
+		$(this).toggleClass("integral_1_fa");	
+		if($("#duihuan").css("display") == "none"){
+			$("#duihuan").slideToggle("show");	
+			$("#duihuan1").slideUp("show");
+			$("#duihuan2").slideUp("show");
+			$("#integral_two").removeClass("integral_1_fa");
+			$("#integral_sev").removeClass("integral_1_fa");
 		}
 		$("#duihuan1_ip").val("");
 		$(".duihuan1_ye").html("");
+		$("#duihuan2_ip").val("");
+		$(".duihuan2_ye").html("");
 		
 		$("#change_type").val(1)
 	})
 	
 	$("#integral_two").on("click",function(){
 		$(this).toggleClass("integral_1_fa");
-		$("#duihuan1").slideToggle("show");	
-		if($("#duihuan").css("display") == "none"){
-			
-		}else{
-			$("#duihuan").slideToggle("show");
-			$("#integral_one").toggleClass("integral_1_fa");
+		
+		if($("#duihuan1").css("display") == "none"){
+			$("#duihuan1").slideToggle("show");	
+			$("#duihuan").slideUp("show");
+			$("#duihuan2").slideUp("show");
+			$("#integral_one").removeClass("integral_1_fa");
+			$("#integral_sev").removeClass("integral_1_fa");
+		}
+		
+		$("#duihuan_ip").val("");
+		$(".duihuan_ye").html("");
+		$("#duihuan2_ip").val("");
+		$(".duihuan2_ye").html("");
+		
+		$("#change_type").val(2)
+	})
+	
+	$("#integral_sev").on("click",function(){
+		$(this).toggleClass("integral_1_fa");
+		
+		if($("#duihuan2").css("display") == "none"){
+			$("#duihuan2").slideToggle("show");	
+			$("#duihuan1").slideUp("show");
+			$("#duihuan").slideUp("show");
+			$("#integral_one").removeClass("integral_1_fa");
+			$("#integral_two").removeClass("integral_1_fa");
 		}
 		$("#duihuan_ip").val("");
 		$(".duihuan_ye").html("");
+		$("#duihuan1_ip").val("");
+		$(".duihuan1_ye").html("");
 		
-		$("#change_type").val(2)
+		$("#change_type").val(3)
 	})
 	
 	
@@ -244,6 +290,33 @@ function submitSurplus() {
 			$("#duihuan1_ip").val("");
 			$(".duihuan1_ye").html("");
 			alert("请输入整数")
+		}
+	});
+	
+	$("#duihuan2_ip").keyup(function(){
+		
+		var a = $("#duihuan2_ip").val();
+		$(".duihuan2_ye").html(a)
+		var r = /^\+?[1-9][0-9]*$/;
+		if(r.test($("#duihuan2_ip").val())){
+			 if($("#duihuan2_ip").val() > {$info.pay_points_2}){
+			 	$("#duihuan2_ip").val("");
+			 	$(".duihuan2_ye").html("");
+				alert("输入积分大于剩余积分")
+			}
+			
+		}else{
+			$("#duihuan2_ip").val("");
+			$(".duihuan2_ye").html("");
+			alert("请输入整数")
+		}
+		
+		if(a%550 != 0){
+			$("#duihuan2 p").css("display","block");
+			$("#duihuan2").find("div").css("height","20vw");
+		}else{
+			$("#duihuan2 p").css("display","none");
+			$("#duihuan2").find("div").css("height","10vw");
 		}
 	});
 	
