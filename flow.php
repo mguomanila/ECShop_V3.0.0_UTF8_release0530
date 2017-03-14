@@ -1690,7 +1690,10 @@ elseif ($_REQUEST['step'] == 'done')
             " FROM " .$ecs->table('cart') .
             " WHERE session_id = '".SESS_ID."' AND rec_type = '$flow_type'";
     $db->query($sql);
-    
+    $sql = "SELECT * FROM ". $ecs->table('order_goods') . " WHERE order_id = $new_order_id AND goods_attr LIKE '分期活动%'";
+    $arr = $db->getRow($sql);
+    $sql = "INSERT INTO " . $ecs->table('installment') . "( " . "rec_id, num, goods_id, order_id) " . " SELECT rec_id, substring(goods_attr,6,2) as goods_attr, goods_id, '$new_order_id'" . " FROM " . $ecs->table('order_goods') . " WHERE goods_attr LIKE '分期活动%' AND order_id = '" . $new_order_id . "'";
+    $db->getRow($sql);
     if($precept != 1){
     	$sql="UPDATE ". $ecs->table('order_goods') ." SET precept = 2 WHERE order_id='$new_order_id'";
         $db->query($sql);

@@ -22,8 +22,12 @@
       <li>
         <div class="input-text"><b class="pull-left">消费金额：</b><span>
           <input id="vr" name="amount_user"  placeholder="1元人民币等于100金元宝" type="text" class="inputBg_touch amount_user" value="<?php echo htmlspecialchars($this->_var['order']['amount']); ?>" />
-          </span></div>
+        </span>
+        </div>
       </li>
+      <li style="text-align: center;padding:1em 4.6em;line-height: 26px;color: red;display: none;" id="vr_sta">
+  				输入金额必须大于13200
+       	</li>
       <li id="vr_user_tr" style="display: ;" >
               <div class="input-text"><b class="pull-left">实际金额：</b><span>
               <input id="vr_user" readonly name="amount" placeholder="实际金额" type="text" class="inputBg_touch amount" value="<?php echo htmlspecialchars($this->_var['order']['amount']); ?>" />
@@ -57,7 +61,7 @@
        	<div class="input-text"><b class="pull-left">选择方案：</b><span>
        		<input type="radio" placeholder="" checked  name="precept" id="precept1" class="precept" value="1"/>方案一
        		<input type="radio" placeholder=""   name="precept" id="precept2" class="precept" value="2"/>方案二
-       		<input type="radio" placeholder=""   name="precept" class="precept" value="3"/>方案三
+       		<input type="radio" placeholder=""   name="precept" id="precept3" class="precept" value="3"/>方案三
        		
        		
        	</li>
@@ -118,6 +122,11 @@
 			var a= $("#vr").val()*0.21;
 			
 		}else{
+			if($("#vr").val() < 13200){
+				$("#vr_sta").css("display","block")
+			}else{
+				$("#vr_sta").css("display","none")
+			}
 			var a= $("#vr").val()*(3000/13200);
 		}
 		var b=a.toFixed(2);
@@ -127,13 +136,26 @@
 	$(".precept").click(function(){
 
 		if($(this).val() == 1){
+			
+			if($(".amount").val()>=1500){
+				$("#stub").css('display','block')
+				}else{
+					$("#stub").css('display','none')
+				}
 			var a= $("#vr").val()*0.15;
 			$("#ms").html(
 				"1、前一天总营业额的12%作为次日消费奖励总额。"+"</br>"+
 				"2、按剩余总额的万分之六左右每天全额奖励，后续消费叠加。"+"</br>"+
 				"3、最终解释权归成都沃尔迅科技有限公司所有。"
 			)
+			$("#vr_sta").css("display","none")
 		}else if($(this).val() == 2){
+			
+			if($(".amount").val()>=1500){
+				$("#stub").css('display','block')
+				}else{
+					$("#stub").css('display','none')
+				}
 			var a= $("#vr").val()*0.21;
 			$("#ms").html(
 				"1、前一天总营业额的12%作为次日消费奖励总额。"+"</br>"+
@@ -145,7 +167,16 @@
 //				"7、原定普通会员的推荐奖励全部取消。"+"<br />"+
 				"3、最终解释权归成都沃尔迅科技有限公司所有。"
 			)
+			$("#vr_sta").css("display","none")
 		}else{
+			$("#stub").css('display','none');
+			if($("#vr").val() == ""){
+				$("#vr_sta").css("display","none");
+			}else if($("#vr").val() < 13200){
+				$("#vr_sta").css("display","block");
+			}else{
+				$("#vr_sta").css("display","none");
+			}
 			var a= $("#vr").val()*(3000/13200);
 			$("#ms").html(
 				"暂无"
@@ -156,11 +187,17 @@
 	})
 	
 	$("#vr").on('keyup',function(){
-		if($(".amount").val()>=1500){
-			$("#stub").css('display','block')
-		}else{
-			$("#stub").css('display','none')
-		}
+		if($("#precept3").is(":checked")){
+				$("#stub").css('display','none');
+			}else{
+				
+				if($(".amount").val()>=1500){
+				$("#stub").css('display','block')
+				}else{
+					$("#stub").css('display','none')
+				}
+			}
+		
 	})
 	
 	

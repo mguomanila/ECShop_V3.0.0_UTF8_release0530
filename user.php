@@ -1876,7 +1876,7 @@ elseif ($action == 'act_account')
     	}
         /* 判断是否有足够的余额的进行退款的操作 */
         $sur_amount = get_user_surplus($user_id);
-        if($amount<100 || $amount%100!=0){
+        if($amount<100 || ($amount*100)%100!=0){
     		$content='提现金积分最低为100,提现金积分必须为100的倍数';
             show_message($content, $_LANG['back_page_up'], '', 'info');
     	}

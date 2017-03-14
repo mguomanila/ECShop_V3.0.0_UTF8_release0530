@@ -803,6 +803,7 @@ class UserController extends CommonController {
     {
     	
         $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
+
 		$integral = isset($_POST['integral']) ? floatval($_POST['integral']) : 0;
 		$user_type=$_POST['user_type'];
         if ($amount < 0)
@@ -839,7 +840,9 @@ class UserController extends CommonController {
 	    	}
             /* 判断是否有足够的余额的进行退款的操作 */
             $sur_amount = model('ClipsBase')->get_user_surplus($this->user_id);
-            if($amount<100 || $amount%100 !=0){
+            settype($amount,'float');
+
+            if($amount<100 || ($amount*100)%100 !=0 ){
             	show_message('提现金额最低为100,提现金额必须为100的倍数', L('back_page_up'), '', 'info');
             }
             if ($amount > $sur_amount)
@@ -930,11 +933,14 @@ class UserController extends CommonController {
         	if($amount<3000){
         		show_message('方案三最低充值3000RMB',L('back_page_up'), '', 'info');
         	}
-        	if($amount>=1500){
-        		if(!$user_img['name']){
-                    show_message('请上传票据',L('back_page_up'), '', 'info');
+        	if($surplus['precept'] != 3){
+        		if($amount>=1500){
+	        		if(!$user_img['name']){
+	                    show_message('请上传票据',L('back_page_up'), '', 'info');
+	        		}
         		}
         	}
+        	
 //      	print_r($_FILES);
 //print_r(@disk_free_space(".")/ (1024 * 1024) . 'M');
         	
@@ -1329,6 +1335,9 @@ class UserController extends CommonController {
     		}else{
     			if($integral_3 <=0){
 	            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
+	            }
+	            if($integral_3%550 != 0){
+	            	show_message('积分兑换必须为550的倍数', L('back_page_up'), '', 'info');
 	            }
     			$jinjifen=$integral_3;
     			$amount_sum=$integral_3;
