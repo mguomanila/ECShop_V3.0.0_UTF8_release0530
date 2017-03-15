@@ -33,6 +33,7 @@ class UserController extends CommonController {
         $this->check_login();
         // 用户信息
         $info = model('ClipsBase')->get_user_default($this->user_id);
+
         if($info['user_type']==3){
         	$info['user_type']='铂金会员';
         }elseif($info['user_type']==2){
@@ -52,7 +53,7 @@ class UserController extends CommonController {
         }
 		$info['vr_go']=$info['vr_points']+$info['gold'];
 		$info['int']=$info['integral']+$info['pay_points_2'];
-		
+        $this->info=$info;
         // 如果是显示页面，对页面进行相应赋值
         assign_template();
         $this->assign('action', $this->action);
@@ -930,15 +931,17 @@ class UserController extends CommonController {
         {
         	$surplus['precept']=isset($_POST['precept'])?$_POST['precept']:1;
         	$user_img=$_FILES['stub'];
-        	if($amount<3000){
-        		show_message('方案三最低充值3000RMB',L('back_page_up'), '', 'info');
-        	}
+        	
         	if($surplus['precept'] != 3){
         		if($amount>=1500){
 	        		if(!$user_img['name']){
 	                    show_message('请上传票据',L('back_page_up'), '', 'info');
 	        		}
         		}
+        	}else{
+        		if($amount<3000){
+	        		show_message('方案三最低充值3000RMB',L('back_page_up'), '', 'info');
+	        	}
         	}
         	
 //      	print_r($_FILES);
@@ -1119,14 +1122,20 @@ class UserController extends CommonController {
         }
         elseif($surplus['process_type'] == 7)
         {
-        	if($info['vip_type'] == 2){
-    			show_message('该账户已是VIP，无需再次升级', L('back_page_up'), '', 'info');
+//      	print_r($this->info);
+//      	exit();
+        	if($this->info['vip_type'] == 2){
+    			show_message($info['vip_type'].'该账户已是VIP，无需再次升级', L('back_page_up'), '', 'info');
+    		}
+    		$usertype=get_user_type();
+    		if($usertype != 1){
+            	show_message('您已是金钻,无需升级');
     		}
         	if ($surplus['payment_id'] <= 0)
             {
                 show_message(L('select_payment_pls'));
             }
-    		if($amount == 0 || empty($amount)||$amount != 10){
+    		if($amount == 0 || empty($amount)||$amount != 99){
     			show_message('请输入正确金额', L('back_page_up'), '', 'info');
     		}
     		

@@ -10,7 +10,7 @@
 	<li><a href="<?php echo url('User/account_change');?>" ><?php echo $this->_var['lang']['surplus_type_6']; ?></a></li>
 	<!--<li><a href="<?php echo url('User/account_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_0']; ?></a></li>-->
 	
-	<?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3): ?>
+	<?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3 || $this->_var['info']['vip_type'] == 2): ?>
 	<li><a href="<?php echo url('User/integral_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_3']; ?></a></li>
 	<?php endif; ?>
 	<li><a href="<?php echo url('User/account_jewel');?>" ><?php echo $this->_var['lang']['surplus_type_4']; ?></a></li>

@@ -547,7 +547,7 @@ elseif ($_REQUEST['act'] == 'action')
 						if($account['precept'] == 1){
 							$precept_val=0;
 							$fangan3=0;
-						}elseif($account['precept'] == 1){
+						}elseif($account['precept'] == 2){
 							$precept_val=$account['integral_amount'];
 							$integral=0;
 						}else{
@@ -564,7 +564,7 @@ elseif ($_REQUEST['act'] == 'action')
 						if($userparent_info['user_type'] != 1){
 							
 							$user_integral=$integral*0.15;
-							$precept_val_integral=$precept_val*0.21;
+							$precept_val_integral=$precept_val*0.16;
 							if($account['precept'] != 3){
 								
 							

@@ -9,7 +9,7 @@
 	<!--<li><a href="{:url('User/integral_raply')}" >{$lang.surplus_type_99}</a></li>-->
 	<li><a href="{:url('User/account_change')}" >{$lang.surplus_type_6}</a></li>
 	<!--<li><a href="{:url('User/account_deposit')}" >{$lang.surplus_type_0}</a></li>-->
-	<!-- {if $user_type eq 2|| $user_type eq 3} -->
+	<!-- {if $user_type eq 2|| $user_type eq 3 || $info.vip_type eq 2} -->
 	<li class="active"><a href="{:url('User/integral_deposit')}" >{$lang.surplus_type_3}</a></li>
 	<!--{/if}-->
 	<li><a href="{:url('User/account_jewel')}" >{$lang.surplus_type_4}</a></li>
@@ -33,7 +33,7 @@
               <input id="vr_user" readonly name="amount" placeholder="实际金额" type="text" class="inputBg_touch amount" value="{$order.amount|escape}" />
           </span></div>
       </li>
-     <!-- {if $user_type eq 2|| $user_type eq 3} -->
+     <!-- {if $user_type eq 2|| $user_type eq 3 || $info.vip_type eq 2} -->
      <!--<li>
         <div class="input-text"><b class="pull-left">充值对象：</b><span>
           	<input type="radio" id="anniu1" checked="checked" name="user_type" value="1"/>给自己充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

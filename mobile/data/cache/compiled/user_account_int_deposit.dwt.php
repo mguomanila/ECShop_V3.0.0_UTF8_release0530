@@ -9,7 +9,7 @@
 	<!--<li><a href="<?php echo url('User/integral_raply');?>" ><?php echo $this->_var['lang']['surplus_type_99']; ?></a></li>-->
 	<li><a href="<?php echo url('User/account_change');?>" ><?php echo $this->_var['lang']['surplus_type_6']; ?></a></li>
 	<!--<li><a href="<?php echo url('User/account_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_0']; ?></a></li>-->
-	<?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3): ?>
+	<?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3 || $this->_var['info']['vip_type'] == 2): ?>
 	<li class="active"><a href="<?php echo url('User/integral_deposit');?>" ><?php echo $this->_var['lang']['surplus_type_3']; ?></a></li>
 	<?php endif; ?>
 	<li><a href="<?php echo url('User/account_jewel');?>" ><?php echo $this->_var['lang']['surplus_type_4']; ?></a></li>
@@ -33,7 +33,7 @@
               <input id="vr_user" readonly name="amount" placeholder="实际金额" type="text" class="inputBg_touch amount" value="<?php echo htmlspecialchars($this->_var['order']['amount']); ?>" />
           </span></div>
       </li>
-     <?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3): ?>
+     <?php if ($this->_var['user_type'] == 2 || $this->_var['user_type'] == 3 || $this->_var['info']['vip_type'] == 2): ?>
      <!--<li>
         <div class="input-text"><b class="pull-left">充值对象：</b><span>
           	<input type="radio" id="anniu1" checked="checked" name="user_type" value="1"/>给自己充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
