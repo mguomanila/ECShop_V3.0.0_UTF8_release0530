@@ -328,7 +328,7 @@ function get_user_accountlist($user_id,$start_time=0,$end_time=0, $shop=0, $chan
     $sql = "SELECT a.*,b.user_name,c.user_name AS admin_name FROM " . $GLOBALS['ecs']->table('account_log') ." AS a LEFT JOIN ". $GLOBALS['ecs']->table('users') . 
     "AS b ON a.user_id=b.user_id LEFT JOIN ". $GLOBALS['ecs']->table('admin_user') ."AS c ON a.admin_id=c.user_id".
     $where ." ORDER BY log_id DESC";
-echo $sql;
+//echo $sql;
     $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
     $arr = array();

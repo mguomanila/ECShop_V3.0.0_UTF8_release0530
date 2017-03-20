@@ -801,6 +801,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
 
     /* 处理商品数据 */
     $is_vip = !empty($_POST['is_vip']) ? $_POST['is_vip'] : 0;
+    $is_ins = !empty($_POST['is_ins']) ? $_POST['is_ins'] : 0;
    
     $shop_price = !empty($_POST['shop_price']) ? $_POST['shop_price'] : 0;
     $market_price = !empty($_POST['market_price']) ? $_POST['market_price'] : 0;
@@ -836,12 +837,12 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
     {
         if ($code == '')
         {
-            $sql = "INSERT INTO " . $ecs->table('goods') . " (is_vip,goods_name, goods_name_style, goods_sn, " .
+            $sql = "INSERT INTO " . $ecs->table('goods') . " (is_vip,is_ins,goods_name, goods_name_style, goods_sn, " .
             "cat_id, brand_id, shop_price, market_price, virtual_sales, is_promote, promote_price, " .
                     "promote_start_date, promote_end_date, goods_img, goods_thumb, original_img, keywords, goods_brief, " .
                     "seller_note, goods_weight, goods_number, warn_number, integral, give_integral, is_best, is_new, is_hot, " .
                     "is_on_sale, is_alone_sale, is_shipping, goods_desc, add_time, last_update, goods_type, rank_integral, suppliers_id)" .
-                "VALUES ('$is_vip','$_POST[goods_name]', '$goods_name_style', '$goods_sn', '$catgory_id', " .
+                "VALUES ('$is_vip','$is_ins','$_POST[goods_name]', '$goods_name_style', '$goods_sn', '$catgory_id', " .
                 "'$brand_id', '$shop_price', '$market_price', '$virtual_sales', '$is_promote','$promote_price', ".
                     "'$promote_start_date', '$promote_end_date', '$goods_img', '$goods_thumb', '$original_img', ".
                     "'$_POST[keywords]', '$_POST[goods_brief]', '$_POST[seller_note]', '$goods_weight', '$goods_number',".
@@ -850,12 +851,12 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
         }
         else
         {
-            $sql = "INSERT INTO " . $ecs->table('goods') . " (is_vip,goods_name, goods_name_style, goods_sn, " .
+            $sql = "INSERT INTO " . $ecs->table('goods') . " (is_vip,is_ins,goods_name, goods_name_style, goods_sn, " .
                     "cat_id, brand_id, shop_price, market_price, virtual_sales, is_promote, promote_price, " .
                     "promote_start_date, promote_end_date, goods_img, goods_thumb, original_img, keywords, goods_brief, " .
                     "seller_note, goods_weight, goods_number, warn_number, integral, give_integral, is_best, is_new, is_hot, is_real, " .
                     "is_on_sale, is_alone_sale, is_shipping, goods_desc, add_time, last_update, goods_type, extension_code, rank_integral)" .
-                "VALUES ('$is_vip','$_POST[goods_name]', '$goods_name_style', '$goods_sn', '$catgory_id', " .
+                "VALUES ('$is_vip','$is_ins','$_POST[goods_name]', '$goods_name_style', '$goods_sn', '$catgory_id', " .
                     "'$brand_id', '$shop_price', '$market_price', '$virtual_sales', '$is_promote','$promote_price', ".
                     "'$promote_start_date', '$promote_end_date', '$goods_img', '$goods_thumb', '$original_img', ".
                     "'$_POST[keywords]', '$_POST[goods_brief]', '$_POST[seller_note]', '$goods_weight', '$goods_number',".
@@ -888,6 +889,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
                 "cat_id = '$catgory_id', " .
                 "brand_id = '$brand_id', " .
                 "is_vip = '$is_vip', " .
+                "is_ins = '$is_ins', " .
                 "shop_price = '$shop_price', " .
                 "market_price = '$market_price', " .
                 "virtual_sales = '$virtual_sales', " .

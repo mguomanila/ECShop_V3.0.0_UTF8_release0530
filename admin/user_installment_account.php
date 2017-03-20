@@ -35,7 +35,7 @@ if ($_REQUEST['act'] == 'list')
 
 
     /* 权限判断 */
-    admin_priv('surplus_manage');
+//  admin_priv('surplus_manage');
 
     /* 指定会员的ID为查询条件 */
     $user_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
@@ -88,7 +88,7 @@ if ($_REQUEST['act'] == 'list')
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit')
 {
-    admin_priv('surplus_manage'); //权限判断
+//  admin_priv('surplus_manage'); //权限判断
 
     $ur_here  = ($_REQUEST['act'] == 'add') ? $_LANG['surplus_add'] : $_LANG['surplus_edit'];
     $form_act = ($_REQUEST['act'] == 'add') ? 'insert' : 'update';
@@ -168,7 +168,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit')
 elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
 {
     /* 权限判断 */
-    admin_priv('surplus_manage');
+//  admin_priv('surplus_manage');
 
     /* 初始化变量 */
     $id           = isset($_POST['id'])            ? intval($_POST['id'])             : 0;
@@ -340,7 +340,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
 elseif ($_REQUEST['act'] == 'check')
 {
     /* 检查权限 */
-    admin_priv('surplus_manage');
+//  admin_priv('surplus_manage');
 
     /* 初始化 */
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -410,7 +410,7 @@ elseif ($_REQUEST['act'] == 'action')
 {
 
     /* 检查权限 */
-    admin_priv('surplus_manage');
+//  admin_priv('surplus_manage');
 
     /* 初始化 */
     $id         = isset($_POST['id'])         ? intval($_POST['id'])             : 0;

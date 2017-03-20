@@ -500,7 +500,7 @@ elseif ($_REQUEST['act'] == 'action')
 				$sql='SELECT * FROM '. $GLOBALS['ecs']->table('users') ."users WHERE user_id = $parent[parent_id]";
 				$parent=$GLOBALS['db']->getRow($sql);
 				if($parent['user_type']!=1){
-            		log_account_change_vr($parent['user_id'], 0, 0, 0, 300,0,0, $lang_content, ACT_SAVING);
+            		log_account_change_vr($parent['user_id'], 300, 0, 0, 0,0,0, $lang_content, ACT_SAVING);
 					break;
 				}
 			}
@@ -529,7 +529,9 @@ elseif ($_REQUEST['act'] == 'action')
         	}
 
 			$userinfo=$GLOBALS['db']->getRow($sql);
-
+           	$lang_content='编号:'.$id.';'.$userinfo['user_name'].'升级VIP收益';
+           	log_account_change_vr($userinfo['parent_id'], 30, 0, 0, 0,0,0, $lang_content, ACT_SAVING);
+			
 			$set='';
 
             update_user_account($id, $amount, $admin_note, $is_paid,0);

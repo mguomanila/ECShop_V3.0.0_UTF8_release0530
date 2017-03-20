@@ -270,7 +270,12 @@ class PaymentModel extends BaseModel {
                         $sql = "SELECT user_id,friend_id, amount FROM " . $this->pre .
                                 "user_account WHERE id = '$pay_log[order_id]'";
                         $arr = $this->row($sql);
-
+						
+                        $sql='SELECT * FROM '. $this->pre ."users WHERE user_id = '$arr[user_id]'" ;
+						$user_info = $this->row($sql);
+						$lang_content = '编号:'.$pay_log['order_id'].';'.$user_info['user_name'].'升级VIP收益';
+                        model('ClipsBase')->log_account_change_vr($user_info['parent_id'], 30, 0, 0, 0,0, 0,$lang_content, ACT_JEWEL);
+						
                     	$sql='UPDATE ' . $this->pre .
                             "users SET vip_type = 2 ".
                             " WHERE user_id = '$arr[user_id]'";
@@ -385,7 +390,7 @@ class PaymentModel extends BaseModel {
                         if($arr['precept'] == 1){
                     	model('ClipsBase')->log_account_change_vr($arr['user_id'], 0, 0, 0, 0,$arr['integral_amount']-$love,$precept_val, $surplus_type[3], ACT_SAVING,$love);
                         	
-                        }elseif($arr['precept'] == 1){
+                        }elseif($arr['precept'] == 2){
                         	
                     	model('ClipsBase')->log_account_change_vr($arr['user_id'], 0, 0, 0, 0,$arr['integral_amount'],$precept_val-$love, $surplus_type[3], ACT_SAVING,$love);
                         }else{

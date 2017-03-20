@@ -61,7 +61,7 @@
        	<div class="input-text"><b class="pull-left">选择方案：</b><span>
        		<input type="radio" placeholder="" checked  name="precept" id="precept1" class="precept" value="1"/>方案一
        		<input type="radio" placeholder=""   name="precept" id="precept2" class="precept" value="2"/>方案二
-       		<input type="radio" placeholder=""   name="precept" id="precept3" class="precept" value="3"/>方案三
+       		<input type="radio" placeholder=""  disabled="disabled"  name="precept" id="precept3" class="precept" value="3"/>方案三
        		
        		
        	</li>

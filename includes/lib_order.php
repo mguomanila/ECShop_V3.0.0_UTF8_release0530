@@ -2571,7 +2571,7 @@ function integral_to_give($order)
     }
     elseif($order['extension_code'] == 'affiliate')
     {
-    	 $sql = "SELECT SUM(og.goods_number * IF(g.give_integral > -1, g.give_integral, og.goods_price)) AS custom_points, SUM(og.goods_number *  og.goods_price * 100) AS vr_points " .
+    	 $sql = "SELECT SUM(og.goods_number * IF(g.give_integral > -1, g.give_integral, og.goods_price)) AS custom_points, SUM(og.goods_number * IF(g.give_integral > -1, g.give_integral,  og.goods_price * 100)) AS vr_points " .
                 "FROM " . $GLOBALS['ecs']->table('order_goods') . " AS og, " .
                           $GLOBALS['ecs']->table('goods') . " AS g " .
                 "WHERE og.goods_id = g.goods_id " .

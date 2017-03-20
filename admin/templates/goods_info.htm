@@ -145,6 +145,12 @@
             </td>
           </tr>
           <tr>
+            <td class="label">分期活动</td>
+            <td><input type="radio" name="is_ins" {if $goods.is_ins eq '0'}checked{/if}  value="0" size="20" />否
+            <input type="radio" name="is_ins" {if $goods.is_ins eq '1'}checked{/if} value="1" size="20" />是
+            </td>
+          </tr>
+          <tr>
             <td class="label">{$lang.lab_market_price}</td>
             <td><input type="text" name="market_price" value="{$goods.market_price}" size="20" />
               <input type="button" value="{$lang.integral_market_price}" onclick="integral_market_price()" />

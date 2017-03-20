@@ -24,14 +24,30 @@
       <h4><?php echo $this->_var['info']['username']; ?> | <a href="<?php echo url('user/logout');?>" class="ect-colorf"><?php echo $this->_var['lang']['label_logout']; ?></a></h4>
     </dt>
   </dl>-->
-  <?php if ($this->_var['info']['user_type'] == '金钻会员'): ?>
+  
  	<div style="position: fixed;top: 60vw;right: 3vw;color: #fff;border-radius: 50%;background: rgba(0,0,0,.3);width: 46px;height: 46px;text-align: center;line-height: 46px;z-index: 999;" id="gg">公告</div>
-	<?php endif; ?>
+	
 	<div id="gg_box">
 		<div style="display:none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,.8);z-index: 9998;" id="gg_bg"></div>
-		<div style="display:none;position: fixed;text-align: center;left: 0;top: 5vw;z-index: 9999;" id="gg_img"><img src="themes/default/images/gg.jpeg" alt="" width="100%"/></div>
-
+		
+		<div style="display:none;position: fixed;text-align: center;left: 0;top: 5vw;z-index: 9999;" id="gg_img">
+			<?php if ($this->_var['info']['user_type'] == '金钻会员' || $this->_var['info']['user_type'] == '铂金会员'): ?>
+			<img src="themes/default/images/gg.jpeg" alt="" width="100%" style="display: none;"/>
+			<?php endif; ?>
+			<img src="themes/default/images/gonggao1.jpg" alt="" width="100%"/>
+		</div>
+			<?php if ($this->_var['info']['user_type'] == '金钻会员' || $this->_var['info']['user_type'] == '铂金会员'): ?>
+		
+		<div class="zdj" style="position: fixed ; left: 5vw; top: 45%;z-index: 9999;display:none;"><img src="themes/default/images/l_jt.png"/></div>
+		<div class="ydj" style="position: fixed ; right: 5vw; top: 45%; z-index: 9999;display:none;"><img src="themes/default/images/r_jt.png"/></div>
+	<?php endif; ?>
 	</div>
+	
+	<!--<div id="gg1_box">
+		<div style="display:none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,.8);z-index: 9998;" id="gg_bg"></div>
+		<div style="display:none;position: fixed;text-align: center;left: 0;top: 5vw;z-index: 9999;" id="gg_img"><img src="themes/default/images/gonggao1.jpeg" alt="" width="100%"/></div>
+
+	</div>-->
 	
 
 
@@ -299,13 +315,61 @@
 	$("#gg").on("click",function(){
 		$("#gg_img").show("show");
 		$("#gg_bg").show("show");
+		$(".zdj").show("show");
+		$(".ydj").show("show");
 		$("body").css({"overflow":"hidden","position":"fixed","top":"0"})
 	});
 	
-	$("#gg_box").on("click",function(){
+	$("#gg_img").on("click",function(){
 		$("#gg_img").hide("show");
 		$("#gg_bg").hide("show");
+		$(".zdj").show("show");
+		$(".ydj").show("show");
 		$("body").css({"overflow":"auto","position":"static"});
+		
+	})
+	var k = 0;
+	
+	$(".zdj").on("click",function(){
+		
+		var i = $("#gg_img img").length;
+		
+		if($("#gg_img img").eq(0).css("display") == "block"){
+			
+			$("#gg_img img").eq(0).css("display","none");
+			$("#gg_img img").eq(i-1).css("display","block");
+			
+		}else{
+			$("#gg_img img").eq(k).css("display","none");
+			$("#gg_img img").eq(k-1).css("display","block");
+		}
+	
+		k--;
+		if(k <= -i){
+			k=0
+		}
+		
+		
+	})
+	
+	$(".ydj").on("click",function(){
+		
+		var i = $("#gg_img img").length;
+		
+		$("#gg_img img").eq(k).css("display","none");
+		
+		$("#gg_img img").eq(k+1).css("display","block");
+			
+		k++;
+		
+		if(k >= i-1){
+			
+			k = -1;
+			
+		}
+		
+		
+		
 	})
 </script>
 </body>
