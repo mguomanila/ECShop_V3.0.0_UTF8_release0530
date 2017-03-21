@@ -72,7 +72,7 @@ function edit_profile($profile)
     }
 
     /* 过滤非法的键值 */
-    $other_key_array = array('msn', 'qq', 'office_phone', 'home_phone', 'mobile_phone');
+    $other_key_array = array('msn', 'qq', 'office_phone', 'home_phone', 'mobile_phone','province','city','area');
     foreach ($profile['other'] as $key => $val)
     {
         //删除非法key值
@@ -110,7 +110,7 @@ function get_profile($user_id)
     /* 会员帐号信息 */
     $info  = array();
     $infos = array();
-    $sql  = "SELECT user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank,".
+    $sql  = "SELECT province,area,city,user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank,".
              " msn, qq, office_phone, home_phone, mobile_phone, passwd_question, passwd_answer ".
            "FROM " .$GLOBALS['ecs']->table('users') . " WHERE user_id = '$user_id'";
     $infos = $GLOBALS['db']->getRow($sql);
@@ -161,6 +161,13 @@ function get_profile($user_id)
     $info['discount']    = $_SESSION['discount'] * 100 . "%";
     $info['email']       = $_SESSION['email'];
     $info['user_name']   = $_SESSION['user_name'];
+//  province,aera,city
+
+    $info['province'] = isset($infos['province']) ? $infos['province'] : '';
+    $info['area'] = isset($infos['area']) ? $infos['area'] : '';
+    $info['city'] = isset($infos['city']) ? $infos['city'] : '';
+    
+    
     $info['rank_points'] = isset($infos['rank_points']) ? $infos['rank_points'] : '';
     $info['pay_points']  = isset($infos['pay_points'])  ? $infos['pay_points']  : 0;
     $info['user_money']  = isset($infos['user_money'])  ? $infos['user_money']  : 0;

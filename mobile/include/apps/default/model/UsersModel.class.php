@@ -385,7 +385,7 @@ class UsersModel extends BaseModel {
         }
 
         /* 过滤非法的键值 */
-        $other_key_array = array('msn', 'qq', 'office_phone', 'home_phone', 'mobile_phone');
+        $other_key_array = array('msn', 'qq', 'office_phone', 'home_phone', 'mobile_phone','province','city','area');
         foreach ($profile['other'] as $key => $val) {
             //删除非法key值
             if (!in_array($key, $other_key_array)) {
@@ -416,7 +416,7 @@ class UsersModel extends BaseModel {
         /* 会员帐号信息 */
         $info = array();
         $infos = array();
-        $sql = "SELECT user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank," .
+        $sql = "SELECT province,city,area,user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank," .
                 " msn, qq, office_phone, home_phone, mobile_phone, passwd_question, passwd_answer " .
                 "FROM " . $this->pre . "users WHERE user_id = '$user_id'";
         $infos = $this->row($sql);
@@ -466,6 +466,12 @@ class UsersModel extends BaseModel {
         $info['birthday'] = isset($infos['birthday']) ? $infos['birthday'] : '';
         $info['question'] = isset($infos['question']) ? htmlspecialchars($infos['question']) : '';
 
+
+		 $info['province'] = isset($infos['province']) ? $infos['province'] : '';
+    $info['area'] = isset($infos['area']) ? $infos['area'] : '';
+    $info['city'] = isset($infos['city']) ? $infos['city'] : '';
+    
+    
         $info['user_money'] = price_format($info['user_money'], false);
         $info['pay_points'] = $info['pay_points'] . C('integral_name');
         $info['bonus'] = $bonus;

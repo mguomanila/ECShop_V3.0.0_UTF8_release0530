@@ -100,6 +100,89 @@
 		</tr>
 		<!-- {/if} -->
 		{/foreach}
+		
+		
+		
+		
+		<tr>
+			<td width="28%" align="right" bgcolor="#FFFFFF" ><label for=""><span></span>所在地区：</label></td>
+			<td width="72%" align="left" bgcolor="#FFFFFF">
+				<select name="province" id="province" onchange="show_sub(this.options[this.options.selectedIndex].value)" style="width: auto;">
+					<option value="0">请选择</option>
+					{foreach from=$province item=vo}
+					<option value="{$vo.provinceID}" {if $vo.provinceID eq $profile.province}selected = "selected"{/if} {if $address_info.province != '' && $vo.provinceID == $address_info.province} selected {else}  {/if}>{$vo.province}</option>
+					{/foreach}
+				</select>
+		
+				<select name="city" id="city" onchange="show_area(this.options[this.options.selectedIndex].value)" style="width: auto;">
+					<option value="0">请选择</option>
+					{foreach from=$city item=vo}
+					<option value="{$vo.cityID}" {if $vo.cityID eq $profile.city}selected = "selected"{/if} {if $address_info.city != '' && $vo.cityID == $address_info.city} selected {else}  {/if}>{$vo.city}</option>
+					{/foreach}
+				</select>
+		
+				<select name="area" id="area" style="width: auto;">
+					<option value="0">请选择</option>
+					{foreach from=$area item=vo}
+					<option value="{$vo.areaID}" {if $vo.areaID eq $profile.area}selected = "selected"{/if} {if $address_info.area != '' && $vo.areaID == $address_info.area} selected {else}  {/if}>{$vo.area}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+<!--		
+		<label for=""><span></span>所在地区：</label>
+		<select name="province" id="province" onchange="show_sub(this.options[this.options.selectedIndex].value)">
+			<option value="0">请选择</option>
+			{foreach from=$province item=vo}
+			<option value="{$vo.provinceID}"} {if $address_info.province != '' && $vo.provinceID == $address_info.province} selected {else}  {/if}>{$vo.province}</option>
+			{/foreach}
+		</select>
+
+		<select name="city" id="city" onchange="show_area(this.options[this.options.selectedIndex].value)">
+			<option value="0">请选择</option>
+			{foreach from=$city item=vo}
+			<option value="{$vo.cityID}" {if $address_info.city != '' && $vo.cityID == $address_info.city} selected {else}  {/if}>{$vo.city}</option>
+			{/foreach}
+		</select>
+
+		<select name="area" id="area">
+			<option value="0">请选择</option>
+			{foreach from=$area item=vo}
+			<option value="{$vo.areaID}" {if $address_info.area != '' && $vo.areaID == $address_info.area} selected {else}  {/if}>{$vo.area}</option>
+			{/foreach}
+		</select>-->
+		
+		
+		
+		
+		<script type="text/javascript">
+			function show_sub(){
+				var province = $('#province').val();
+				Ajax.call('user.php?act=agent_select','province='+province,stylesheetFun,'GET','json',true,true);
+				function stylesheetFun(temp){
+					$("#city").html("<option value=''>请选择</option>");  
+					$.each(temp, function(i, item) {
+						$("#city").append("<option value='" + item.cityID + "'>" + item.city + "</option>");  
+					});
+				}
+			}
+		    function show_area(){
+				var city = $('#city').val();
+				Ajax.call('user.php?act=area_select','city='+city,registed_status,'GET','json',true,true);
+				function registed_status(data){
+					$("#area").html("<option value=''>请选择</option>");  
+					$.each(data, function(i, item) {
+						$("#area").append("<option value='" + item.areaID + "'>" + item.area + "</option>");  
+					});
+				}
+			}
+		</script>
+		
+		
+		
+		
+		
+		
 		<tr style="background: #fff;text-align: right;height: 38px;"><td colspan="2" ><span class=" sjyh" style="border:none;width: 84px;border: 1px solid #e1e1e1;padding: 5px;margin-right: 20px;cursor: pointer;"/>修改手机/银行</span></td></tr>
 		
 		<tr style="text-align: center;display: none;" class="yz">

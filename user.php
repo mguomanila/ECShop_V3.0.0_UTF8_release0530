@@ -541,6 +541,21 @@ elseif ($action == 'profile')
             default:    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']] ;
         }
     }
+    
+    $sql = "SELECT * from ecs_province";
+	$province = $db->getAll($sql);
+	
+	$sql = "SELECT * FROM ".$ecs->table('city')." WHERE father = '$user_info[province]'";
+	$city = $db->getAll($sql);
+	
+	$sql = "SELECT * FROM ".$ecs->table('area')." WHERE father = '$user_info[city]'";
+	$area = $db->getAll($sql);
+	
+	$smarty->assign('city',   $city);
+	$smarty->assign('area',   $area);
+	
+//	print_r($province);
+	$smarty->assign('province',   $province);
 
     $smarty->assign('extend_info_list', $extend_info_list);
     /* 密码提示问题 */
@@ -551,6 +566,23 @@ elseif ($action == 'profile')
 	}
     $smarty->assign('profile', $user_info);
     $smarty->display('user_transaction.dwt');
+}
+//处理查询信息
+elseif ($action == 'agent_select'){
+	$father = $_GET['province'];
+	$sql = "SELECT * FROM ".$ecs->table('city')." WHERE father = '$father'";
+	$city = $db->getAll($sql);
+	$province_json = json_encode($city);
+	echo $province_json;
+	
+}
+elseif ($action == 'area_select'){
+	$father = $_GET['city'];
+	$sql = "SELECT * FROM ".$ecs->table('area')." WHERE father = '$father'";
+	$city = $db->getAll($sql);
+	$province_json = json_encode($city);
+	echo $province_json;
+	
 }
 
 /* 修改个人资料的处理 */
@@ -566,6 +598,12 @@ elseif ($action == 'act_edit_profile')
     $other['office_phone'] = $office_phone = isset($_POST['extend_field3']) ? trim($_POST['extend_field3']) : '';
     $other['home_phone'] = $home_phone = isset($_POST['extend_field4']) ? trim($_POST['extend_field4']) : '';
     $other['mobile_phone'] = $mobile_phone = isset($_POST['extend_field5']) ? trim($_POST['extend_field5']) : '';
+    
+    $other['province'] = $province = isset($_POST['province']) ? trim($_POST['province']) : '';
+    $other['city'] = $city = isset($_POST['city']) ? trim($_POST['city']) : '';
+    $other['area'] = $area = isset($_POST['area']) ? trim($_POST['area']) : '';
+    
+    
     $sel_question = empty($_POST['sel_question']) ? '' : compile_str($_POST['sel_question']);
     $passwd_answer = isset($_POST['passwd_answer']) ? compile_str(trim($_POST['passwd_answer'])) : '';
     

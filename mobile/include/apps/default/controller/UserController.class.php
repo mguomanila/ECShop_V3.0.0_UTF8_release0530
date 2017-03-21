@@ -166,6 +166,12 @@ class UserController extends CommonController {
             $other['qq'] = $qq = I('post.extend_field2');
             $other['office_phone'] = $office_phone = I('post.extend_field3');
             $other['mobile_phone'] = $mobile_phone = I('post.extend_field5');
+            
+            $other['province'] = $province = isset($_POST['province']) ? trim($_POST['province']) : '';
+		    $other['city'] = $city = isset($_POST['city']) ? trim($_POST['city']) : '';
+		    $other['area'] = $area = isset($_POST['area']) ? trim($_POST['area']) : '';
+    
+            
             $sel_question = I('post.sel_question');
             $passwd_answer = I('post.passwd_answer');
             $session=$_POST['session']?$_POST['session']:'';
@@ -422,6 +428,22 @@ class UserController extends CommonController {
             }
         }
 //print_r($arr);
+
+
+	 	$sql = "SELECT * from ecs_province";
+		$province = M()->query($sql);
+		
+		$sql = "SELECT * FROM ". M()->pre ."city WHERE father = '$user_info[province]'";
+		$city = M()->query($sql);
+		
+		$sql = "SELECT * FROM ". M()->pre ."area WHERE father = '$user_info[city]'";
+		$area = M()->query($sql);
+		
+		$this->assign('city',   $city);
+		$this->assign('area',   $area);
+		
+//		print_r($province);
+		$this->assign('province',   $province);
         $this->assign('arr', $arr);
         $this->assign('title', L('profile'));
         $this->assign('extend_info_list', $extend_info_list);
@@ -434,6 +456,24 @@ class UserController extends CommonController {
         $this->assign('profile', $user_info);
         $this->display('user_profile.dwt');
     }
+    
+    
+    public function agent_select(){
+    	$father = $_GET['province'];
+	$sql = "SELECT * FROM " . M()->pre ."city WHERE father = '$father'";
+	$city =  M()->query($sql);
+//	print_r($city);
+	$province_json = json_encode($city);
+	echo $province_json;
+    }
+
+	public	function area_select(){
+		$father = $_GET['city'];
+	$sql = "SELECT * FROM " . M()->pre ."area WHERE father = '$father'";
+	$city =  M()->query($sql);
+	$province_json = json_encode($city);
+	echo $province_json;
+	}
 
     /**
      * 资金管理
