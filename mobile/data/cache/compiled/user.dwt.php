@@ -323,8 +323,8 @@
 	$("#gg_img").on("click",function(){
 		$("#gg_img").hide("show");
 		$("#gg_bg").hide("show");
-		$(".zdj").show("show");
-		$(".ydj").show("show");
+		$(".zdj").css("display","none");
+		$(".ydj").css("display","none");
 		$("body").css({"overflow":"auto","position":"static"});
 		
 	})

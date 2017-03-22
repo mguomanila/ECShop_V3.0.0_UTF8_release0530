@@ -979,6 +979,8 @@ class UserController extends CommonController {
 	        		}
         		}
         	}else{
+	        	show_message('暂未开通',L('back_page_up'), '', 'info');
+        		
         		if($amount<3000){
 	        		show_message('方案三最低充值3000RMB',L('back_page_up'), '', 'info');
 	        	}
