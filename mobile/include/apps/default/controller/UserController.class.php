@@ -92,6 +92,7 @@ class UserController extends CommonController {
         $this->assign('history', $history);
         $this->assign('title', L('user_center'));
         $this->display('user.dwt');
+        exit();
     }
     
 

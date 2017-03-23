@@ -88,13 +88,20 @@
 
 	</div>
 
-		<div>
+		<div class="ect-margin-tb shapbox ect-margin-bottom0" style="border-bottom:none;" >
 		<div class="tjcp_name">
 			<img src="images/hot.jpg" alt="" style="width: 100%;"/>
 		</div>
-		<ul class="shapbox">
+		<ul id="J_ItemList">
+		  	<li class="single_item">
+		    </li>
+		     <a href="javascript:;" style="text-align:center" class="get_more"></a>
+		  </ul>
+		
+		
+		<!--<ul class="shapbox">-->
 			<!--{foreach from=$hot_goods item=lis}-->
-			<li>
+			<!--<li>
 				<a href="{$lis.url}">
 					<div class="jingp">
 						
@@ -103,13 +110,16 @@
 					<span>{$lis.name}</span>
 					<p>{$lis.shop_price}<span class="shapbox_xl">销量：{$lis.sales_count}</span></p>
 				</a>
-			</li>
+			</li>-->
 			<!--{/foreach}-->
 
-		</ul>
+		<!--</ul>-->
+		
+		
+		
 	</div>
 
-
+<!-- #BeginLibraryItem "/library/recommend_hot.lbi" --><!-- #EndLibraryItem -->
 
 
 	<footer>
@@ -169,7 +179,7 @@ $.AutomLeafStart({
 		autoplay: 2000,
         autoplayDisableOnInteraction : false
 	});
-//	get_asynclist("{:url('index/ajax_goods', array('type'=>'hot'))}" , '__TPL__/images/loader.gif');
+	get_asynclist("{:url('index/ajax_goods', array('type'=>'1'))}" , '__TPL__/images/loader.gif');
 </script>
 <script type="text/javascript" src="js/b.js"></script>
 

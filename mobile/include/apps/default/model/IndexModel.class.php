@@ -28,8 +28,10 @@ class IndexModel extends CommonModel {
             $type = 'g.is_new = 1';
         } else if ($type == 'hot') {
             $type = 'g.is_hot = 1';
-        } else {
+        } else if ($type == 'best') {
             $type = 'g.is_best = 1';
+        }else {
+        	$type = 1;
         }
         // 取出所有符合条件的商品数据，并将结果存入对应的推荐类型数组中
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, g.market_price, g.shop_price AS org_price, g.promote_price, ' . "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " . "promote_start_date, promote_end_date, g.goods_brief, g.goods_thumb, g.goods_img, RAND() AS rnd " . 'FROM ' . $this->pre . 'goods AS g ' . "LEFT JOIN " . $this->pre . "member_price AS mp " . "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' ";

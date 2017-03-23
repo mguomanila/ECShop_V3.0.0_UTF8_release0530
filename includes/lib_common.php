@@ -2390,6 +2390,9 @@ function log_account_change_one($user_id, $user_money = 0, $frozen_money = 0, $r
 	
 	$gold=0;
 	$pay_points=0.00;
+	$sql="SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_id'";
+    $info =  $GLOBALS['db']->getRow($sql);
+    $bili=$info['bili'];
 	if($precept != 1){
 		$gold = $vr_points*100-$love;
 		$pay_points_2=$gold/80000;
@@ -2398,9 +2401,7 @@ function log_account_change_one($user_id, $user_money = 0, $frozen_money = 0, $r
 		}else{
 			$pay_points_2=0;
 		}
-		$sql="SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_id'";
-	    $info =  $GLOBALS['db']->getRow($sql);
-	    $bili=$info['bili'];
+		
 	    if($gold>0){
 	        $sum=$info['gold']+$gold;
 	        $bili=$sum/80000;
