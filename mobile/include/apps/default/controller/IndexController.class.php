@@ -89,6 +89,7 @@ class IndexController extends CommonController {
                     );
                 }
             }
+//          print_r($list);
             echo json_encode($list);
             exit();
         } else {

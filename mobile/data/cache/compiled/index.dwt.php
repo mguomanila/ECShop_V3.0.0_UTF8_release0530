@@ -104,6 +104,8 @@ echo $this->_echash . $k['name'] . '|' . serialize($k) . $this->_echash;
 		<div class="tjcp_name">
 			<img src="themes/default/images/hot.jpg" alt="" style="width: 100%;"/>
 		</div>
+		
+		
 		<ul id="J_ItemList">
 		  	<li class="single_item">
 		    </li>
@@ -111,11 +113,11 @@ echo $this->_echash . $k['name'] . '|' . serialize($k) . $this->_echash;
 		  </ul>
 		
 		
-		<!--<ul class="shapbox">-->
+		<ul class="shapbox">
 			<?php $_from = $this->_var['hot_goods']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'lis');if (count($_from)):
     foreach ($_from AS $this->_var['lis']):
 ?>
-			<!--<li>
+			<li>
 				<a href="<?php echo $this->_var['lis']['url']; ?>">
 					<div class="jingp">
 						
@@ -124,16 +126,16 @@ echo $this->_echash . $k['name'] . '|' . serialize($k) . $this->_echash;
 					<span><?php echo $this->_var['lis']['name']; ?></span>
 					<p><?php echo $this->_var['lis']['shop_price']; ?><span class="shapbox_xl">销量：<?php echo $this->_var['lis']['sales_count']; ?></span></p>
 				</a>
-			</li>-->
+			</li>
 			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 
-		<!--</ul>-->
+		</ul>
 		
 		
 		
 	</div>
 
-<?php echo $this->fetch('library/recommend_hot.lbi'); ?>
+
 
 
 	<footer>
