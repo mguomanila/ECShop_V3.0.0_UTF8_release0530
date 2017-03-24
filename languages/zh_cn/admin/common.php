@@ -147,6 +147,7 @@ $_LANG['14_sms'] = '短信管理';
 $_LANG['15_rec'] = '推荐管理';
 $_LANG['16_email_manage'] = '邮件群发管理';
 $_LANG['18_lead_manage'] = '移动版管理';
+$_LANG['19_agent'] = '经销商管理';
 
 /* 商品管理 */
 $_LANG['01_goods_list'] = '商品列表';
@@ -365,4 +366,8 @@ $_LANG['logistic_tracking'] = '云起物流';
 
 /* 移动版全民分销开通引导页 */
 $_LANG['lead'] = '移动版';
+
+/* 代理商 */
+$_LANG['01_list'] = '经销商列表';
+
 ?>

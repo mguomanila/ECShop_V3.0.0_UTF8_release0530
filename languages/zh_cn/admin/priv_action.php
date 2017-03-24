@@ -158,4 +158,7 @@ $_LANG['certificate_manage'] = '授权绑定';
 //移动版全民分销开通引导页管理
 $_LANG['lead_manage'] = '移动版';
 
+//代理商
+$_LANG['01_list'] = '经销商列表';
+
 ?>

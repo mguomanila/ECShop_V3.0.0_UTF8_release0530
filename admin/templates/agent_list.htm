@@ -1,0 +1,230 @@
+{if $full_page}
+<!-- $Id: users_list.htm 17053 2010-03-15 06:50:26Z sxc_shop $ -->
+{include file="pageheader.htm"}
+
+<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+ <style type="text/css">
+    #idData {text-align: center;}
+    a{text-decoration: none;}
+ </style>
+
+<div class="form-div" style="height:26px">
+  <form action="agent.php?act=list" name="searchForm" method="post" style="width:90%;float:left;">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+   	 
+	 <select name="is_paid">
+        <option value="-1">{$lang.status}</option>
+        <option value="0"}>{$lang.cancel}</option>
+        <option value="1">{$lang.unconfirm}</option>
+      </select>
+	
+    &nbsp;{$lang.label_user_name} &nbsp;<input type="text" name="keyword" size="10" id="useragent" value="{$agent_name}"/> 
+    <label for=""><span></span>所在地区：</label>
+		<select name="province" id="province" onchange="show_sub(this.options[this.options.selectedIndex].value)">
+			<option value="0">请选择</option>
+			{foreach from=$province item=vo}
+			<option value="{$vo.provinceID}"} {if $address_info.province != '' && $vo.provinceID == $address_info.province} selected {else}  {/if}>{$vo.province}</option>
+			{/foreach}
+		</select>
+
+		<select name="city" id="city" onchange="show_area(this.options[this.options.selectedIndex].value)">
+			<option value="0">请选择</option>
+			{foreach from=$city item=vo}
+			<option value="{$vo.cityID}" {if $address_info.city != '' && $vo.cityID == $address_info.city} selected {else}  {/if}>{$vo.city}</option>
+			{/foreach}
+		</select>
+
+		<select name="area" id="area">
+			<option value="0">请选择</option>
+			{foreach from=$area item=vo}
+			<option value="{$vo.areaID}" {if $address_info.area != '' && $vo.areaID == $address_info.area} selected {else}  {/if}>{$vo.area}</option>
+			{/foreach}
+		</select>
+		
+		<script type="text/javascript" src="./plugin/My97DatePicker/WdatePicker.js"></script>
+		开始时间：<input type="text" value="{$address_info.start_time}" name="start_time"  style="width:5%;margin-left:10px" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" >
+	    结束时间：<input type="text" value="{$address_info.end_time}" name="end_time" style="width:5%;margin-left:10px" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" >
+							
+		<input type="submit" value="{$lang.button_search}" />&nbsp;&nbsp;&nbsp;&nbsp;
+	总金额：{if $address_info.total_money == null} 0 {else} {$address_info.total_money} {/if}
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	</form>
+	<div style="float:right;width:10%">
+		分页：<input type="text" id="page" value="20" onchange="pagedata(this)" style="width:50%"/>
+	</div>
+	
+  <script type="text/javascript">
+     function jiechu(obj){
+
+     	if($(obj).val() != '-1'){
+     		$("#xuanzhong1").removeAttr('disabled');
+     	}else{
+				$("#xuanzhong1").removeAttr('checked')
+     		$("#xuanzhong1").val(0);
+     		$("#xuanzhong1").attr('disabled','');
+     	}
+     	if($(obj).val() != 3){
+     		$("#stub_status").removeAttr('checked')
+     		$("#stub_status").val(-1);
+     		$("#stub_status").attr('disabled','disabled');
+     	}else{
+     		$("#stub_status").removeAttr('disabled');
+     		
+     	}
+     }
+     	function xuanzhong(obj){
+     		if($(obj).val()==1){
+     		$(obj).val('0')
+     		}else{
+     		$(obj).val('1')
+     			
+     		}
+
+     	}
+     </script>
+  <script type="text/javascript">
+	function show_sub(){
+		var province = $('#province').val();
+		Ajax.call('agent.php?act=agent_select','province='+province,stylesheetFun,'GET','json',true,true);
+		function stylesheetFun(temp){
+			$("#city").html("<option value=''>请选择</option>");  
+			$.each(temp, function(i, item) {
+				$("#city").append("<option value='" + item.cityID + "'>" + item.city + "</option>");  
+			});
+		}
+	}
+    function show_area(){
+		var city = $('#city').val();
+		Ajax.call('agent.php?act=area_select','city='+city,registed_status,'GET','json',true,true);
+		function registed_status(data){
+			$("#area").html("<option value=''>请选择</option>");  
+			$.each(data, function(i, item) {
+				$("#area").append("<option value='" + item.areaID + "'>" + item.area + "</option>");  
+			});
+		}
+	}
+	
+  	function jiechu(obj){
+
+     	if($(obj).val() == '2'){
+     		$("#job").removeAttr('disabled');
+     	}else{
+				$("#job").removeAttr('checked')
+     		$("#job").val(1);
+     		$("#job").attr('disabled','');
+     	}
+    }
+  	function xuanzhong(obj){
+     		if($(obj).val()==2){
+     		$(obj).val('1')
+     		}else{
+     		$(obj).val('2')
+     			
+     		}
+
+     	}
+  </script>
+</div>
+
+<form method="POST" action="" name="listForm" onsubmit="return confirm_bath()">
+
+<!-- start users list -->
+<div class="list-div" id="listDiv">
+{/if}
+<!--用户列表部分-->
+	<table cellpadding="3" cellspacing="1" id="idData">
+	    <tr>
+			<th>
+			  <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox">
+			  <a href="javascript:listTable.sort('user_id'); ">{$lang.record_id}</a>{$sort_user_id}
+			</th>
+			<th><a href="javascript:listTable.sort('user_name'); ">{$lang.username}</a>{$sort_user_name}</th>
+			<th><a href="javascript:listTable.sort('email'); ">{$lang.email}</a>{$sort_email}</th> 
+			<th>{$lang.user_money}</th>
+			<th><a href="javascript:listTable.sort('reg_time'); ">{$lang.reg_date}</a>{$sort_reg_time}</th>
+			<th>{$lang.consumption_sum}</th>
+			<th>{$lang.adress_sum}</th>
+			<th><a href="javascript:listTable.sort('is_validated'); ">{$lang.is_validated}</a>{$sort_is_validate}</th>
+			<!--	<th>{$lang.handler}</th>-->
+	    </tr>
+	  {foreach from=$user_list item=user}
+		{if $user.amount != null}
+	    <tr>
+			<td><input type="checkbox" name="checkboxes[]" value="{$user.user_id}" notice="{if $user.user_money ne 0}1{else}0{/if}"/>{$user.user_id}</td>
+			<td class="first-cell">{$user.user_name|escape}</td>
+			<td><span onclick="listTable.edit(this, 'edit_email', {$user.user_id})">{$user.email}</span></td>	 
+			<td>{$user.user_money}</td>
+			<td align="center">{$user.reg_time}</td>
+			<td align="center">{$user.amount}</td>
+			<td align="center">{$user.address}</td>
+			<td align="center"><a href="javascript:void()" onclick="onagent(this)" id="agent_status_{$user.user_id}" >{if $user.is_validated}<img src="images/yes.gif">{else} <img src="images/no.gif">{/if} </a ></td>
+	    </tr>
+		{/if}
+		{foreachelse}
+		<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr> 
+		{/foreach}
+	</table>
+
+	<table align="right" cellpadding="3" cellspacing="1" width="100%">
+
+		<td><div id="barcon" name="barcon"></div></td>
+
+	</table>
+{if $full_page}
+</div>
+<!-- end users list -->
+</form>
+<script type="text/javascript" language="JavaScript">
+<!--
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+
+{literal}
+onload = function()
+{
+    document.forms['searchForm'].elements['keyword'].focus();
+    // 开始检查订单
+    startCheckOrder();
+}
+
+/* 指定代理商
+*/
+function onagent(a){
+	var agent = a.id.substr(13);
+	Ajax.call('agent.php?act=agent_status', 'status=' + agent,registed_status , 'GET', 'text', true, true );	
+	function registed_status(data){
+		if(data == 1){
+			 window.location.reload();
+		}
+	}
+}
+
+function confirm_bath()
+{
+  userItems = document.getElementsByName('checkboxes[]');
+
+  cfm = '{$lang.list_remove_confirm}';
+
+  for (i=0; userItems[i]; i++)
+  {
+    if (userItems[i].checked && userItems[i].notice == 1)
+    {
+      cfm = '{$lang.list_still_accounts}' + '{$lang.list_remove_confirm}';
+      break;
+    }
+  }
+
+  return confirm(cfm);
+}
+//-->
+</script>
+ 
+{/literal}
+{include file="pagefooter.htm"}
+{/if}

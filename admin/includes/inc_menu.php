@@ -159,4 +159,10 @@ $modules['16_email_manage']['view_sendlist']        = 'view_sendlist.php?act=lis
 
 
 $modules['18_lead_manage']['lead']        = 'lead.php?act=list';//移动版全民分销开通引导页
+
+//经销商
+$modules['19_agent']['01_agent']                    = 'agent.php?act=list';
+$modules['19_agent']['01_list']                     = 'agent.php?act=list';
+
+
 ?>

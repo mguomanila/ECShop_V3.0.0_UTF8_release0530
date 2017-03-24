@@ -9,6 +9,7 @@
 {insert_scripts files="../js/transport.js,common.js"}
 
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="./plugin/page.js"></script>
 
 <style>
   .panel-icloud .panel-right iframe {
@@ -35,9 +36,17 @@ var {$key} = "{$item}";
     if(mask){mask.style.display = 'none';}
     if(cloudFrame){cloudFrame.src='';}
   }
+  //获取分页
+ function pagedata(){
+	var page = $('#page').val();
+	if(page == ""){
+		page = 20;
+	}
+	goPage(1,page);
+ }
 </script>
 </head>
-<body>
+<body onload="pagedata()"> 
 
 <h1>
 {if !$certi.certificate_id}
