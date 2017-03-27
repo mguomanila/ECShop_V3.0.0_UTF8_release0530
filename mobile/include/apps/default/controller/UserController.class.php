@@ -883,8 +883,8 @@ class UserController extends CommonController {
             /* 判断是否有足够的余额的进行退款的操作 */
             $sur_amount = model('ClipsBase')->get_user_surplus($this->user_id);
             settype($amount,'float');
-
-            if($amount<100 || ($amount*100)%100 !=0 ){
+            
+            if($amount<100 || ($amount%100 !=0) || (ceil($amount) != $amount)){
             	show_message('提现金额最低为100,提现金额必须为100的倍数', L('back_page_up'), '', 'info');
             }
             if ($amount > $sur_amount)

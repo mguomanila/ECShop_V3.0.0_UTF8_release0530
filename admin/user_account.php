@@ -857,6 +857,8 @@ function account_list()
 			$filter['end_time']=local_strtotime($filter['end_time']);
 		}
         $filter['process_type'] = isset($_REQUEST['process_type']) ? intval($_REQUEST['process_type']) : -1;
+        $filter['user_type'] = isset($_REQUEST['user_type']) ? intval($_REQUEST['user_type']) : -1;
+        
         $filter['payment'] = empty($_REQUEST['payment']) ? '' : trim($_REQUEST['payment']);
         $filter['is_paid'] = isset($_REQUEST['is_paid']) ? intval($_REQUEST['is_paid']) : -1;
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'add_time' : trim($_REQUEST['sort_by']);
@@ -879,6 +881,11 @@ function account_list()
         {
             $where .= " AND ua.process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN,SURPLUS_INTEGRAL,SURPLUS_INTEGRAL_SAVE,SURPLUS_JEWEL,SURPLUS_VIP));
         }
+        
+        if($filter['user_type'] != -1){
+        	 $where .= " AND u.user_type = '$filter[user_type]' ";
+        }
+        
         if($filter['stub_status'] != '' && $filter['stub_status'] != -1){
 
         	$where .= " AND ua.stub_status = $filter[stub_status] AND ua.stub_img <> '' ";

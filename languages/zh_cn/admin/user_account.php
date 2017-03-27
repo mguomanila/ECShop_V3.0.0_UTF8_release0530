@@ -25,6 +25,11 @@ $_LANG['confirm_date'] = '到款日期';
 $_LANG['surplus_notic'] = '管理员备注';
 $_LANG['surplus_desc'] = '会员描述';
 $_LANG['surplus_type'] = '操作类型';
+$_LANG['userstype'] = '会员类型';
+
+$_LANG['user_type'][1] = '会员';
+$_LANG['user_type'][2] = '金钻';
+$_LANG['user_type'][3] = '铂金';
 
 $_LANG['no_user'] = '匿名购买';
 
