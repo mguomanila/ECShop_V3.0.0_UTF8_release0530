@@ -25,21 +25,21 @@
 		<select name="province" id="province" onchange="show_sub(this.options[this.options.selectedIndex].value)">
 			<option value="0">请选择</option>
 			{foreach from=$province item=vo}
-			<option value="{$vo.provinceID}"} {if $address_info.province != '' && $vo.provinceID == $address_info.province} selected {else}  {/if}>{$vo.province}</option>
+			<option value="{$vo.provinceID}"} {if $vo.provinceID == $address_info.province} selected {else}  {/if}>{$vo.province}</option>
 			{/foreach}
 		</select>
 
 		<select name="city" id="city" onchange="show_area(this.options[this.options.selectedIndex].value)">
 			<option value="0">请选择</option>
 			{foreach from=$city item=vo}
-			<option value="{$vo.cityID}" {if $address_info.city != '' && $vo.cityID == $address_info.city} selected {else}  {/if}>{$vo.city}</option>
+			<option value="{$vo.cityID}" {if $vo.cityID == $address_info.city} selected {else}  {/if}>{$vo.city}</option>
 			{/foreach}
 		</select>
 
 		<select name="area" id="area">
 			<option value="0">请选择</option>
 			{foreach from=$area item=vo}
-			<option value="{$vo.areaID}" {if $address_info.area != '' && $vo.areaID == $address_info.area} selected {else}  {/if}>{$vo.area}</option>
+			<option value="{$vo.areaID}" {if $vo.areaID == $address_info.area} selected {else}  {/if}>{$vo.area}</option>
 			{/foreach}
 		</select>
 		
@@ -147,10 +147,9 @@
 			<th>{$lang.consumption_sum}</th>
 			<th>{$lang.adress_sum}</th>
 			<th><a href="javascript:listTable.sort('is_validated'); ">{$lang.is_validated}</a>{$sort_is_validate}</th>
-			<!--	<th>{$lang.handler}</th>-->
 	    </tr>
 	  {foreach from=$user_list item=user}
-		{if $user.amount != null}
+		<!--{if $user.amount != null}-->
 	    <tr>
 			<td><input type="checkbox" name="checkboxes[]" value="{$user.user_id}" notice="{if $user.user_money ne 0}1{else}0{/if}"/>{$user.user_id}</td>
 			<td class="first-cell">{$user.user_name|escape}</td>
@@ -161,7 +160,7 @@
 			<td align="center">{$user.address}</td>
 			<td align="center"><a href="javascript:void()" onclick="onagent(this)" id="agent_status_{$user.user_id}" >{if $user.is_validated}<img src="images/yes.gif">{else} <img src="images/no.gif">{/if} </a ></td>
 	    </tr>
-		{/if}
+		<!--{/if}-->
 		{foreachelse}
 		<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr> 
 		{/foreach}
@@ -174,6 +173,20 @@
 	</table>
 {if $full_page}
 </div>
+<script type="text/javascript" >
+	/* 指定代理商
+*/
+function onagent(a){
+	var agent = a.id.substr(13);
+	Ajax.call('agent.php?act=agent_status', 'status=' + agent,registed_status , 'GET', 'text', true, true );	
+	function registed_status(data){
+		if(data == 1){
+			 window.location.reload();
+		}
+	}
+}
+	
+</script>
 <!-- end users list -->
 </form>
 <script type="text/javascript" language="JavaScript">
@@ -191,18 +204,6 @@ onload = function()
     document.forms['searchForm'].elements['keyword'].focus();
     // 开始检查订单
     startCheckOrder();
-}
-
-/* 指定代理商
-*/
-function onagent(a){
-	var agent = a.id.substr(13);
-	Ajax.call('agent.php?act=agent_status', 'status=' + agent,registed_status , 'GET', 'text', true, true );	
-	function registed_status(data){
-		if(data == 1){
-			 window.location.reload();
-		}
-	}
 }
 
 function confirm_bath()
