@@ -1,6 +1,5 @@
 <?php
-/*
-²éÑ¯µØÇø
+/*æŸ¥è¯¢åœ°å€ä¿¡æ¯
 */
 function getAgentAddress($province,$city,$area){
 	$province =" WHERE provinceID=".$province;
@@ -24,7 +23,7 @@ function  getAddress($filed,$table,$where_address){
 
 
 
-/*ÏÂÒ»¼¶µÄĞÅÏ¢*/
+/*æŸ¥è¯¢ä¸‹ä¸€çº§*/
 function getNextInfo($address_next,$table,$start_time,$end_time){
 	foreach($address_next as $key=>$val){
 		$agent_where = " WHERE add_time>=$start_time and add_time<=$end_time and process_type=3 and is_paid=1 and user_id=".$val['user_id'];
@@ -45,33 +44,36 @@ function getNextInfo($address_next,$table,$start_time,$end_time){
 }
 
 /*
-*	±éÀú¼Û¸ñ×ÜºÍ
-*	$table                ±íÃû
-	$where_money          Ìõ¼ş
+*	ç»Ÿè®¡æ€»é‡‘é¢å°è®¡
+*	$table                è¡¨æ˜
+	$where_money          æ¡ä»¶
 */
 
 function getAgentMoney($table,$where_money){
-	$sql = "SELECT amount,user_id from `$table`".$where_money;
-	$temp = get_province($sql);
-	if($temp != NULL)
-	{
-		foreach($temp as $val)
-		{	
-			$money_agent += $val['amount'];
-			$money_agent_total['user_id'] = $val['user_id'];
+		$sql = "SELECT amount,user_id from `$table`".$where_money;
+		$temp = get_province($sql);
+		if($temp != NULL)
+		{
+			foreach($temp as $val)
+			{	
+				if($val['amount'] >= 0){
+					$money_agent += $val['amount'];
+				}
+				$money_agent_total['user_id'] = $val['user_id'];
+			}
+			$money_agent_total['subtotal'] = $money_agent;
+			$money_agent_total['total'] = $money_agent;
 		}
-		$money_agent_total['subtotal'] = $money_agent;
-		$money_agent_total['total'] = $money_agent;
-	}
 	return $money_agent_total;
 }
 
 /*
 
-²éÑ¯·½·¨
+æŸ¥è¯¢
 
 
-return   ·µ»ØÒ»¸ö¶şÎ¬Êı×é
+return   è¿”å›ä¸€ä¸ªäºŒç»´æ•°ç»„
+
 */
 function get_province($sql){
 	if ($res=mysql_query($sql)){
@@ -79,7 +81,7 @@ function get_province($sql){
 			$province[]=$row;
 		} 
 	}else {
-		$province = "Ö´ĞĞSQLÓï¾ä:$sql\n´íÎó£º".mysql_error();
+		$province = "Ö´æ‰§è¡ŒSQLè¯­å¥:$sql\né”™è¯¯".mysql_error();
 		
 	}
 	return $province;
