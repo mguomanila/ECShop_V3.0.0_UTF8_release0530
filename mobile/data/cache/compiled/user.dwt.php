@@ -31,16 +31,17 @@
 		<div style="display:none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,.8);z-index: 9998;" id="gg_bg"></div>
 		
 		<div style="display:none;position: fixed;text-align: center;left: 0;top: 5vw;z-index: 9999;" id="gg_img">
+			<img src="themes/default/images/jiayou_gg.jpg" alt="" width="100%"/>
+				
 			<?php if ($this->_var['info']['user_type'] == '金钻会员' || $this->_var['info']['user_type'] == '铂金会员'): ?>
 			<img src="themes/default/images/gg.jpeg" alt="" width="100%" style="display: none;"/>
 			<?php endif; ?>
-			<img src="themes/default/images/gonggao1.jpg" alt="" width="100%"/>
+			<img src="themes/default/images/gonggao1.jpg" alt="" width="100%" style="display: none;"/>
 		</div>
-			<?php if ($this->_var['info']['user_type'] == '金钻会员' || $this->_var['info']['user_type'] == '铂金会员'): ?>
-		
+
 		<div class="zdj" style="position: fixed ; left: 5vw; top: 45%;z-index: 9999;display:none;"><img src="themes/default/images/l_jt.png"/></div>
 		<div class="ydj" style="position: fixed ; right: 5vw; top: 45%; z-index: 9999;display:none;"><img src="themes/default/images/r_jt.png"/></div>
-	<?php endif; ?>
+
 	</div>
 	
 	<!--<div id="gg1_box">

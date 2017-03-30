@@ -16,6 +16,11 @@
     <strong>期数：</strong>{$surplus.num}期 &nbsp;&nbsp;
     <strong>{$lang.add_date}：</strong>{$surplus.add_time}
     &nbsp;&nbsp;<strong>{$lang.process_type}：</strong>{$process_type}
+    &nbsp;&nbsp;<strong>收货人：</strong>{$surplus.consignee} &nbsp;&nbsp;
+    &nbsp;&nbsp;<strong>联系电话：</strong>{$surplus.mobile} &nbsp;&nbsp; 
+    &nbsp;&nbsp;<strong>收货地址：</strong>[{$surplus.region}]&nbsp;&nbsp;{$surplus.address} &nbsp;&nbsp;<br>
+    <strong>用户留言：</strong>{$surplus.postscript}
+    
     {if $surplus.pay_method}&nbsp;&nbsp;<strong>{$lang.pay_method}：</strong>{$surplus.payment}{/if}
     </td>
   </tr>

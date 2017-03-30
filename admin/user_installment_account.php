@@ -339,6 +339,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'check')
 {
+
     /* 检查权限 */
 //  admin_priv('surplus_manage');
 
@@ -354,8 +355,17 @@ elseif ($_REQUEST['act'] == 'check')
 
     /* 查询当前的预付款信息 */
     $account = array();
-    $account = $db->getRow("SELECT * FROM " .$ecs->table('installment_account'). " WHERE id = '$id'");
+    $account = $db->getRow("SELECT * FROM " .$ecs->table('installment_account'). "AS i LEFT JOIN " .$ecs->table('order_info'). "AS o ON o.order_id = i.order_id WHERE id = '$id'");
     $account['add_time'] = local_date($_CFG['time_format'], $account['add_time']);
+    $sql = "SELECT concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, ''), " .
+        "'  ', IFNULL(t.region_name, ''), '  ', IFNULL(d.region_name, '')) AS region " .
+        "FROM " . $ecs->table('order_info') . " AS o " .
+        "LEFT JOIN " . $ecs->table('region') . " AS c ON o.country = c.region_id " .
+        "LEFT JOIN " . $ecs->table('region') . " AS p ON o.province = p.region_id " .
+        "LEFT JOIN " . $ecs->table('region') . " AS t ON o.city = t.region_id " .
+        "LEFT JOIN " . $ecs->table('region') . " AS d ON o.district = d.region_id " .
+        "WHERE o.order_id = '$account[order_id]'";
+    $account['region'] = $db->getOne($sql);
 
     //余额类型:预付款，退款申请，购买商品，取消订单
     if ($account['process_type'] == 0)

@@ -151,7 +151,7 @@ class PaymentModel extends BaseModel {
                     $this->query($sql);
 					
 					$sql = 'UPDATE ' . $this->pre .
-                            "installment SET is_paid = '" . $pay_status . "', " .
+                            "installment SET is_paid = '" . $pay_status . "'" .
                             "WHERE order_id = '$order_id'";
                     $this->query($sql);
 					

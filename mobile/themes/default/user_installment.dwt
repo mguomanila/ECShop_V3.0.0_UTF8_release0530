@@ -7,6 +7,7 @@
       <td>订单编号</td>
       <td>商品名</td>
 			<td>分期数</td>
+			<td>收货人</td>
 			<td>操作</td>
 
     </tr>
@@ -16,12 +17,13 @@
       <td>{$val.order_sn}</td>
       <td>{$val.goods_name}</td>
 			<td>{$val.num}</td>
+			<td>{$val.consignee}</td>
 			<td>查看</td>
     </tr >
 	    <!-- {foreach from=$val.num_arr key=level_1 item=v name=affdb} -->
 	    <tr  class="arr{$level}" style="display: none;background:  #F4F4F4; " align="center"  >
-	      <td colspan="2">第{$level_1}期</td>
-	      {if $v.status eq 1 && $v.str}
+	      <td colspan="3">第{$level_1}期</td>
+	      {if $v.status eq 1 && $v.str eq $level_1}
 	      <td  colspan="2" style="color: #888;">已领取</td>
 	      {elseif $v.status eq 1 && $v.str eq ''}
 	      <td  colspan="2" style="color: #EC971F;" onclick="apply({$level_1},{$val.id},{$val.order_id},{$val.goods_id},this);">可领取</td>
@@ -38,7 +40,7 @@
     <!-- {/foreach} -->
     <!--{else}-->
     <tr align="center" onclick="select_earnings(this,{$val.user_id},'{$val.user_name}');" >
-    	<td colspan="4">暂无分期活动商品</td>
+    	<td colspan="5">暂无分期活动商品</td>
     </tr>
     
 	<!--{/if}-->

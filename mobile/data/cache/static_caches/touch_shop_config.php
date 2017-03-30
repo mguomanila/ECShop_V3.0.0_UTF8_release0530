@@ -39,7 +39,7 @@ scrollAmount=3><U><FONT color=red>
   'integral_percent' => '1',
   'sn_prefix' => 'ECS',
   'comment_check' => '1',
-  'no_picture' => '/ECShop_V3.0.0_UTF8_release0530/mobile/data/common/images/no_picture.gif',
+  'no_picture' => '/ecshop_v3.0.0_utf8_release0530/mobile/data/common/images/no_picture.gif',
   'stats_code' => '',
   'cache_time' => 3600,
   'register_points' => '0',

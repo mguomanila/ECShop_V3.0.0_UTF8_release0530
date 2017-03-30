@@ -178,7 +178,12 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                     " lastmodify = '".gmtime()."' ".
                     "WHERE order_id = '$order_id'";
                 $GLOBALS['db']->query($sql);
-
+				
+				$sql = 'UPDATE ' . $GLOBALS['ecs']->table('installment') .
+                    " SET is_paid = '$pay_status'" .
+                    "WHERE order_id = '$order_id'";
+                $GLOBALS['db']->query($sql);
+				
                 /* 记录订单操作记录 */
                 order_action($order_sn, OS_CONFIRMED, SS_UNSHIPPED, $pay_status, $note, $GLOBALS['_LANG']['buyer']);
 

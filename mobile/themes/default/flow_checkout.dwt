@@ -138,7 +138,7 @@
         <p><b> {$lang.order_postscript} </b></p>
         <i class="fa fa-angle-down"></i> </a>
         <div id="collapseFive" class="panel-collapse collapse in">
-          <input name="postscript" type="text" class="fuyan" placeholder="{$lang.please_order_postscript}">
+          <input name="postscript" type="text" class="fuyan" placeholder="如果是给好友购买分期油卡，请填写好友用户名">
         </div>
         
         <a data-toggle="collapse"  href="#collapseFive2">

@@ -7,6 +7,7 @@
       <td>订单编号</td>
       <td>商品名</td>
 			<td>分期数</td>
+			<td>收货人</td>
 			<td>操作</td>
 
     </tr>
@@ -20,6 +21,7 @@ if ($this->_foreach['affdb']['total'] > 0):
       <td><?php echo $this->_var['val']['order_sn']; ?></td>
       <td><?php echo $this->_var['val']['goods_name']; ?></td>
 			<td><?php echo $this->_var['val']['num']; ?></td>
+			<td><?php echo $this->_var['val']['consignee']; ?></td>
 			<td>查看</td>
     </tr >
 	    <?php $_from = $this->_var['val']['num_arr']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('level_1', 'v');$this->_foreach['affdb'] = array('total' => count($_from), 'iteration' => 0);
@@ -28,8 +30,8 @@ if ($this->_foreach['affdb']['total'] > 0):
         $this->_foreach['affdb']['iteration']++;
 ?>
 	    <tr  class="arr<?php echo $this->_var['level']; ?>" style="display: none;background:  #F4F4F4; " align="center"  >
-	      <td colspan="2">第<?php echo $this->_var['level_1']; ?>期</td>
-	      <?php if ($this->_var['v']['status'] == 1 && $this->_var['v']['str']): ?>
+	      <td colspan="3">第<?php echo $this->_var['level_1']; ?>期</td>
+	      <?php if ($this->_var['v']['status'] == 1 && $this->_var['v']['str'] == $this->_var['level_1']): ?>
 	      <td  colspan="2" style="color: #888;">已领取</td>
 	      <?php elseif ($this->_var['v']['status'] == 1 && $this->_var['v']['str'] == ''): ?>
 	      <td  colspan="2" style="color: #EC971F;" onclick="apply(<?php echo $this->_var['level_1']; ?>,<?php echo $this->_var['val']['id']; ?>,<?php echo $this->_var['val']['order_id']; ?>,<?php echo $this->_var['val']['goods_id']; ?>,this);">可领取</td>
@@ -46,7 +48,7 @@ if ($this->_foreach['affdb']['total'] > 0):
     <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
     <?php else: ?>
     <tr align="center" onclick="select_earnings(this,<?php echo $this->_var['val']['user_id']; ?>,'<?php echo $this->_var['val']['user_name']; ?>');" >
-    	<td colspan="4">暂无分期活动商品</td>
+    	<td colspan="5">暂无分期活动商品</td>
     </tr>
     
 	<?php endif; ?>

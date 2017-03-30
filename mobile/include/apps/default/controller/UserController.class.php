@@ -2365,11 +2365,18 @@ class UserController extends CommonController {
     	$list=array();
     	if($user_i_list){
 	    	foreach ($user_i_list as $key => $value) {
-	    		$value['goods_name'] = mb_strlen($value['goods_name'])>=11?mb_substr($value['goods_name'],0,'11').'...':$value['goods_name'];
-	    		$num_arr1 = explode(',',$value['num_arr']);
-	    		foreach ($num_arr1 as $k => $v) {
-	    			$num_arr[$v]=$v;
+	    		$value['goods_name'] = mb_strlen($value['goods_name'])>=7?mb_substr($value['goods_name'],0,'7').'...':$value['goods_name'];
+	    		if($value['num_arr']){
+	    			$num_arr1 = explode(',',$value['num_arr']);
+	    		}else{
+	    			$num_arr1 = array(0);
 	    		}
+
+	    		foreach ($num_arr1 as $v) {
+	    				$num_arr=array($v=>"$v");
+	    		}
+//	    		print_r($num_arr);
+	    		
 //	    		array_shift($num_arr);
 	    		$value['num_arr']=array();
 	    		for ($i=1; $i <= $value['num']; $i++) { 
@@ -2383,7 +2390,7 @@ class UserController extends CommonController {
 				$list[$key] = $value;
 	    	}
     	}
-//  	print_r($num_arr);
+//  	print_r($user_i_list);
     	$count=count($list);
     	$this->assign('count',$count);
     	$this->assign('list',$list);
