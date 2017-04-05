@@ -3301,7 +3301,7 @@ class UserController extends CommonController {
 		
     	$content="【成都沃尔迅科技有限公司】你好，您的短信验证码是".$sms_code."，请您及时输入，短信5分钟内有效。";
     	$message = iconv("UTF-8","GB2312",$content);
-    	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$message);
+    	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$content);
     	echo $re;
     }
     public function get_password_sms(){

@@ -7,7 +7,7 @@
 	<header class="ect-header ect-margin-tb ect-margin-lr">
 		<a href="{:url('category/top_all')}" class="pull-left ect-icon ect-icon1 ect-icon-cate1"></a>
 		<div class="ect-header-div">
-			<button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;平安车险正式上线</button>
+			<button class="btn btn-default ect-text-left ect-btn-search" onClick="javascript:openSearch();"><i class="fa fa-search"></i>&nbsp;加油卡感恩回馈大促销</button>
 		</div>
 	</header>
 	<!--<header class="ect-header "> 
@@ -101,9 +101,9 @@
 		  </ul>
 		
 		
-		<ul class="shapbox">
+		<!--<ul class="shapbox">-->
 			<!--{foreach from=$hot_goods item=lis}-->
-			<li>
+			<!--<li>
 				<a href="{$lis.url}">
 					<div class="jingp">
 						
@@ -112,10 +112,10 @@
 					<span>{$lis.name}</span>
 					<p>{$lis.shop_price}<span class="shapbox_xl">销量：{$lis.sales_count}</span></p>
 				</a>
-			</li>
+			</li>-->
 			<!--{/foreach}-->
 
-		</ul>
+		<!--</ul>-->
 		
 		
 		
@@ -181,7 +181,7 @@ $.AutomLeafStart({
 		autoplay: 2000,
         autoplayDisableOnInteraction : false
 	});
-	get_asynclist("{:url('index/ajax_goods', array('type'=>'1'))}" , '__TPL__/images/loader.gif');
+	get_asynclist("{:url('index/ajax_goods', array('type'=>'1','amount'=>'14'))}" , '__TPL__/images/loader.gif');
 </script>
 <script type="text/javascript" src="js/b.js"></script>
 
