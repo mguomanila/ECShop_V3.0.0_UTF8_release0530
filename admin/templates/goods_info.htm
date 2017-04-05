@@ -219,7 +219,7 @@
         <!-- 璇︾粏鎻忚堪 -->
         <table width="90%" id="detail-table" style="display:none">
           <tr>
-            <td>{$FCKeditor}</td>
+						<td> <script id="editor" type="text/plain" style="width:100%;height:400px;"></script>  </td>		
           </tr>
         </table>
 
@@ -452,7 +452,16 @@
 </div>
 <!-- end goods form -->
 {insert_scripts files="validator.js,tab.js"}
-
+<script type="text/javascript" charset="utf-8" src="./plugin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./plugin/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="./plugin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    
+<script type="text/javascript">
+$(function(){
+	delete(Object.prototype.toJSONString);
+	var ue = UE.getEditor('editor');
+});
+</script>
 <script language="JavaScript">
   var goodsId = '{$goods.goods_id}';
   var elements = document.forms['theForm'].elements;

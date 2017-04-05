@@ -13,11 +13,12 @@
 <div class="form-div" style="height:26px">
   <form action="agent.php?act=list" name="searchForm" method="post" style="width:90%;float:left;">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-   	 
-	 <select name="is_paid">
-        <option value="-1">{$lang.status}</option>
-        <option value="0"}>{$lang.cancel}</option>
-        <option value="1">{$lang.unconfirm}</option>
+    
+      <select name="user_type">
+    	<option value="0" {if $address_info.user_type == 0 } selected {/if} >{$lang.usertype}</option>
+        <option value="1" {if $address_info.user_type == 1 } selected {/if} >{$lang.user_type_1}</option>
+        <option value="2" {if $address_info.user_type == 2 } selected {/if} >{$lang.user_type_2}</option>
+        <option value="3" {if $address_info.user_type == 3 } selected {/if} >{$lang.user_type_3}</option>
       </select>
 	
     &nbsp;{$lang.label_user_name} &nbsp;<input type="text" name="keyword" size="10" id="useragent" value="{$agent_name}"/> 
@@ -56,34 +57,17 @@
 	</div>
 	
   <script type="text/javascript">
-     function jiechu(obj){
-
-     	if($(obj).val() != '-1'){
-     		$("#xuanzhong1").removeAttr('disabled');
+  	function jiechu(obj){
+     	if($(obj).val() == '2'){
+     		$("#job").removeAttr('disabled');
      	}else{
-				$("#xuanzhong1").removeAttr('checked')
-     		$("#xuanzhong1").val(0);
-     		$("#xuanzhong1").attr('disabled','');
+				$("#job").removeAttr('checked')
+     		$("#job").val(1);
+     		$("#job").attr('disabled','');
      	}
-     	if($(obj).val() != 3){
-     		$("#stub_status").removeAttr('checked')
-     		$("#stub_status").val(-1);
-     		$("#stub_status").attr('disabled','disabled');
-     	}else{
-     		$("#stub_status").removeAttr('disabled');
-     		
-     	}
-     }
-     	function xuanzhong(obj){
-     		if($(obj).val()==1){
-     		$(obj).val('0')
-     		}else{
-     		$(obj).val('1')
-     			
-     		}
+    }
 
-     	}
-     </script>
+  </script>
   <script type="text/javascript">
 	function show_sub(){
 		var province = $('#province').val();
@@ -106,25 +90,6 @@
 		}
 	}
 	
-  	function jiechu(obj){
-
-     	if($(obj).val() == '2'){
-     		$("#job").removeAttr('disabled');
-     	}else{
-				$("#job").removeAttr('checked')
-     		$("#job").val(1);
-     		$("#job").attr('disabled','');
-     	}
-    }
-  	function xuanzhong(obj){
-     		if($(obj).val()==2){
-     		$(obj).val('1')
-     		}else{
-     		$(obj).val('2')
-     			
-     		}
-
-     	}
   </script>
 </div>
 
@@ -133,8 +98,9 @@
 <!-- start users list -->
 <div class="list-div" id="listDiv">
 {/if}
-<!--用户列表部分-->
-	<table cellpadding="3" cellspacing="1" id="idData">
+<!--用户列表部分--> 
+	<table cellpadding="3" cellspacing="1">
+		<tbody>
 	    <tr>
 			<th>
 			  <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox">
@@ -148,22 +114,23 @@
 			<th>{$lang.adress_sum}</th>
 			<th><a href="javascript:listTable.sort('is_validated'); ">{$lang.is_validated}</a>{$sort_is_validate}</th>
 	    </tr>
-	  {foreach from=$user_list item=user}
-		<!--{if $user.amount != null}-->
+	    </tbody>
+	    <tbody id="idData">
+	  	{foreach from=$user_list item=user}
 	    <tr>
 			<td><input type="checkbox" name="checkboxes[]" value="{$user.user_id}" notice="{if $user.user_money ne 0}1{else}0{/if}"/>{$user.user_id}</td>
 			<td class="first-cell">{$user.user_name|escape}</td>
 			<td><span onclick="listTable.edit(this, 'edit_email', {$user.user_id})">{$user.email}</span></td>	 
 			<td>{$user.user_money}</td>
 			<td align="center">{$user.reg_time}</td>
-			<td align="center">{$user.amount}</td>
-			<td align="center">{$user.address}</td>
-			<td align="center"><a href="javascript:void()" onclick="onagent(this)" id="agent_status_{$user.user_id}" >{if $user.is_validated}<img src="images/yes.gif">{else} <img src="images/no.gif">{/if} </a ></td>
+			<td align="center">{if $user.amount == null} 0 {else} {$user.amount} {/if}</td>
+			<td align="center">{$user.address}</td>	
+			<td align="center"><a href="javascript:void()" onclick="onagent(this)" >{if $user.user_type==2 or $user.user_type==3}<img src="images/yes.gif">{else} <img src="images/no.gif">{/if} </a ></td>
 	    </tr>
-		<!--{/if}-->
 		{foreachelse}
 		<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr> 
 		{/foreach}
+		</tbody>
 	</table>
 
 	<table align="right" cellpadding="3" cellspacing="1" width="100%">
@@ -173,20 +140,7 @@
 	</table>
 {if $full_page}
 </div>
-<script type="text/javascript" >
-	/* 指定代理商
-*/
-function onagent(a){
-	var agent = a.id.substr(13);
-	Ajax.call('agent.php?act=agent_status', 'status=' + agent,registed_status , 'GET', 'text', true, true );	
-	function registed_status(data){
-		if(data == 1){
-			 window.location.reload();
-		}
-	}
-}
-	
-</script>
+
 <!-- end users list -->
 </form>
 <script type="text/javascript" language="JavaScript">

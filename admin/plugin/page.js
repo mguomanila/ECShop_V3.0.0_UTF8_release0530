@@ -31,12 +31,12 @@ function goPage(pno,psize){
             irow.style.display = "none";
         }
     }
-	var num = num-1;
+
     var pageEnd = document.getElementById("pageEnd");
     var tempStr = "共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页";
     if(currentPage>1){
         tempStr += "<a href=\"#\" onClick=\"goPage("+(1)+","+psize+")\">首页</a>";
-        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+")\"><上一页</a>"
+        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+")\"><上一页</a>";
     }else{
         tempStr += "首页";
         tempStr += "<上一页";    
@@ -51,5 +51,5 @@ function goPage(pno,psize){
     }
 
     document.getElementById("barcon").innerHTML = tempStr;
-    
+    document.getElementById("idPage").append() = pageBox;
 }

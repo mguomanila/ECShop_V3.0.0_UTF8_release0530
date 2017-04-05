@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * ECSHOP 会员账号管理语言文件
@@ -22,6 +22,9 @@ $_LANG['label_rank_name'] = '会员等级';
 $_LANG['all_option'] = '所有等级';
 
 $_LANG['usertype']	 = '会员类型';
+$_LANG['pid'] = '用户类型';
+$_LANG['is_pid'][1] = '代理商';
+$_LANG['is_pid'][2] = '普通会员';
 $_LANG['type']	 = '所有类型';
 $_LANG['user_type'][1] = '会员';
 $_LANG['user_type'][2] = '金钻';
@@ -49,6 +52,9 @@ $_LANG['newpass'] = '新密码';
 $_LANG['question'] = '密码提示问题';
 $_LANG['answer'] = '密码提示问题答案';
 $_LANG['gender'] = '性别';
+$_LANG['ispid']= '用户类型';
+$_LANG['is_pid'][1] = '代理商';
+$_LANG['is_pid'][2] = '普通会员';
 $_LANG['usertype'] = '用户类型';
 $_LANG['user_type'][1] = '会员';
 $_LANG['user_type'][2] = '金钻';
@@ -158,6 +164,10 @@ $_LANG['confirm'] = '已完成';
 $_LANG['unconfirm'] = '经销商';
 $_LANG['cancel'] = '普通商户';
 
+$_LANG['usertype'] = '用户类型';
+$_LANG['user_type_1'] = '会员';
+$_LANG['user_type_2'] = '金钻';
+$_LANG['user_type_3'] = '铂金';
 
 ?>
 

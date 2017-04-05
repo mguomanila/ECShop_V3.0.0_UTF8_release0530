@@ -21,8 +21,6 @@ function  getAddress($filed,$table,$where_address){
 	return $row;
 }
 
-
-
 /*查询下一级*/
 function getNextInfo($address_next,$table,$start_time,$end_time){
 	foreach($address_next as $key=>$val){
@@ -70,10 +68,7 @@ function getAgentMoney($table,$where_money){
 /*
 
 查询
-
-
 return   返回一个二维数组
-
 */
 function get_province($sql){
 	if ($res=mysql_query($sql)){
