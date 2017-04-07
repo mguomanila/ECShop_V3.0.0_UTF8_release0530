@@ -77,6 +77,7 @@ public class ActionEnter {
 			case ActionMap.UPLOAD_VIDEO:
 			case ActionMap.UPLOAD_FILE:
 				conf = this.configManager.getConfig( actionCode );
+				conf.put("actionCode", actionCode);
 				state = new Uploader( request, conf ).doExec();
 				break;
 				

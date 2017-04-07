@@ -80,6 +80,32 @@ public class BinaryUploader {
 				storageState.putInfo("url", PathFormat.format(savePath));
 				storageState.putInfo("type", suffix);
 				storageState.putInfo("original", originFileName + suffix);
+				if(StringUtils.equals((String)conf.get("imageActionName"), "uploadimage")) {
+				InputStream tempis = null;
+				BufferedImage src = null;
+				int height = -1;
+				int width = -1;
+				try {
+					tempis = new FileInputStream(new File(physicalPath));
+					src = javax.imageio.ImageIO.read(tempis);
+					height = src.getHeight(null); // 得到源图高
+					width = src.getWidth(null);
+					tempis.close();
+					tempis = null;
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					if(tempis != null) {
+						IOUtils.closeQuietly(tempis);
+					}
+				}
+				if(height > 0) {
+					storageState.putInfo("height", height);
+				}
+				if(width > 0) {
+					storageState.putInfo("width", width);
+				}
+			}
 			}
 
 			return storageState;
