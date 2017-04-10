@@ -125,16 +125,30 @@
 				          </span></div>
 				</li>
 				<?php else: ?>
-				<li>
+				<li style="position: relative;">
 					<div class="input-text"><b <?php if ($this->_var['field']['is_need']): ?>id="extend_field<?php echo $this->_var['field']['id']; ?>i"<?php endif; ?>><?php echo $this->_var['field']['reg_field_name']; ?>：</b>
 						<span>
 									<input name="extend_field<?php echo $this->_var['field']['id']; ?>" type="text" size="25" class="inputBg" <?php if ($this->_var['field']['is_need']): ?> style="width:85%;"<?php endif; ?> /><?php if ($this->_var['field']['is_need']): ?><font style="color:#FF0000;float:right"> *</font><?php endif; ?>
 				                </span></div>
+				       <?php if ($this->_var['field']['id'] == 5): ?>
+					<a class="yazm" onclick="get_code('reg_code')" style="float: right;position: absolute;top: 2.6vw;border: 1px solid #e1e1e1;padding: 3px;right:4vw">获取验证码</a>
+					<?php endif; ?>
 				</li>
+
 				<?php endif; ?>
 				<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 
-						<?php if ($this->_var['enabled_captcha']): ?>
+				
+				<li>
+					<div class="input-text"><b >验证码：</b>
+						<span>
+									<input name="code" type="text" size="25" class="inputBg" <?php if ($this->_var['field']['is_need']): ?> style="width:85%;"<?php endif; ?> />
+				                </span></div>
+				</li>
+
+
+			
+		<?php if ($this->_var['enabled_captcha']): ?>
 						<li>
 							<div class="input-text code"><b><?php echo $this->_var['lang']['code']; ?>：</b><span>
                 <input placeholder="<?php echo $this->_var['lang']['no_code']; ?>"  name="captcha" id="captcha" type="text" datatype="*" />
@@ -149,6 +163,8 @@
 				</p>
 				<div class="ect-padding-lr ect-padding-tb">
 					<input name="act" type="hidden" value="act_register" />
+					<input name="session" type="hidden" value="reg_code" />
+					
 					<input name="enabled_sms" type="hidden" value="0" />
 					<input type="hidden" name="back_act" value="<?php echo $this->_var['back_act']; ?>" />
 					<button href="flow_consignee.html" name="Submit" type="submit" class="btn btn-info ect-btn-info ect-colorf ect-bg"><?php echo $this->_var['lang']['next']; ?></button>
@@ -189,4 +205,53 @@
 		}
 	}
 </script>
+<script type="text/javascript">
+   		var k = true;
+	  	var seconds = 60;
+	    function getdate(){
+	    	k= false;
+	        seconds--;
+	         $(".yazm").text(seconds+"s后重新发送");
+	         $(".yazm").css({"background":"#ccc"});
+	    }
+	
+	   function sss(){
+	      if(seconds<=1){
+	      	k=true;
+	         $(".yazm").text("重新发送");
+	         $(".yazm").css({"background":"#fff"});
+	        return;
+	      }
+	     getdate();
+	     var set = setTimeout(sss,1000); 
+	   }
+	   
+	   
+	   function get_code(session){
+		if($('input[name="extend_field5"]').val() == ""){
+			alert('手机号不能为空')
+			return false;
+		}else{
+			var phone = $('input[name="extend_field5"]').val();
+		    if(!(/^1[2345678]\d{9}$/.test(phone))){ 
+		        alert("手机号码格式有误，请重填");  
+		        return false; 
+		    } 
+		}
+	  	if(k==true){
+	  		$.ajax({
+	  			type:"post",
+				url:"<?php echo url('user/get_code');?>",
+				data:'mobile_phone='+$('input[name="extend_field5"]').val()+'&session='+session,
+				dataType:"text",
+				async:true
+	  		});
+	  		seconds =60;
+	  		sss(); 		
+	  	}else{  		
+	  		return;
+	  	}
+	  	 	
+	  }
+		</script>
 <?php echo $this->fetch('library/nav.lbi'); ?>

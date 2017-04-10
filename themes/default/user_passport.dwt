@@ -173,16 +173,30 @@
         </li>
 	<!-- {else} -->
         <li>
-          <div class="zhucebox">
+          <div class="zhucebox" style="position: relative;">
 	          <label align="right" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}
 	          </label>
 	          <input name="extend_field{$field.id}" type="text" size="25" class="inputBg" />
 	          </td>
+	           <!--{if $field.id eq 5}-->
+	          
+				<a class="fsyz" style="position: absolute;right: 20px;top: 13px;border: 1px solid #D6D6D6;padding: 5px;" href="javascript:">获取验证码</a>
+        	<!--{/if}-->
           </div>
+         
         </li>
         <!-- {if $field.is_need} --><span style="color:#FF0000"></span><!-- {/if} -->
+        
 	<!-- {/if} -->
 	<!-- {/foreach} -->
+	<li>
+          <div class="zhucebox">
+	          <label align="right" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>验证码
+	          </label>
+	          <input name="code" type="text" size="25" class="inputBg" />
+	          </td>
+          </div>
+        </li>
       <!-- 判断是否启用验证码{if $enabled_captcha} -->
       <li>
       <td align="right">{$lang.comment_captcha}</td>
@@ -198,6 +212,8 @@
           
           <td align="left">
           <input name="act" type="hidden" value="act_register" >
+          <input name="session" type="hidden" value="reg_code" >
+          
           <input type="hidden" name="back_act" value="{$back_act}" />
           <input name="Submit" type="submit" value="" class="us_Submit_reg"></input>
           </td>
@@ -216,6 +232,56 @@
     </form>
   </div>
 </div>
+<script type="text/javascript">
+	
+	$(function (){
+	   var k = true;
+	   var seconds = 60;
+	    function getdate(){
+	    	k= false;
+	        seconds--;
+	         $(".fsyz").text(seconds+"s后重新发送");
+	         $(".fsyz").css({"background":"#ccc"});
+	    }
+	
+	   function sss(){
+	      if(seconds<=1){
+	      	k=true;
+	         $(".fsyz").text("重新发送");
+	         $(".fsyz").css({"background":"#fff"});
+	        return;
+	      }
+	     getdate();
+	     var set = setTimeout(sss,1000); 
+	   }
+	  $(".fsyz").on("click",function (){
+	  	if($('input[name="extend_field5"]').val() == ""){
+			alert('手机号不能为空')
+			return false;
+		}else{
+			var phone = $('input[name="extend_field5"]').val();
+		    if(!(/^1[2345678]\d{9}$/.test(phone))){ 
+		        alert("手机号码格式有误，请重填");  
+		        return false; 
+		    } 
+		}
+	  	if(k==true){
+	  		$.ajax({
+				type:"post",
+				url:"user.php?act=get_code_sms",
+				data:'mobile_phone='+$('input[name="extend_field5"]').val()+'&session=reg_code',
+				dataType:"text",
+				async:true
+			});	
+	  		seconds =60;
+	  		sss(); 		
+	  	}else{  		
+	  		return;
+	  	}
+	  	 	
+	  })
+	})
+</script>
 <!--{/if}-->
 <!--{/if}-->
 <!--#会员注册界面 end-->

@@ -654,12 +654,15 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
     public function get_user_default($user_id) {
         $user_bonus = $this->get_user_bonus();
 
-        $sql = "SELECT vip_type,pay_points_2,pay_points_3,fangan3,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
+        $sql = "SELECT is_reg_a,reg_time,vip_type,pay_points_2,pay_points_3,fangan3,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
         $row = $this->row($sql);
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
         $info['shop_name'] = C('shop_name');
         $info['integral'] =$row['pay_points']  ;
+        $info['reg_time'] =$row['reg_time']  ;
+        $info['is_reg_a'] =$row['is_reg_a']  ;
+        
         $info['pay_points_2'] =$row['pay_points_2']  ;
         $info['pay_points_3'] =$row['pay_points_3']  ;
         $info['fangan3'] =$row['fangan3']  ;

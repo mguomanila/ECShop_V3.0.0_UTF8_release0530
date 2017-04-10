@@ -11,32 +11,46 @@ defined('IN_ECTOUCH') or die('Deny Access');
 
 
 
-function sendSMS($cusername,$cpassword,$cgwid,$cmobile,$cmessage)
+function sendSMS($username,$password,$gwid,$mobile,$message)
 {
-	$http = 'http://api.106txt.com/smsGBK.aspx?';
-	$data = array
-		(
-		'action'=>'Send',
-		'username'=>$cusername,	//用户账号
-		'password'=>$cpassword,	
-	    'gwid'=>$cgwid,		//企业ID
-		'mobile'=>$cmobile,	//号码
-		'message'=>$cmessage 	//内容
-		
-		);
-	$result= postSMS($http,$data);			//POST方式提交
+	
+	$postData = array
+    (
+    'type'=>'send',
+    'username'=>$username,   
+    'password'=>$password,   
+    'gwid'=>$gwid, 
+    'mobile'=>$mobile,
+    'message'=>$message
+    );
+ 
+$url="http://jk.106api.cn/smsUTF8.aspx";
+	
+//	$http = 'http://jk.106api.cn/smsGBK.aspx?';
+//	$data = array
+//		(
+//		'type'=>'Send',
+//		'username'=>$cusername,	//用户账号
+//		'password'=>$cpassword,	
+//	    'gwid'=>$cgwid,		//企业ID
+//		'mobile'=>$cmobile,	//号码
+//		'message'=>$cmessage 	//内容
+//		
+//		);
+	$result= postSMS($url,$postData);			//POST方式提交
 	return $result;
 	//判断$result 返回值
 }
 
-function postSMS($url,$data='')
+function postSMS($url,$postData)
 {
+//  print_r($url);
     $row = parse_url($url);
     $host = $row['host'];
     $port = isset($row['port']) ? $row['port']:80;
     $file = $row['path'];
     $post = "";
-    while (list($k,$v) = each($data)) 
+    while (list($k,$v) = each($postData)) 
     {
         $post .= rawurlencode($k)."=".rawurlencode($v)."&"; 
     }
@@ -58,7 +72,10 @@ function postSMS($url,$data='')
             $receive .= fgets($fp, 128);
         }
         fclose($fp);
+
         $receive = explode("\r\n\r\n",$receive);
+        print_r($receive);
+        
         unset($receive[0]);
         return implode("",$receive);
     }

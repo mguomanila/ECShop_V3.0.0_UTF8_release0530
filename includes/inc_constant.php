@@ -24,7 +24,7 @@ define('YD', false);
 /* sendSMS短信信息 */
 define('SMS_NAME', '243559568');
 define('SMS_PWD', '137935DD6F982EC645FFEE023A5F5F55');
-define('SMS_ID', '64');
+define('SMS_ID', 'b6b63ee');
 
 
 /* 图片处理相关常数 */

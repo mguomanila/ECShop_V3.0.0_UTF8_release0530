@@ -74,8 +74,8 @@ class IndexController extends CommonController {
         if (IS_AJAX) {
             $type = I('get.type');
             $start = $_POST['last'];
-            $limit = $_POST['amount'];
-
+            $limit = $_GET['amount'];
+//print_r($limit);
             $hot_goods = model('Index')->goods_list($type, $limit, $start);
 
             

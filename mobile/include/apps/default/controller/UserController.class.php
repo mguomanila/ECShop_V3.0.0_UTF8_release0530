@@ -53,9 +53,26 @@ class UserController extends CommonController {
         }
 		$info['vr_go']=$info['vr_points']+$info['gold'];
 		$info['int']=$info['integral']+$info['pay_points_2'];
+//		print_r($info);
         $this->info=$info;
         // 如果是显示页面，对页面进行相应赋值
         assign_template();
+        $sql = "SELECT * FROM ". M()->pre ."users WHERE user_id = '$_SESSION[user_id]'";
+    	$reg_time = M()->getRow($sql);
+    	$star=mktime(0,0,0,4,1,2017);
+//          	echo $star;exit();
+    	$end =mktime(24,59,59,6,30,2017);
+    	if($reg_time['reg_time'] > $star && $reg_time['reg_time']<$end && $reg_time['is_reg_a'] == 0){
+    		model('ClipsBase')->log_account_change($reg_time['user_id'],8.88,0,0,0,'注册送红包');
+    		$sql = "UPDATE ". M()->pre ."users SET is_reg_a = 1 WHERE user_id = '$reg_time[user_id]'";
+        	M()->query($sql);
+    	}else{
+    		$sql = "UPDATE ". M()->pre ."users SET is_reg_a = 1 WHERE user_id = '$reg_time[user_id]'";
+        	M()->query($sql);
+    	}
+        $this->assign('star', $star);
+        $this->assign('end', $end);
+    	
         $this->assign('action', $this->action);
         $this->assign('info', $info);
 
@@ -1255,29 +1272,29 @@ class UserController extends CommonController {
         }
         elseif($surplus['process_type'] == 5){
         	
-        	$code=isset($_POST['mobile_code'])?$_POST['mobile_code']:'';
-        	$mobile_session=$_POST['session']?$_POST['session']:'';
-        	$user_info = model('Users')->get_profile($this->user_id);
-        	if(empty($code)){
-				$content='请输入验证码';
-                show_message($content, L('back_page_up'), '', 'info');
-        	}
-
-	    	if($code != $_SESSION[$mobile_session]['sms_code']){
-				$content='验证码错误';
-                show_message($content, L('back_page_up'), '', 'info');
-			}
-			if(time() - $_SESSION[$mobile_session]['sms_time'] >300000){
-				$content='验证码已过期';
-                show_message($content, L('back_page_up'), '', 'info');
-			}
-	    	if($_SESSION[$mobile_session]['mobile_phone'] != $user_info['mobile_phone']){
-	    		$content='手机号不正确';
-	    		show_message($content, L('back_page_up'), '', 'info');
-			}
-			unset($_SESSION[$mobile_session]['sms_code']);
-			unset($_SESSION[$mobile_session]['sms_time']);
-			unset($_SESSION[$mobile_session]['mobile_phone']);
+//      	$code=isset($_POST['mobile_code'])?$_POST['mobile_code']:'';
+//      	$mobile_session=$_POST['session']?$_POST['session']:'';
+//      	$user_info = model('Users')->get_profile($this->user_id);
+//      	if(empty($code)){
+//				$content='请输入验证码';
+//              show_message($content, L('back_page_up'), '', 'info');
+//      	}
+//
+//	    	if($code != $_SESSION[$mobile_session]['sms_code']){
+//				$content='验证码错误';
+//              show_message($content, L('back_page_up'), '', 'info');
+//			}
+//			if(time() - $_SESSION[$mobile_session]['sms_time'] >300000){
+//				$content='验证码已过期';
+//              show_message($content, L('back_page_up'), '', 'info');
+//			}
+//	    	if($_SESSION[$mobile_session]['mobile_phone'] != $user_info['mobile_phone']){
+//	    		$content='手机号不正确';
+//	    		show_message($content, L('back_page_up'), '', 'info');
+//			}
+//			unset($_SESSION[$mobile_session]['sms_code']);
+//			unset($_SESSION[$mobile_session]['sms_time']);
+//			unset($_SESSION[$mobile_session]['mobile_phone']);
 
         	
             /* 判断是否有足够的余额的进行退款的操作 */
@@ -2961,6 +2978,34 @@ class UserController extends CommonController {
             $sel_question = empty($_POST['sel_question']) ? '' : compile_str($_POST['sel_question']);
             $passwd_answer = isset($_POST['passwd_answer']) ? compile_str(trim($_POST['passwd_answer'])) : '';
 
+			$code=isset($_POST['code'])?$_POST['code']:'';
+        	$mobile_session=$_POST['session']?$_POST['session']:'';
+
+        	if(empty($code)){
+				$content='请输入验证码';
+                show_message($content, L('back_page_up'), '', 'info');
+        	}
+
+	    	if($code != $_SESSION[$mobile_session]['sms_code']){
+				$content='验证码错误';
+                show_message($content, L('back_page_up'), '', 'info');
+			}
+			if(time() - $_SESSION[$mobile_session]['sms_time'] >300000){
+				unset($_SESSION[$mobile_session]['sms_code']);
+			unset($_SESSION[$mobile_session]['sms_time']);
+			unset($_SESSION[$mobile_session]['mobile_phone']);
+				$content='验证码已过期';
+                show_message($content, L('back_page_up'), '', 'info');
+			}
+			if($other['mobile_phone'] != $_SESSION[$mobile_session]['mobile_phone']){
+				$content='手机号与验证码不匹配';
+                show_message($content, L('back_page_up'), '', 'info');
+			}
+			unset($_SESSION[$mobile_session]['sms_code']);
+			unset($_SESSION[$mobile_session]['sms_time']);
+			unset($_SESSION[$mobile_session]['mobile_phone']);
+
+
 			
 			$sql = 'SELECT * FROM ' . M()->pre . 'reg_fields' . " WHERE reg_field_name = '身份证号码'  AND display = 1 AND is_need = 1";
 
@@ -3076,6 +3121,7 @@ class UserController extends CommonController {
             }
             
             if (model('Users')->register($username, $password, $email, $other) !== false) {
+            	
                 /*把新注册用户的扩展信息插入数据库*/
                 $sql = 'SELECT id,is_need,reg_field_name FROM ' . M()->pre . 'reg_fields' . ' WHERE  display = 1 ORDER BY dis_order, id';   //读出所有自定义扩展字段的id
                 $fields_arr = M()->query($sql);
@@ -3301,7 +3347,7 @@ class UserController extends CommonController {
 		
     	$content="【成都沃尔迅科技有限公司】你好，您的短信验证码是".$sms_code."，请您及时输入，短信5分钟内有效。";
     	$message = iconv("UTF-8","GB2312",$content);
-    	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$message);
+    	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$content);
     	echo $re;
     }
     public function get_password_sms(){
