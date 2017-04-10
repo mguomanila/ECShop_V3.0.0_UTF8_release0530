@@ -93,6 +93,7 @@ if (in_array($action, $ui_arr))
 if ($action == 'default')
 {
     include_once(ROOT_PATH .'includes/lib_clips.php');
+    
     if ($rank = get_rank_info())
     {
         $smarty->assign('rank_name', sprintf($_LANG['your_level'], $rank['rank_name']));
@@ -104,6 +105,25 @@ if ($action == 'default')
     $share_id='W20161111'.$user_id;
     $smarty->assign('share_id',        $share_id);
     $smarty->assign('info',        get_user_default($user_id));
+    
+    $sql = "SELECT * FROM ". $ecs->table('users') . " WHERE user_id = '$user_id'";
+        	$reg_time = $db->getRow($sql);
+
+        	$star=mktime(0,0,0,4,1,2017);
+
+        	$end =mktime(24,59,59,6,30,2017);
+        	if($reg_time['reg_time'] > $star && $reg_time['reg_time']<$end && $reg_time['is_reg_a'] == 0){
+        		log_account_change($reg_time['user_id'],8.88,0,0,0,'注册送红包');
+        		$sql = "UPDATE ". $ecs->table('users') ." SET is_reg_a = 1 WHERE user_id = '$reg_time[user_id]'";
+        		$db->query($sql);
+        	}else{
+        		$sql = "UPDATE ". $ecs->table('users') ." SET is_reg_a = 1 WHERE user_id = '$reg_time[user_id]'";
+        		$db->query($sql);
+        	}
+        	
+    $smarty->assign('end',        $end);
+    $smarty->assign('star',        $star);
+    
     $smarty->assign('user_notice', $_CFG['user_notice']);
     $smarty->assign('prompt',      get_user_prompt($user_id));
     $smarty->display('user_clips.dwt');
@@ -174,6 +194,30 @@ elseif ($action == 'act_register')
 		if(!empty($arr)){
         		show_message('手机号已存在');
 		}
+		
+		$session = isset($_POST['session']) ? $_POST['session'] : '';
+		$mobile_code = isset($_POST['code']) ? $_POST['code'] : '';
+		if($mobile_code==false){
+			show_message('请输入验证码', $_LANG['back_page_up'], '', 'error');
+		}
+		if($mobile_code != $_SESSION[$session]['sms_code']){
+			show_message('验证码错误', $_LANG['back_page_up'], '', 'error');
+		}
+		if(time() - $_SESSION[$session]['sms_time'] >300000){
+			unset($_SESSION[$session]['sms_code']);
+			unset($_SESSION[$session]['sms_time']);
+			unset($_SESSION[$session]['mobile_phone']);
+			
+			show_message('验证码已过期', $_LANG['back_page_up'], '', 'error');
+		}
+		if($other['mobile_phone'] != $_SESSION[$session]['mobile_phone']){
+			
+			show_message('手机号与验证码不匹配', $_LANG['back_page_up'], '', 'error');
+		}
+		unset($_SESSION[$session]['sms_code']);
+		unset($_SESSION[$session]['sms_time']);
+			unset($_SESSION[$session]['mobile_phone']);
+		
 		$sql = 'SELECT * FROM ' . $ecs->table('reg_fields') . " WHERE reg_field_name = '身份证号码' AND display = 1 AND is_need = 1";
     	if($extend_info_list = $db->getRow($sql))
 		{
@@ -246,6 +290,7 @@ elseif ($action == 'act_register')
 
         if (register($username, $password, $email, $other) !== false)
         {
+        	
             /*把新注册用户的扩展信息插入数据库*/
             $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有自定义扩展字段的id
             $fields_arr = $db->getAll($sql);
@@ -815,7 +860,7 @@ elseif($action == 'get_code_sms'){
 	
 	$content="【成都沃尔迅科技有限公司】你好，您的短信验证码是".$sms_code."，请您及时输入，短信5分钟内有效。";
 	$message = iconv("UTF-8","GB2312",$content);
-	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$message);
+	$re=sendSMS(SMS_NAME,SMS_PWD,SMS_ID,$mobile_phone,$content);
 //	echo $re;
 }
 /* 密码找回-->根据提交的手机验证码进行相应处理 */

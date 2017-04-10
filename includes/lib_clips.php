@@ -741,7 +741,7 @@ function get_user_default($user_id)
 {
     $user_bonus = get_user_bonus();
 
-    $sql = "SELECT user_type,vip_type,gold,love,vr_points, pay_points,pay_points_2, user_money, credit_line, last_login, is_validated FROM " .$GLOBALS['ecs']->table('users'). " WHERE user_id = '$user_id'";
+    $sql = "SELECT is_reg_a,reg_time,user_type,vip_type,gold,love,vr_points, pay_points,pay_points_2, user_money, credit_line, last_login, is_validated FROM " .$GLOBALS['ecs']->table('users'). " WHERE user_id = '$user_id'";
     $row = $GLOBALS['db']->getRow($sql);
     $info = array();
     $info['username']  = stripslashes($_SESSION['user_name']);
@@ -749,7 +749,8 @@ function get_user_default($user_id)
 	$info['vr_points']  = $row['vr_points'];
 	$info['gold']  = $row['gold'];
 	$info['vr_go']=$info['gold']+$info['vr_points'];
-	
+	$info['reg_time'] =$row['reg_time']  ;
+        $info['is_reg_a'] =$row['is_reg_a']  ;
 	$info['love']  = $row['love'];
     $info['integral']  = $row['pay_points'] ;
     $info['integral_2']  = $row['pay_points_2'] ;

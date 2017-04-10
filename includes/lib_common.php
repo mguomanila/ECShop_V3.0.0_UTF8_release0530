@@ -76,10 +76,12 @@ function is_telephone($phone){
 
 function sendSMS($cusername,$cpassword,$cgwid,$cmobile,$cmessage)
 {
-	$http = 'http://api.106txt.com/smsGBK.aspx?';
+//	$http = 'http://api.106txt.com/smsGBK.aspx?';
+$http="http://jk.106api.cn/smsUTF8.aspx";
+	
 	$data = array
 		(
-		'action'=>'Send',
+		'type'=>'send',
 		'username'=>$cusername,	//用户账号
 		'password'=>$cpassword,	
 	    'gwid'=>$cgwid,		//企业ID
@@ -92,14 +94,14 @@ function sendSMS($cusername,$cpassword,$cgwid,$cmobile,$cmessage)
 	//判断$result 返回值
 }
 
-function postSMS($url,$data='')
+function postSMS($url,$postData='')
 {
     $row = parse_url($url);
     $host = $row['host'];
     $port = isset($row['port']) ? $row['port']:80;
     $file = $row['path'];
     $post = "";
-    while (list($k,$v) = each($data)) 
+    while (list($k,$v) = each($postData)) 
     {
         $post .= rawurlencode($k)."=".rawurlencode($v)."&"; 
     }
@@ -121,7 +123,10 @@ function postSMS($url,$data='')
             $receive .= fgets($fp, 128);
         }
         fclose($fp);
+
         $receive = explode("\r\n\r\n",$receive);
+        print_r($receive);
+        
         unset($receive[0]);
         return implode("",$receive);
     }

@@ -500,4 +500,10 @@ copyToClipboard = function(txt)
 var {$key} = "{$item}";
 {/foreach}
 </script>
+<script type="text/javascript">
+{if $info.reg_time > $star && $info.reg_time < $end && $info.is_reg_a eq 0}
+	var hongbao='自2017年4月1日起所有加入沃尔迅易购商城的会员都将享受免费注册，注册成功后沃尔迅易购商城赠送8.88元人民币的红包，以个人后台余额呈现，到2017年6月30日止。';
+	alert(hongbao)
+	{/if}
+</script>
 </html>

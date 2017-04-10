@@ -281,13 +281,14 @@
     })
 </script>
 <script type="text/javascript" src="js/alertPopShow.js"></script>
-<!--<script type="text/javascript">
+<script type="text/javascript">
 //	$(function(){
 //		$('#demo2').on('click', function(){
+	{if $info.reg_time > $star && $info.reg_time < $end && $info.is_reg_a eq 0}
 			var neirong='欢迎登陆沃尔迅积分奖励系统，在本商城消费的商品都将以金元宝的形式回赠到您的个人账户</br>系统规则：</br>1：购买多少金额的商品系统即回赠相应比例的金元宝到您的个人账户</br>2：用户获得的金元宝将每天按照万分之六左右的比例兑换成金积分，1金积分=1元</br>3：金积分可用于商城购买商品消费</br>4：提现会扣除相应金额的6%【税收及相关:手续费】</br>5：用户购买商品回赠的金元宝都将扣除千分之五作为爱心公益基金捐助';
 			var fangjia='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;亲爱的会员们,你们好,由于我司春节期间员工放假时间为2017年01月21日至2017年02月05日,在此期间您的提现申请暂停操作,至2017年02月06日起恢复正常提现操作。</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	若您近期有提现需求,请在本周五（1月20日）中午12:00前提交申请,当日可完成提现交易,逾期则要顺延到年后处理。</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期间给您带来的不便,敬请谅解!沃尔迅易购领导携全体员工祝您节日快乐,身体健康!<p style="text-align: right;"></br>成都沃尔迅科技有限公司</br>2017年01月18日</p>	';
-
-			popTipShow.alert('关于春节假日期间会员提现操作暂停公告',fangjia, ['知道了'],
+			var hongbao='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自2017年4月1日起所有加入沃尔迅易购商城的会员都将享受免费注册，注册成功后沃尔迅易购商城赠送8.88元人民币的红包，以个人后台余额呈现，到2017年6月30日止。';
+			popTipShow.alert('注册新用户送红包',hongbao, ['领取'],
 				function(e){
 				  //callback 处理按钮事件		  
 				  var button = $(e.target).attr('class');
@@ -300,10 +301,10 @@
 				}
 			);
 			$("body").css({"overflow":"hidden","position":"fixed","top":"0"})
-			
+		{/if}
 //	   });
 //	})
-</script>-->
+</script>
 
 
 <script type="text/javascript">

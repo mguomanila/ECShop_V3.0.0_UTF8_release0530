@@ -225,11 +225,11 @@
     	
     	<li>
         <div class="input-text"><b class="pull-left" ><?php echo $this->_var['field']['reg_field_name']; ?>：</b><span>
-          <input name="extend_field<?php echo $this->_var['field']['id']; ?>" id="extend_field<?php echo $this->_var['field']['id']; ?>" class="bank "  type="text" placeholder="<?php echo $this->_var['field']['reg_field_name']; ?>"  value="<?php echo $this->_var['field']['content']; ?>">
+          <input name="extend_field<?php echo $this->_var['field']['id']; ?>" id="extend_field<?php echo $this->_var['field']['id']; ?>" class="bank ccc" readonly type="text" placeholder="<?php echo $this->_var['field']['reg_field_name']; ?>"  value="<?php echo $this->_var['field']['content']; ?>">
          </span></div>
       </li>
       <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
-      <!--<p style="position: relative;z-index: 100;display: block;width: 100%;text-align: right;float: left;margin-top: 15px;" class="exph2">绑定银行账户</p>-->
+      <p style="position: relative;z-index: 100;display: block;width: 100%;text-align: right;float: left;margin-top: 15px;" class="exph2">绑定银行账户</p>
 
       
       <!--<input type="" name="bank_code" id="bank_code" value="" />-->
