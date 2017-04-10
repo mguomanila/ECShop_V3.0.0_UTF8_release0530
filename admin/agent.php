@@ -1069,7 +1069,13 @@ function getUserAgent($address_next,$start_time,$end_time,$username){
 			$address_next[$k]['reg_time'] = date('Y-m-d',$v['reg.time']);						
 		}
 	}
-
+	if($username){
+			foreach($address_next as $key=>$val){
+				if($val['amount'] == NULL){
+					$address_next[$key] = '';
+				}
+			}
+		}
 	$address_next_agent['next'] = $address_next;
 	$address_next_agent['total_money'] =$address_info['total_money'];
 	
