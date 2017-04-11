@@ -51,7 +51,9 @@
 		<input type="submit" value="{$lang.button_search}" />&nbsp;&nbsp;&nbsp;&nbsp;
 	总金额：{if $address_info.total_money == null} 0 {else} {$address_info.total_money} {/if}
 	&nbsp;&nbsp;&nbsp;&nbsp;
+
 	</form>
+
 
 	<div style="float:right;width:10%">
 		分页：<input type="text" id="page" value="20" onchange="pagedata(this)" style="width:50%"/>
@@ -108,12 +110,12 @@
 			  <a href="javascript:listTable.sort('user_id'); ">{$lang.record_id}</a>{$sort_user_id}
 			</th>
 			<th><a href="javascript:listTable.sort('user_name'); ">{$lang.username}</a>{$sort_user_name}</th>
-			<th><a href="javascript:listTable.sort('email'); ">{$lang.email}</a>{$sort_email}</th> 
+			
 			<th>{$lang.user_money}</th>
 			<th><a href="javascript:listTable.sort('reg_time'); ">{$lang.reg_date}</a>{$sort_reg_time}</th>
 			<th>{$lang.consumption_sum}</th>
 			<th>{$lang.adress_sum}</th>
-			<th><a href="javascript:listTable.sort('is_validated'); ">{$lang.is_validated}</a>{$sort_is_validate}</th>
+			
 	    </tr>
 	    </tbody>
 	    <tbody id="idData">
@@ -121,12 +123,12 @@
 	    <tr>
 			<td><input type="checkbox" name="checkboxes[]" value="{$user.user_id}" notice="{if $user.user_money ne 0}1{else}0{/if}"/>{$user.user_id}</td>
 			<td class="first-cell">{$user.user_name|escape}</td>
-			<td><span onclick="listTable.edit(this, 'edit_email', {$user.user_id})">{$user.email}</span></td>	 
+			
 			<td>{$user.user_money}</td>
 			<td align="center">{$user.reg_time}</td>
 			<td align="center">{if $user.amount == null} 0 {else} {$user.amount} {/if}</td>
 			<td align="center">{$user.address}</td>	
-			<td align="center"><a href="javascript:void()" onclick="onagent(this)" >{if $user.user_type==2 or $user.user_type==3}<img src="images/yes.gif">{else} <img src="images/no.gif">{/if} </a ></td>
+			
 	    </tr>
 		{foreachelse}
 		<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr> 

@@ -18,6 +18,7 @@ define('IN_ECS', true);
 require(dirname(__FILE__) . '/includes/init.php');
 /*加载自己封装的函数库*/
 include_once(ROOT_PATH."includes/lib_db.php");
+
 /*------------------------------------------------------ */
 //-- 用户帐号列表
 /*------------------------------------------------------ */
@@ -77,6 +78,7 @@ if ($_REQUEST['act'] == 'list')
 			}	
 			
 		}
+		
 
 		$user_list['user_list'] = arraySequence(array_filter($user_list['user_list']),'amount');
 		$smarty->assign('address_info',    $address_info);
