@@ -61,17 +61,23 @@ if ($_REQUEST['act'] == 'list')
 		foreach($user_list['user_list'] as $key=>$val)
 		{
 			$where_money = " WHERE user_id='".$val['user_id']."' and process_type='3' and is_paid='1'";
+			
 			$subtotal = getAgentMoney("ecs_user_account",$where_money);	
+			
 			$address_info['total_money'] += $subtotal['total'];
+			
 			$user_list['user_list'][$key]['address'] = getAgentAddress(trim($val['province']),trim($val['city']),trim($val['area']));	
-			if($subtotal['subtotal'] != null){
+			
+			if($subtotal['subtotal'] != null)
+			{
 				$user_list['user_list'][$key]['amount'] = $subtotal['subtotal'];
+				
 			}else{
 				$user_list['user_list'][$key] = '';
 			}	
 			
 		}
-
+		//var_dump($user_list['user_list']);exit;
 		$smarty->assign('address_info',    $address_info);
 		$smarty->assign('user_list',    array_filter($user_list['user_list']));	
 		$smarty->assign('pageHtml','agent_list.htm');		
@@ -124,7 +130,8 @@ if ($_REQUEST['act'] == 'list')
 			$area = $db->getAll($sql);
 		}
 		$agent_where_address = $agent_where;
-		if($username){
+		if($username)
+		{
 			$agent_where_address = " WHERE 1 and user_name like '%".$username."%'";
 		}
 		//查询用户信息
@@ -1001,7 +1008,7 @@ function user_list()
         /* 分页大小 */
         $filter = page_and_size($filter);
         
-			$sql = "SELECT pay_points_2,user_id, user_name, email, user_money, frozen_money, rank_points, pay_points, reg_time,province,city,area".
+			$sql = "SELECT pay_points_2,user_id, user_name, email, user_money, frozen_money, rank_points, pay_points, reg_time,province,city,area,user_type".
                 " FROM " . $GLOBALS['ecs']->table('users') . $ex_where .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'];
 		
