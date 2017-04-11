@@ -77,7 +77,8 @@ if ($_REQUEST['act'] == 'list')
 			}	
 			
 		}
-		//var_dump($user_list['user_list']);exit;
+
+		$user_list['user_list'] = arraySequence(array_filter($user_list['user_list']),'amount');
 		$smarty->assign('address_info',    $address_info);
 		$smarty->assign('user_list',    array_filter($user_list['user_list']));	
 		$smarty->assign('pageHtml','agent_list.htm');		
@@ -1068,7 +1069,7 @@ function getUserAgent($address_next,$start_time,$end_time,$username){
 					$account_where .= " and add_time <='".$end_time."'";
 				}
 			}
-			$account_where .= " and user_id = '".$v['user_id']."'";
+			$account_where .= " and user_id = '".$v['user_id']."' ORDER BY amount desc";
 			$subtotal = getAgentMoney("ecs_user_account",$account_where);	
 			$address_next[$k]['amount'] = $subtotal['subtotal'];
 			$address_info['total_money'] += $subtotal['total'];
@@ -1076,13 +1077,9 @@ function getUserAgent($address_next,$start_time,$end_time,$username){
 			$address_next[$k]['reg_time'] = date('Y-m-d',$v['reg.time']);						
 		}
 	}
-	if($username){
-			foreach($address_next as $key=>$val){
-				if($val['amount'] == NULL){
-					$address_next[$key] = '';
-				}
-			}
-		}
+
+	$address_next = arraySequence($address_next,'amount');
+	
 	$address_next_agent['next'] = $address_next;
 	$address_next_agent['total_money'] =$address_info['total_money'];
 	
