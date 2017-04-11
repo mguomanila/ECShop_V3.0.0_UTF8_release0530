@@ -43,6 +43,12 @@
         &nbsp;&nbsp;时间起点&nbsp;&nbsp;<input name="start_time" type="text" id="start_time" size="10" value='{if $start_time}{$start_time}{/if}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
       
         &nbsp;&nbsp;时间末点&nbsp;&nbsp;<input name="end_time" type="text" id="end_time" size="10" value='{if $end_time}{$end_time}{/if}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>
+    &nbsp;&nbsp;选择操作&nbsp;&nbsp;<select name="time">
+    	<option value="0" selected="selected">申请时间</option>
+    	<option value="1">操作时间</option>
+    	
+    </select>
+    
      &nbsp;&nbsp;求和&nbsp;&nbsp;<input type="checkbox" id="xuanzhong1" name="sum" value="0" onchange="xuanzhong(this)"   disabled="disabled"/>
 <select name="stub_status" id="stub_status"  disabled="disabled">
         <option value="-1">票据审核</option>
@@ -170,6 +176,8 @@ function searchUser()
     listTable.filter['start_time'] = document.forms['searchForm'].elements['start_time'].value;
     listTable.filter['end_time'] = document.forms['searchForm'].elements['end_time'].value;
     listTable.filter['sum'] = document.forms['searchForm'].elements['sum'].value;
+    listTable.filter['time'] = document.forms['searchForm'].elements['time'].value;
+
     listTable.filter['payment'] = Utils.trim(document.forms['searchForm'].elements['payment'].value);
     listTable.filter['stub_status'] = Utils.trim(document.forms['searchForm'].elements['stub_status'].value);
     

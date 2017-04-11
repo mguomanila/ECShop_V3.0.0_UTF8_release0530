@@ -858,6 +858,7 @@ function account_list()
 		}
         $filter['process_type'] = isset($_REQUEST['process_type']) ? intval($_REQUEST['process_type']) : -1;
         $filter['user_type'] = isset($_REQUEST['user_type']) ? intval($_REQUEST['user_type']) : -1;
+        $filter['time'] = isset($_REQUEST['time']) ? intval($_REQUEST['time']) : 0;
         
         $filter['payment'] = empty($_REQUEST['payment']) ? '' : trim($_REQUEST['payment']);
         $filter['is_paid'] = isset($_REQUEST['is_paid']) ? intval($_REQUEST['is_paid']) : -1;
@@ -890,13 +891,17 @@ function account_list()
 
         	$where .= " AND ua.stub_status = $filter[stub_status] AND ua.stub_img <> '' ";
         }
+        $time_type = 'ua.add_time';
+        if($filter['time'] != 0){
+        	$time_type = 'ua.paid_time';
+        }
         if(!empty($filter['start_time']) )
         {
-        	$where .= " AND ua.add_time >= '$filter[start_time]' ";
+        	$where .= " AND $time_type >= '$filter[start_time]' ";
         }
         if(!empty($filter['end_time']) )
         {
-        	$where .= " AND ua.add_time < '$filter[end_time]' ";
+        	$where .= " AND $time_type < '$filter[end_time]' ";
         }
         if ($filter['payment'])
         {
