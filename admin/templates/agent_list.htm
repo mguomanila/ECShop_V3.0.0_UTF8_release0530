@@ -61,18 +61,6 @@
 	</div>
 	
   <script type="text/javascript">
-  	function jiechu(obj){
-     	if($(obj).val() == '2'){
-     		$("#job").removeAttr('disabled');
-     	}else{
-				$("#job").removeAttr('checked')
-     		$("#job").val(1);
-     		$("#job").attr('disabled','');
-     	}
-    }
-
-  </script>
-  <script type="text/javascript">
 	function show_sub(){
 		var province = $('#province').val();
 		Ajax.call('agent.php?act=agent_select','province='+province,stylesheetFun,'GET','json',true,true);
@@ -149,7 +137,8 @@
 </form>
 <script type="text/javascript" language="JavaScript">
 <!--
-
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
 
 {foreach from=$filter item=item key=key}
 listTable.filter.{$key} = '{$item}';

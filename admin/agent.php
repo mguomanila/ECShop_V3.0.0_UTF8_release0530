@@ -62,9 +62,6 @@ if ($_REQUEST['act'] == 'list')
 
 	$user_agent = getUserAgentList($res);
 	$_SESSION['user_agent'] = $user_agent['user_agent'];
-
-
-
 	$smarty->assign('city',   $city);
 	$smarty->assign('area',   $area);
 	
@@ -1058,7 +1055,7 @@ function getUserListExcel()
 		
 		if($user_agent_info == null)
 		{
-			die("<script> alert('用户名输入无效，请重新输入');window.history.go(-1); </script>");
+			die("<script> alert('没有找到该用户名，请重新输入');window.history.go(-1); </script>");
 		}
 
 		//查询下一级	
