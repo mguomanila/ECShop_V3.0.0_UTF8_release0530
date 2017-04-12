@@ -54,7 +54,7 @@
 	&nbsp;&nbsp;&nbsp;&nbsp;
 	</form>
 	
-	<a href="agent.php?act=outExcel&status={$status}" style="float: left;width:5%;line-height: 23px;">导出excel</a>
+	<a href="javascript:void(0)" onclick="excelAgent()" style="float: left;width:5%;line-height: 23px;">导出excel</a>
 
 	<div style="float:right;width:10%">
 		分页：<input type="text" id="page" value="20" onchange="pagedata(this)" style="width:50%"/>
@@ -80,6 +80,14 @@
 				$("#area").append("<option value='" + item.areaID + "'>" + item.area + "</option>");  
 			});
 		}
+	}
+	
+	function excelAgent(){
+		if(confirm('你确定要将该页面的数据导出到excel中吗?')){
+			location='agent.php?act=outExcel&status={$status}';
+		}else{
+             window.history.go(-1);
+        }
 	}
 	
   </script>
