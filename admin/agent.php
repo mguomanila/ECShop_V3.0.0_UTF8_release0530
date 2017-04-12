@@ -41,7 +41,7 @@ if ($_REQUEST['act'] == 'list')
     {
         $user_type[$i] = $_LANG['user_type'][$i];
     }
-    
+  
 	//查询省
 	$sql = "SELECT * from ".$ecs->table('province');
 	$province = get_province($sql);
@@ -57,119 +57,22 @@ if ($_REQUEST['act'] == 'list')
 	$smarty->assign('is_bind_crm',  $is_bind_crm);
 	$smarty->assign('full_page',    1);
 	$smarty->assign('sort_user_id', '<img src="images/sort_desc.gif">');
-	if(empty($_POST))
-	{
-		foreach($user_list['user_list'] as $key=>$val)
-		{
-			$where_money = " WHERE user_id='".$val['user_id']."' and process_type='3' and is_paid='1'";
-			
-			$subtotal = getAgentMoney("ecs_user_account",$where_money);	
-			
-			$address_info['total_money'] += $subtotal['total'];
-			
-			$user_list['user_list'][$key]['address'] = getAgentAddress(trim($val['province']),trim($val['city']),trim($val['area']));	
-			
-			if($subtotal['subtotal'] != null)
-			{
-				$user_list['user_list'][$key]['amount'] = $subtotal['subtotal'];
-				
-			}else{
-				$user_list['user_list'][$key] = '';
-			}	
-			
-		}
 		
+	$res = empty($_POST) ? 0 : 1;
 
-		$user_list['user_list'] = arraySequence(array_filter($user_list['user_list']),'amount');
-		$smarty->assign('address_info',    $address_info);
-		$smarty->assign('user_list',    array_filter($user_list['user_list']));	
-		$smarty->assign('pageHtml','agent_list.htm');		
-		$smarty->display('agent_list.htm');	
-	}
-	else
-	{
-		$username = empty($_POST['keyword']) ? '' : $_POST['keyword'];
-		$province_p = empty($_POST['province']) ? '' : intval($_POST['province']);		
-		$city_p = empty($_POST['city']) ? '' : intval($_POST['city']);
-		$area_p = empty($_POST['area']) ? '' : intval($_POST['area']);
-		$start_time = empty($_POST['start_time']) ? '' : intval(strtotime($_POST['start_time']));
-		$end_time = empty($_POST['end_time']) ? '' : intval(strtotime($_POST['end_time']));
-		$user_type = empty($_POST['user_type']) ? '' : intval($_POST['user_type']);
-		$order = " order by user_id DESC";
-		
-		if($end_time < $start_time)
-		{
-			die("<script> alert('结束时间不能小于开始时间，请重新输入');window.history.go(-1); </script>");
-		}	
-		if($start_time && $end_time){
-			$address_info['start_time'] = date('Y-m-d H:i:s',$start_time);
-			$address_info['end_time'] = date('Y-m-d H:i:s',$end_time);
-		}
-		$filed = "pay_points_2,user_id, user_name, email, user_money, frozen_money, rank_points, pay_points, reg_time,province,city,area,user_type";
-		
-		$agent_where = " WHERE 1";
-		if($username){
-			$agent_where .= " and user_name like '%".$username."%'";
-		}
+	$user_agent = getUserAgentList($res);
+	$_SESSION['user_agent'] = $user_agent['user_agent'];
 
-		if($user_type){
-			$agent_where .= " and user_type = '".$user_type."'";
-			$address_info['user_type'] = $user_type;
-		}		
-		if($province_p){
-			$agent_where .= " and province = '".$province_p."'";
-			$address_info['province'] = $province_p;
-		}
-		if($city_p){
-			$agent_where .= " and city = '".$city_p."'";
-			$address_info['city'] = $city_p;
-			$sql = "SELECT * from ".$ecs->table('city');
-			$city = $db->getAll($sql);
-		}
-		if($area_p){
-			$agent_where .= " and area = '".$area_p."'";
-			$address_info['area'] = $area_p;
-			$sql = "SELECT * from ".$ecs->table('area');
-			$area = $db->getAll($sql);
-		}
-		$agent_where_address = $agent_where;
-		if($username)
-		{
-			$agent_where_address = " WHERE 1 and user_name like '%".$username."%'";
-		}
-		//查询用户信息
-		$sql = "SELECT $filed from ".$ecs->table('users').$agent_where_address.$order;
-		$user_agent_info = $db->getAll($sql);	
-			
-		//查询下一级	
-		if($username){
-			foreach($user_agent_info as $val){
-				$agent_where .= " and parent_id = '".$val['user_id']."'";
-				if($user_type && $username){
-					$agent_where_address = preg_replace("/and user_name like '%".$username."%'/",'',$agent_where);
-				}			
-				$agent_where = preg_replace("/and user_name like '%".$username."%'/",'',$agent_where);
-				$sql = "SELECT $filed from ".$ecs->table('users').$agent_where.$order;
-				$next_info = $db->getAll($sql);
-			}
-		}	
-		
-		if($next_info != null){
-			$user_agent_info = $next_info;
-		}
-		$userInfo = getUserAgent($user_agent_info,$start_time,$end_time,$username);
-		
-		$user_agent = $userInfo['next'];
-		$address_info['total_money'] = $userInfo['total_money'];			
-		assign_query_info();
-		$smarty->assign('city',   $city);
-		$smarty->assign('area',   $area);
 
-		$smarty->assign('agent_name', $username);
-		$smarty->assign('address_info',    $address_info);
-		$smarty->assign('user_list',    array_filter($user_agent));		
-		$smarty->display('agent_list.htm');		
-	}
+
+	$smarty->assign('city',   $city);
+	$smarty->assign('area',   $area);
+	
+	$smarty->assign('address_info',    $user_agent['total_money_price']);
+	$smarty->assign('agent_info',    $user_agent['address_info']);
+	$smarty->assign('user_list',    array_filter($user_agent['user_agent']));	
+	$smarty->assign('status',    $res);
+	$smarty->display('agent_list.htm');	
 
 }
 
@@ -929,7 +832,12 @@ elseif ($_REQUEST['act'] == 'agent_status')
    }
 }
 
-
+//导出excel
+elseif ($_REQUEST['act'] == 'outExcel')
+{
+	$user_agent_info = $_SESSION['user_agent'];
+	excelListInfo($user_agent_info);	
+}
 
 /**
  *  返回用户列表数据
@@ -1011,7 +919,7 @@ function user_list()
         /* 分页大小 */
         $filter = page_and_size($filter);
         
-			$sql = "SELECT pay_points_2,user_id, user_name, email, user_money, frozen_money, rank_points, pay_points, reg_time,province,city,area,user_type".
+			$sql = "SELECT user_id, user_name,  user_money,  reg_time,province,city,area,user_type".
                 " FROM " . $GLOBALS['ecs']->table('users') . $ex_where .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'];
 		
@@ -1038,6 +946,152 @@ function user_list()
 		
     return $arr;
 }
+
+//处理搜索信息
+function getUserAgentList($res){
+	
+	if($res == 1)
+	{	
+		$user_agent = getUserListExcel();
+
+		$total_money_price['total_money']	= 	$user_agent['total_money'];			
+		$user_agent['total_money_price'] = $total_money_price;	
+		
+		$user_agent_info['agent_info']	= 	$user_agent['address_info'];			
+		$user_agent['agent_info'] = $user_agent_info;
+	}
+	
+	if($res == 0)
+	{
+		$user_list = user_list();
+		$user_list_total = getUserListFunction($user_list['user_list']);
+		//金额排序
+		$user_agent['user_agent'] = arraySequence(array_filter($user_list_total['list']),'amount');
+		$user_agent['total_money_price'] = $user_list_total['total_money'];
+	}
+
+	return $user_agent;	
+}
+
+function getUserListFunction($user_list){
+	foreach($user_list as $key=>$val)
+		{
+			$where_money = " WHERE user_id='".$val['user_id']."' and process_type='3' and is_paid='1'";
+			
+			$subtotal = getAgentMoney("ecs_user_account",$where_money);	
+			
+			$address_info['total_money'] += $subtotal['total'];
+			
+			$user_list[$key]['address'] = getAgentAddress(trim($val['province']),trim($val['city']),trim($val['area']));	
+			
+			if($subtotal['subtotal'] != null)
+			{
+				$user_list[$key]['amount'] = $subtotal['subtotal'];
+				
+			}else{
+				$user_list[$key] = '';
+			}	
+			
+		}
+		$user_list_total['total_money'] = $address_info;
+		$user_list_total['list']   = $user_list;
+
+		return $user_list_total;
+}
+
+function getUserListExcel()
+{
+		$username = empty($_REQUEST['keyword']) ? '' : $_REQUEST['keyword'];
+		$province_p = empty($_REQUEST['province']) ? '' : intval($_REQUEST['province']);		
+		$city_p = empty($_REQUEST['city']) ? '' : intval($_REQUEST['city']);
+		$area_p = empty($_REQUEST['area']) ? '' : intval($_REQUEST['area']);
+		$start_time = empty($_REQUEST['start_time']) ? '' : intval(strtotime($_REQUEST['start_time']));
+		$end_time = empty($_REQUEST['end_time']) ? '' : intval(strtotime($_REQUEST['end_time']));
+		$user_type = empty($_REQUEST['user_type']) ? '' : intval($_REQUEST['user_type']);
+		$order = " order by user_id DESC";
+		
+		if($end_time < $start_time)
+		{
+			die("<script> alert('结束时间不能小于开始时间，请重新输入');window.history.go(-1); </script>");
+		}	
+		if($start_time && $end_time){
+			$address_info['start_time'] = date('Y-m-d H:i:s',$start_time);
+			$address_info['end_time'] = date('Y-m-d H:i:s',$end_time);
+		}
+		$filed = "pay_points_2,user_id, user_name, email, user_money, frozen_money, rank_points, pay_points, reg_time,province,city,area,user_type";
+		
+		$agent_where = " WHERE 1";
+		if($username)
+		{
+			$agent_where .= " and user_name like '%".$username."%'";
+			$address_info['username'] = $username;
+		}
+
+		if($user_type){
+			$agent_where .= " and user_type = '".$user_type."'";
+			$address_info['user_type'] = $user_type;
+		}		
+		if($province_p){
+			$agent_where .= " and province = '".$province_p."'";
+			$address_info['province'] = $province_p;
+		}
+		if($city_p){
+			$agent_where .= " and city = '".$city_p."'";
+			$address_info['city'] = $city_p;
+			$sql = "SELECT * from ecs_city";
+			$address_info['city_info'] = get_province($sql);
+		}
+		if($area_p){
+			$agent_where .= " and area = '".$area_p."'";
+			$address_info['area'] = $area_p;
+			$sql = "SELECT * from ecs_area";
+			$address_info['area_info'] = get_province($sql);
+		}
+		$agent_where_address = $agent_where;
+		if($username)
+		{
+			$agent_where_address = " WHERE 1 and user_name like '%".$username."%'";
+		}
+		
+		$sql = "SELECT $filed from ecs_users".$agent_where_address.$order;
+		$user_agent_info = get_province($sql);
+		
+		if($user_agent_info == null)
+		{
+			die("<script> alert('用户名输入无效，请重新输入');window.history.go(-1); </script>");
+		}
+
+		//查询下一级	
+		if($username){
+			foreach($user_agent_info as $val)
+			{
+				$agent_where .= " and parent_id = '".$val['user_id']."'";
+				
+				if($user_type && $username)
+				{
+					$agent_where_address = preg_replace("/and user_name like '%".$username."%'/",'',$agent_where);
+				}			
+				$agent_where = preg_replace("/and user_name like '%".$username."%'/",'',$agent_where);
+				$sql = "SELECT $filed from ecs_users".$agent_where.$order;
+				$next_info = get_province($sql);
+			}
+		}	
+		
+		if($next_info != null){
+			$user_agent_info = $next_info;
+		}
+
+		$userInfo = getUserAgent($user_agent_info,$start_time,$end_time,$username);
+		
+		$user_agent = $userInfo['next'];
+		$excel_agent['total_money'] = $userInfo['total_money'];
+
+		$excel_agent['address_info'] = $address_info;
+		$excel_agent['user_agent'] = $user_agent;
+		
+		return $excel_agent;
+}
+
 /**
  * 获得用户信息
  */
@@ -1059,15 +1113,19 @@ function get_assign_user_info($user,$code=''){
 }
 //计算总金额
 function getUserAgent($address_next,$start_time,$end_time,$username){
-	if(!empty($address_next)){
+	if(!empty($address_next))
+	{
 		foreach($address_next as $k=>$v)
 		{		
 			$account_where = " where 1 and process_type='3' and is_paid='1'";
-			if(! empty($start_time) && !empty($end_time)){
-				if($start_time){
+			if(! empty($start_time) && !empty($end_time))
+			{
+				if($start_time)
+				{
 					$account_where .= " and add_time >= '".$start_time."'";
 				}
-				if($end_time){
+				if($end_time)
+				{
 					$account_where .= " and add_time <='".$end_time."'";
 				}
 			}
@@ -1082,6 +1140,16 @@ function getUserAgent($address_next,$start_time,$end_time,$username){
 
 	$address_next = arraySequence($address_next,'amount');
 	
+	foreach($address_next as $key=>$val)
+	{
+		if($val['amount'] == NULL)
+		{
+			$val['amount'] = 0;
+		}
+		
+		$address_next[$key] = $val;
+	}
+
 	$address_next_agent['next'] = $address_next;
 	$address_next_agent['total_money'] =$address_info['total_money'];
 	
