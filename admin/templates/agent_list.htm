@@ -11,49 +11,50 @@
  </style>
 
 <div class="form-div" style="height:26px">
-  <form action="agent.php?act=list" name="searchForm" method="post" style="width:90%;float:left;">
-    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+	<form action="agent.php?act=list" name="searchForm" method="post" style="width:85%;float:left;">
+ 	  <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
     
       <select name="user_type">
-    	<option value="0" {if $address_info.user_type == 0 } selected {/if} >{$lang.usertype}</option>
-        <option value="1" {if $address_info.user_type == 1 } selected {/if} >{$lang.user_type_1}</option>
-        <option value="2" {if $address_info.user_type == 2 } selected {/if} >{$lang.user_type_2}</option>
-        <option value="3" {if $address_info.user_type == 3 } selected {/if} >{$lang.user_type_3}</option>
+    	<option value="0" {if $agent_info.user_type == 0 } selected {/if} >{$lang.usertype}</option>
+        <option value="1" {if $agent_info.user_type == 1 } selected {/if} >{$lang.user_type_1}</option>
+        <option value="2" {if $agent_info.user_type == 2 } selected {/if} >{$lang.user_type_2}</option>
+        <option value="3" {if $agent_info.user_type == 3 } selected {/if} >{$lang.user_type_3}</option>
       </select>
 	
-    &nbsp;{$lang.label_user_name} &nbsp;<input type="text" name="keyword" size="10" id="useragent" value="{$agent_name}"/> 
+    &nbsp;{$lang.label_user_name} &nbsp;<input type="text" name="keyword" size="10" id="useragent" value="{$agent_info.username}"/> 
     <label for=""><span></span>所在地区：</label>
 		<select name="province" id="province" onchange="show_sub(this.options[this.options.selectedIndex].value)">
 			<option value="0">请选择</option>
 			{foreach from=$province item=vo}
-			<option value="{$vo.provinceID}"} {if $vo.provinceID == $address_info.province} selected {else}  {/if}>{$vo.province}</option>
+			<option value="{$vo.provinceID}"} {if $vo.provinceID == $agent_info.province} selected {else}  {/if}>{$vo.province}</option>
 			{/foreach}
 		</select>
 
 		<select name="city" id="city" onchange="show_area(this.options[this.options.selectedIndex].value)">
 			<option value="0">请选择</option>
-			{foreach from=$city item=vo}
-			<option value="{$vo.cityID}" {if $vo.cityID == $address_info.city} selected {else}  {/if}>{$vo.city}</option>
+			{foreach from=$agent_info['city_info'] item=vo}
+			<option value="{$vo.cityID}" {if $vo.cityID == $agent_info.city} selected {else}  {/if}>{$vo.city}</option>
 			{/foreach}
 		</select>
 
 		<select name="area" id="area">
 			<option value="0">请选择</option>
-			{foreach from=$area item=vo}
-			<option value="{$vo.areaID}" {if $vo.areaID == $address_info.area} selected {else}  {/if}>{$vo.area}</option>
+			{foreach from=$agent_info['area_info'] item=vo}
+			<option value="{$vo.areaID}" {if $vo.areaID == $agent_info.area} selected {else}  {/if}>{$vo.area}</option>
 			{/foreach}
 		</select>
 		
 		<script type="text/javascript" src="./plugin/My97DatePicker/WdatePicker.js"></script>
-		开始时间：<input type="text" value="{$address_info.start_time}" name="start_time"  style="width:5%;margin-left:10px" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" >
-	    结束时间：<input type="text" value="{$address_info.end_time}" name="end_time" style="width:5%;margin-left:10px" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" >
+		开始时间：<input type="text" value="{$agent_info.start_time}" name="start_time"  style="width:5%;margin-left:10px" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" >
+	    结束时间：<input type="text" value="{$agent_info.end_time}" name="end_time" style="width:5%;margin-left:10px" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" >
 							
 		<input type="submit" value="{$lang.button_search}" />&nbsp;&nbsp;&nbsp;&nbsp;
 	总金额：{if $address_info.total_money == null} 0 {else} {$address_info.total_money} {/if}
+	{$status.res}
 	&nbsp;&nbsp;&nbsp;&nbsp;
-
 	</form>
-
+	
+	<a href="agent.php?act=outExcel&status={$status}" style="float: left;width:5%;line-height: 23px;">导出excel</a>
 
 	<div style="float:right;width:10%">
 		分页：<input type="text" id="page" value="20" onchange="pagedata(this)" style="width:50%"/>
@@ -110,7 +111,7 @@
 			  <a href="javascript:listTable.sort('user_id'); ">{$lang.record_id}</a>{$sort_user_id}
 			</th>
 			<th><a href="javascript:listTable.sort('user_name'); ">{$lang.username}</a>{$sort_user_name}</th>
-			
+
 			<th>{$lang.user_money}</th>
 			<th><a href="javascript:listTable.sort('reg_time'); ">{$lang.reg_date}</a>{$sort_reg_time}</th>
 			<th>{$lang.consumption_sum}</th>
@@ -148,8 +149,7 @@
 </form>
 <script type="text/javascript" language="JavaScript">
 <!--
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
+
 
 {foreach from=$filter item=item key=key}
 listTable.filter.{$key} = '{$item}';
