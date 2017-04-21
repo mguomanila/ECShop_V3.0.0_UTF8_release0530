@@ -2207,11 +2207,14 @@ elseif ($action == 'act_account')
 
     	$integral_1 = isset($_POST['integral_1']) ? floatval($_POST['integral_1']) : 0;
 		$integral_2 = isset($_POST['integral_2']) ? floatval($_POST['integral_2']) : 0;
+		$integral_3 = isset($_POST['integral_3']) ? floatval($_POST['integral_3']) : 0;
+		
 		$change_type = isset($_POST['change_type']) ? $_POST['change_type'] : 1;
     	
         /* 判断是否有足够的余额的进行退款的操作 */
         $sur_amount_1 = get_user_integral($user_id);
         $sur_amount_2 = get_user_integral_2($user_id);
+        $sur_amount_3 = get_user_integral_3($user_id);
         
         if ($integral_1 > $sur_amount_1)
         {
@@ -2219,6 +2222,11 @@ elseif ($action == 'act_account')
             show_message($content, $_LANG['back_page_up'], '', 'info');
         }
         if ($integral_2 > $sur_amount_2)
+        {
+            $content = $_LANG['surplus_amount_error'];
+            show_message($content, $_LANG['back_page_up'], '', 'info');
+        }
+        if ($integral_3 > $sur_amount_3)
         {
             $content = $_LANG['surplus_amount_error'];
             show_message($content, $_LANG['back_page_up'], '', 'info');
@@ -2235,7 +2243,7 @@ elseif ($action == 'act_account')
 			$surplus['user_note'] = '方案一金积分：'.$integral_1.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
 			
-		}else{
+		}elseif($change_type==2){
 			if($integral_2 <=0){
             	show_message('请输入正确金额', $_LANG['back_page_up'], '', 'info');
             }
@@ -2244,6 +2252,16 @@ elseif ($action == 'act_account')
 			$amount_sum=round($amount_sum,2);
 			
 			$surplus['user_note'] = '方案二金积分：'.$integral_2.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+
+		}else{
+			if($integral_3 <=0){
+            	show_message('请输入正确金额', $_LANG['back_page_up'], '', 'info');
+            }
+			$jinjifen=$integral_3;
+			$amount_sum=$integral_3*0.87;
+			$amount_sum=round($amount_sum,2);
+			
+			$surplus['user_note'] = '方案二金积分：'.$integral_3.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
 		}
 
@@ -2258,8 +2276,11 @@ elseif ($action == 'act_account')
         	if($change_type==1){
         	log_account_change_vr($user_id, $amount_sum, 0, 0, $integral_1*(-1), 0,0,$_LANG['surplus_type_6'], ACT_CHANGE,0,0);
         		
-        	}else{
+        	}elseif($change_type==1){
         	log_account_change_vr($user_id, $amount_sum, 0, 0, 0,0,0, $_LANG['surplus_type_6'], ACT_CHANGE,0,$integral_2*(-1));
+        		
+        	}else{
+        	log_account_change_vr($user_id, $amount_sum, 0, 0, 0,0,0, $_LANG['surplus_type_6'], ACT_CHANGE,0,0,0,$integral_3*(-1));
         		
         	}
 

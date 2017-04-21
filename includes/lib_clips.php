@@ -729,6 +729,16 @@ function get_user_integral_2($user_id)
     return $GLOBALS['db']->getOne($sql);
 }
 
+function get_user_integral_3($user_id)
+{
+	
+    $sql = "SELECT SUM(pay_points_3) FROM " .$GLOBALS['ecs']->table('account_log').
+           " WHERE user_id = '$user_id'";
+
+    return $GLOBALS['db']->getOne($sql);
+}
+
+
 /**
  * 获取用户中心默认页面所需的数据
  *

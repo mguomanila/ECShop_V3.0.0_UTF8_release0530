@@ -1000,11 +1000,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
 	        $sum=$info['gold']+$gold;
 	        $bili=$sum/80000;
         }
-        $bili3=$info['bili3'];
-        if($fangan3>0){
-	        $sum3=$info['fangan3']+$fangan3;
-	        $bili3=$sum3/72000;
-        }
+//      $bili3=$info['bili3'];
+//      if($fangan3>0){
+//	        $sum3=$info['fangan3']+$fangan3;
+//	        $bili3=$sum3/72000;
+//      }
         /* 更新用户信息 */
         $sql = "UPDATE " . $this->pre .
                 "users SET user_money = user_money + ('$user_money')," .
@@ -1014,7 +1014,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
                 " gold = gold + ('$gold')," .
                 " fangan3 = fangan3 + ('$fangan3')," .
                 " bili = '$bili'," .
-                " bili3 = '$bili3'," .
+//              " bili3 = '$bili3'," .
                 " love = love + ('$love')," .
                 " pay_points_3 = pay_points_3 + ('$pay_points_3')," .
                 " pay_points_2 = pay_points_2 + ('$pay_points_2')," .
@@ -1061,11 +1061,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
 	        $sum=$info['gold']+$gold;
 	        $bili=$sum/800;
         }
-        $bili3=$info['bili3'];
-        if($fangan3>0){
-	        $sum3=$info['fangan3']+$fangan3;
-	        $bili3=$sum3/720;
-        }
+//      $bili3=$info['bili3'];
+//      if($fangan3>0){
+//	        $sum3=$info['fangan3']+$fangan3;
+//	        $bili3=$sum3/720;
+//      }
         /* 更新用户信息 */
         $sql = "UPDATE " . $this->pre .
                 "users SET user_money = user_money + ('$user_money')," .
@@ -1073,7 +1073,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
                 " rank_points = rank_points + ('$rank_points')," .
                 " gold = gold + ('$gold')," .
                 " bili = '$bili'," .
-                " bili3 = '$bili3'," .
+//              " bili3 = '$bili3'," .
                 " pay_points = pay_points + ('$pay_points')" .
                 " WHERE user_id = '$user_id' LIMIT 1";
         $this->query($sql);

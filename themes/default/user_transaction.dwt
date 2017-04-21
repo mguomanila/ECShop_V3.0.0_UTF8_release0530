@@ -860,23 +860,27 @@
         
         <div style="width: 100%;border-left: 1px solid #ccc;box-sizing: border-box;border-right: 1px solid #ccc">
         	 <div width="45%" bgcolor="#ffffff" style="overflow: hidden;">
-        	 	<div style="width: 50%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;">方案一金积分转换 
-        	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz1">选择</a>
+        	 	<div style="width: 33.33%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案一转换 
+        	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz1" class="formSurplus_xz formSurplus_zxz">选择</a>
         	 	</div>
-        	 	<div style="width: 50%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;">方案二金积分转换 
-        	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz2">选择</a>
+        	 	 
+        	 	<div style="width: 33.33%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案二转换 
+        	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz2" class="formSurplus_zxz">选择</a>
         	 	</div>
+        	 	
+        	 	<div style="width: 33.33%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案三转换 
+        	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz3"class="formSurplus_zxz">选择</a>
+        	 	</div>
+        	 	
+        	 	<div style="padding: 15px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;" class="formSurplus_on">
+	        	 	<input type="text" name="integral_1" id="formSurplus_ov"  size="30" style="border-top: 1px solid #ccc;width: 10%;height: 30px;font-size: 16px;position: relative; left: 22%;top: 0px;border: 1px solid #ccc;padding-left: 15px;color: #999;" placeholder="金积分1"/>
+	        	 	<img src="images/gt.png" alt="" style="position: relative; left: 38%;top: 12px;"/>
+	        	 	<span style="position: relative; left: 52%;top: 0px;font-size: 16px;">0.00</span>
+	        	 </div>
+        	 	
         	 </div> 
-        	 <div style="padding: 15px;border-top: 1px solid #ccc;" class="formSurplus_one">
-        	 	<input type="text" name="integral_1" id="formSurplus_ov"  size="30" style="border-top: 1px solid #ccc;width: 10%;height: 30px;font-size: 16px;position: relative; left: 22%;top: -7px;border: 1px solid #ccc;padding-left: 15px;color: #999;" placeholder="金积分1"/>
-        	 	<img src="images/gt.png" alt="" style="position: relative; left: 38%;top: 5px;"/>
-        	 	<span style="position: relative; left: 52%;top: -4px;font-size: 16px;">0.00</span>
-        	 </div>
-        	 <div style="padding: 15px;border-top: 1px solid #ccc;" class="formSurplus_two">
-        	 	<input type="text" name="integral_2" size="30" style="border-top: 1px solid #ccc;width: 10%;height: 30px;font-size: 16px;position: relative; left: 22%;top: -7px;border: 1px solid #ccc;padding-left: 15px;color: #999;" placeholder="金积分2 "/>
-        	 	<img src="images/gt.png" alt="" style="position: relative; left: 38%;top: 5px;"/>
-        	 	<span style="position: relative; left: 52%;top: -4px;font-size: 16px;">0.00</span>
-        	 </div>
+        	
+        	 
         </div>
         
         
@@ -903,80 +907,168 @@
         </form>
         
        <script type="text/javascript">
-       		
-       		
-       		$("#formSurplus_xz1").on("click",function(){
-       			
-				$(this).toggleClass("formSurplus_xz");
-				
-//				$(".formSurplus_one").slideToggle("show");
-				
-				if($(".formSurplus_one").css("display") == "block"){
-					$(".formSurplus_one").css("display","none");
-				}else{
-					$(".formSurplus_one").css("display","block");
-				}
-				if($(".formSurplus_two").css("display") == "none"){
-					
-				}else{
-					if($(".formSurplus_two").css("display") == "block"){
-						$(".formSurplus_two").css("display","none");
-					}else{
-						$(".formSurplus_two").css("display","block");
-					}
-					$("#formSurplus_xz2").toggleClass("formSurplus_xz");
-				}
-				$(".formSurplus_two input").val("");
-				$(".formSurplus_two span").html("0.00");
-				
-				$("#change_type").val(1)
-			})
-			
-			$("#formSurplus_xz2").on("click",function(){
-       			
-				$(this).toggleClass("formSurplus_xz");
-				
-//				$(".formSurplus_one").slideToggle("show");
-				
-				if($(".formSurplus_two").css("display") == "block"){
-					$(".formSurplus_two").css("display","none");
-				}else{
-					$(".formSurplus_two").css("display","block");
-				}
-				
-				if($(".formSurplus_one").css("display") == "none"){
-					
-				}else{
-					if($(".formSurplus_one").css("display") == "block"){
-						$(".formSurplus_one").css("display","none");
-					}else{
-						$(".formSurplus_one").css("display","block");
-					}
-					$("#formSurplus_xz1").toggleClass("formSurplus_xz");
-				}
-				$(".formSurplus_one input").val("");
-				$(".formSurplus_one span").html("0.00");
-				
-				$("#change_type").val(2)
-			})
-
-			
-			
-			$(".formSurplus_one input").keyup(function(){
-				
-				var a = $(".formSurplus_one input").val()*.94;
+       
+       
+       $("#formSurplus_xz1").on("click",function(){
+       		$(".formSurplus_zxz").removeClass("formSurplus_xz");
+       		$(this).addClass("formSurplus_xz");
+       		$("#formSurplus_ov").attr({"name":"integral_1","placeholder":"金积分1"}).val("");
+       		$(".formSurplus_on span").html(0.00);
+       		$("#change_type").val(1);
+       })
+       $("#formSurplus_xz2").on("click",function(){
+       		$(".formSurplus_zxz").removeClass("formSurplus_xz");
+       		$(this).addClass("formSurplus_xz");
+       		$("#formSurplus_ov").attr({"name":"integral_2","placeholder":"金积分2"}).val("");
+       		$(".formSurplus_on span").html(0.00);
+       		$("#change_type").val(2);
+       })
+       $("#formSurplus_xz3").on("click",function(){
+       		$(".formSurplus_zxz").removeClass("formSurplus_xz");
+       		$(this).addClass("formSurplus_xz");
+       		$("#formSurplus_ov").attr({"name":"integral_3","placeholder":"金积分3"}).val("");
+       		$(".formSurplus_on span").html(0.00);
+       		$("#change_type").val(3);
+       })
+       
+       $(".formSurplus_on input").keyup(function(){
+      
+			if($("#formSurplus_ov").attr("name") == "integral_1"){
+				var a = $(".formSurplus_on input").val()*.94;
 				var b=a.toFixed(2);
-				$(".formSurplus_one span").html(b)
-		
-			});
-			
-			$(".formSurplus_two input").keyup(function(){
-				
-				var a = $(".formSurplus_two input").val()*.87;
+				$(".formSurplus_on span").html(b)
+			}else if($("#formSurplus_ov").attr("name") == "integral_2"){
+				var a = $(".formSurplus_on input").val()*.87;
 				var b=a.toFixed(2);
-				$(".formSurplus_two span").html(b)
-		
-			});
+				$(".formSurplus_on span").html(b)
+			}else if($("#formSurplus_ov").attr("name") == "integral_3"){
+				var a = $(".formSurplus_on input").val()*.87;
+				var b=a.toFixed(2);
+				$(".formSurplus_on span").html(b)
+			}
+			
+	
+		});
+       
+       
+       
+       
+       		
+//     		
+//     		$("#formSurplus_xz1").on("click",function(){
+//     			
+//     		
+//				$(this).toggleClass("formSurplus_xz");
+//				
+////				$(".formSurplus_one").slideToggle("show");
+//				
+//				if($(".formSurplus_one").css("display") == "block"){
+//					$(".formSurplus_one").css("display","none");
+//				}else{
+//					$(".formSurplus_one").css("display","block");
+//				}
+//				
+//				
+//				if($(".formSurplus_two").css("display") == "none"){
+//					
+//				}else{
+//					if($(".formSurplus_two").css("display") == "block"){
+//						$(".formSurplus_two").css("display","none");
+//					}else{
+//						$(".formSurplus_two").css("display","block");
+//					}
+//					$("#formSurplus_xz2").toggleClass("formSurplus_xz");
+//				}
+//
+//				
+//				
+//				$(".formSurplus_two input").val("");
+//				$(".formSurplus_two span").html("0.00");
+//				
+//				$("#change_type").val(1)
+//			})
+//			
+//			$("#formSurplus_xz2").on("click",function(){
+//     			
+//				$(this).toggleClass("formSurplus_xz");
+//				
+////				$(".formSurplus_one").slideToggle("show");
+//				
+//				if($(".formSurplus_two").css("display") == "block"){
+//					$(".formSurplus_two").css("display","none");
+//				}else{
+//					$(".formSurplus_two").css("display","block");
+//				}
+//				
+//				
+//				if($(".formSurplus_one").css("display") == "none"){
+//					
+//				}else{
+//					if($(".formSurplus_one").css("display") == "block"){
+//						$(".formSurplus_one").css("display","none");
+//					}else{
+//						$(".formSurplus_one").css("display","block");
+//					}
+//					$("#formSurplus_xz1").toggleClass("formSurplus_xz");
+//				}
+//				$(".formSurplus_one input").val("");
+//				$(".formSurplus_one span").html("0.00");
+//				
+//				$("#change_type").val(2)
+//			})
+//
+//			
+//			$("#formSurplus_xz3").on("click",function(){
+//     			
+//				$(this).toggleClass("formSurplus_xz");
+//				
+////				$(".formSurplus_one").slideToggle("show");
+//				
+//				if($(".formSurplus_san").css("display") == "block"){
+//					$(".formSurplus_san").css("display","none");
+//				}else{
+//					$(".formSurplus_san").css("display","block");
+//				}
+//				
+//				if($(".formSurplus_one").css("display") == "none"){
+//					
+//				}else{
+//					if($(".formSurplus_one").css("display") == "block"){
+//						$(".formSurplus_one").css("display","none");
+//					}else{
+//						$(".formSurplus_one").css("display","block");
+//					}
+//					$("#formSurplus_xz1").toggleClass("formSurplus_xz");
+//				}
+//				
+//				
+//				$(".formSurplus_one input").val("");
+//				$(".formSurplus_one span").html("0.00");
+//				
+//				$("#change_type").val(3)
+//			})
+			
+			
+			
+			
+			
+			
+			
+//			$(".formSurplus_one input").keyup(function(){
+//				
+//				var a = $(".formSurplus_one input").val()*.94;
+//				var b=a.toFixed(2);
+//				$(".formSurplus_one span").html(b)
+//		
+//			});
+//			
+//			$(".formSurplus_two input").keyup(function(){
+//				
+//				var a = $(".formSurplus_two input").val()*.87;
+//				var b=a.toFixed(2);
+//				$(".formSurplus_two span").html(b)
+//		
+//			});
        </script>
         
         
@@ -1180,7 +1272,9 @@
             	<td bgcolor="#ffffff">选择方案：</td>
             	<td align="left" bgcolor="#ffffff">
             		<input type="radio" placeholder="" checked="checked"  name="precept" id="precept" class="precept" value="1"/>方案一
-       				<input type="radio" placeholder=""   name="precept" class="precept" value="2"/>方案二
+       				<input type="radio" placeholder=""   name="precept" class="precept" id="precept2" value="2"/>方案二
+       				<input type="radio" placeholder=""   name="precept" class="precept" value="3"/>方案三
+       				
             	</td>	
             </tr>
             <tr>
@@ -1271,8 +1365,11 @@
 				if($("#precept").is(":checked")){
 
 					var a= $("#vr").val()*0.15;
+				}else if($("#precept2").is(":checked")){
+					var a= $("#vr").val()*0.21;
 				}else{
 					var a= $("#vr").val()*0.21;
+					
 				}
 				var b=a.toFixed(2);
   				$("#vr_user").val(b)
@@ -1287,7 +1384,7 @@
 				"2、按剩余总额的万分之六左右每天全额奖励，后续消费叠加。"+"</br>"+
 				"3、最终解释权归成都沃尔迅科技有限公司所有。"
 					)
-				}else{
+				}else if($(this).val() == 2){
 					var a= $("#vr").val()*0.21;
 					$("#ms").html(
 						"1、前一天总营业额的12%作为次日消费奖励总额。"+"</br>"+
@@ -1299,6 +1396,11 @@
 //				"7、原定普通会员的推荐奖励全部取消。"+"<br />"+
 				"3、最终解释权归成都沃尔迅科技有限公司所有。"
 					)
+				}else{
+					var a= $("#vr").val()*0.21
+					$("#ms").html(
+						"暂无"
+					)
 				}
 				var b=a.toFixed(2);
 				$("#vr_user").val(b)
@@ -1308,6 +1410,8 @@
 				if($("#precept").is(":checked")){
 
 					var a= $("#vr").val()*0.15;
+				}else if($("#precept2").is(":checked")){
+					var a= $("#vr").val()*0.21;
 				}else{
 					var a= $("#vr").val()*0.21;
 				}

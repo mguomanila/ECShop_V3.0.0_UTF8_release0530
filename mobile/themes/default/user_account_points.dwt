@@ -22,7 +22,7 @@
   	<ul class=" ect-bg-colorf">
      <!--{foreach from=$account_log item=item}-->
     	<li>
-        	<p class="title"><span class="pull-left">{$item.change_time}</span> <span class="pull-right">{if $item.points neq 0}{$item.points}{else}{$item.points_2}{/if}</span></p>
+        	<p class="title"><span class="pull-left">{$item.change_time}</span> <span class="pull-right">{if $item.points neq 0}{$item.points}{elseif $item.points_2 neq 0}{$item.points_2}{else}{$item.points_3}{/if}</span></p>
             <p class="content"><span class="remark pull-left">{$item.short_change_desc}</span> <span class="pull-right text-right type">{$item.type}</span></p>
         </li>
 <!--{/foreach}-->

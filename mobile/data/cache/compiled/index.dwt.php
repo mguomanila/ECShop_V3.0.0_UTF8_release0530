@@ -192,7 +192,7 @@ $.AutomLeafStart({
 		autoplay: 2000,
         autoplayDisableOnInteraction : false
 	});
-	get_asynclist("<?php echo url('index/ajax_goods', array('type'=>'1','amount'=>'14'));?>" , '__TPL__/images/loader.gif');
+	get_asynclist("<?php echo url('index/ajax_goods', array('type'=>'1','amount'=>'50'));?>" , '__TPL__/images/loader.gif');
 </script>
 <script type="text/javascript" src="themes/default/js/b.js"></script>
 

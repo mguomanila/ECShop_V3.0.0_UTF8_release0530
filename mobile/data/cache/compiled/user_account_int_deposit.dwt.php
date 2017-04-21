@@ -25,9 +25,9 @@
         </span>
         </div>
       </li>
-      <li style="text-align: center;padding:1em 4.6em;line-height: 26px;color: red;display: none;" id="vr_sta">
+      <!--<li style="text-align: center;padding:1em 4.6em;line-height: 26px;color: red;display: none;" id="vr_sta">
   				输入金额必须大于13200
-       	</li>
+       	</li>-->
       <li id="vr_user_tr" style="display: ;" >
               <div class="input-text"><b class="pull-left">实际金额：</b><span>
               <input id="vr_user" readonly name="amount" placeholder="实际金额" type="text" class="inputBg_touch amount" value="<?php echo htmlspecialchars($this->_var['order']['amount']); ?>" />
@@ -61,7 +61,7 @@
        	<div class="input-text"><b class="pull-left">选择方案：</b><span>
        		<input type="radio" placeholder="" checked  name="precept" id="precept1" class="precept" value="1"/>方案一
        		<input type="radio" placeholder=""   name="precept" id="precept2" class="precept" value="2"/>方案二
-       		<input type="radio" placeholder=""  disabled="disabled"  name="precept" id="precept3" class="precept" value="3"/>方案三
+       		<input type="radio" placeholder=""    name="precept" id="precept3" class="precept" value="3"/>方案三
        		
        		
        	</li>
@@ -122,12 +122,12 @@
 			var a= $("#vr").val()*0.21;
 			
 		}else{
-			if($("#vr").val() < 13200){
-				$("#vr_sta").css("display","block")
-			}else{
-				$("#vr_sta").css("display","none")
-			}
-			var a= $("#vr").val()*(3000/13200);
+//			if($("#vr").val() < 13200){
+//				$("#vr_sta").css("display","block")
+//			}else{
+//				$("#vr_sta").css("display","none")
+//			}
+			var a= $("#vr").val()*0.21;
 		}
 		var b=a.toFixed(2);
 		$("#vr_user").val(b)
@@ -169,15 +169,12 @@
 			)
 			$("#vr_sta").css("display","none")
 		}else{
-			$("#stub").css('display','none');
-			if($("#vr").val() == ""){
-				$("#vr_sta").css("display","none");
-			}else if($("#vr").val() < 13200){
-				$("#vr_sta").css("display","block");
-			}else{
-				$("#vr_sta").css("display","none");
-			}
-			var a= $("#vr").val()*(3000/13200);
+			if($(".amount").val()>=1500){
+				$("#stub").css('display','block')
+				}else{
+					$("#stub").css('display','none')
+				}
+			var a= $("#vr").val()*0.21;
 			$("#ms").html(
 				"暂无"
 			)
@@ -187,16 +184,16 @@
 	})
 	
 	$("#vr").on('keyup',function(){
-		if($("#precept3").is(":checked")){
-				$("#stub").css('display','none');
-			}else{
-				
+//		if($("#precept3").is(":checked")){
+//				$("#stub").css('display','none');
+//			}else{
+//				
 				if($(".amount").val()>=1500){
 				$("#stub").css('display','block')
 				}else{
 					$("#stub").css('display','none')
 				}
-			}
+//			}
 		
 	})
 	

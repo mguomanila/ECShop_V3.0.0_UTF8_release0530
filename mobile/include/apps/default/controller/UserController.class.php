@@ -528,7 +528,7 @@ class UserController extends CommonController {
         
         $size = I(C('page_size'), 5);
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
-        $where = 'user_id = ' . $this->user_id . ' AND (pay_points <> 0 OR pay_points_2 <> 0)';
+        $where = 'user_id = ' . $this->user_id . ' AND (pay_points <> 0 OR pay_points_2 <> 0 OR pay_points_3 <> 0)';
         $count = $this->model->table('account_log')->field('COUNT(*)')->where($where)->getOne();
         $this->pageLimit(url('user/account_points'), $size);
         $this->assign('pager', $this->pageShow($count));
@@ -990,19 +990,13 @@ class UserController extends CommonController {
         	$surplus['precept']=isset($_POST['precept'])?$_POST['precept']:1;
         	$user_img=$_FILES['stub'];
         	
-        	if($surplus['precept'] != 3){
+        	
         		if($amount>=1500){
 	        		if(!$user_img['name']){
 	                    show_message('请上传票据',L('back_page_up'), '', 'info');
 	        		}
         		}
-        	}else{
-	        	show_message('暂未开通',L('back_page_up'), '', 'info');
-        		
-        		if($amount<3000){
-	        		show_message('方案三最低充值3000RMB',L('back_page_up'), '', 'info');
-	        	}
-        	}
+        	
         	
 //      	print_r($_FILES);
 //print_r(@disk_free_space(".")/ (1024 * 1024) . 'M');
@@ -1061,7 +1055,7 @@ class UserController extends CommonController {
 		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(11500/21),$amount);
 		            }
             	}else{
-            		$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(1320/3),$amount);
+            		$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(10000/21),$amount);
             	}
                 
                 

@@ -2031,7 +2031,7 @@ function sm_fx_integral(){
 
 				if($user_row[0]['vr_points'] >=1700){
 					$pay_points=round($user_row[0]['vr_points']*0.000006,2);
-				}elseif($user_row[0]['vr_points'] < 1700 ){
+				}else{
 					$pay_points=0;
 				}
 				if($pay_points>0){
@@ -2112,7 +2112,7 @@ function sm_fx_integral(){
 			}else{
 				if($user_row[0]['gold'] >=1700){
 					$pay_points=round($user_row[0]['gold']*0.000006,2);
-				}elseif($user_row[0]['gold'] < 1700 ){
+				}else{
 					$pay_points=0;
 				}
 				if($pay_points>0){
@@ -2162,17 +2162,27 @@ function sm_fx_integral(){
 			"WHERE user_id=".$value['user_id'] ." LIMIT 1";
 			$user_row=$GLOBALS['db']->getAll($sql_user_one);
 			
+			if($user_row[0]['fangan3'] >=39800){
+				$pay_points=round($user_row[0]['fangan3']*0.00001,2);
+			}else{
+				$pay_points=0;
+			}
+			if($pay_points>0){
+				$pay_points_100=$pay_points*100;
+			}else{
+				$pay_points_100=0;
+			}
 			
-			if($user_row[0]['bili3'] != 0){
-				$fangan3=$user_row[0]['bili3'];
+			if($pay_points != 0){
+//				$fangan3=$user_row[0]['bili3'];
 			    /* 插入帐户变动记录 */
 			    $account_log = array(
 			        'user_id'      	=> $value['user_id'],
 			        'user_money'    => 0,
 			        'frozen_money'  => 0,
 			        'rank_points'   => 0,
-			        'pay_points_3'    => $fangan3,
-			        'fangan3'    		=> (-1)*$fangan3*100,
+			        'pay_points_3'    => $pay_points,
+			        'fangan3'    		=> (-1)*$pay_points_100,
 			        'change_time'   => gmtime(),
 			        'change_desc'   => '方案3每日返积分',
 			        'change_type'   => $type
@@ -2181,8 +2191,8 @@ function sm_fx_integral(){
 				
 			    /* 更新用户信息 */
 			    $sql_update = "UPDATE " . $GLOBALS['ecs']->table('users') .
-		            " SET fangan3 = fangan3 - ('$fangan3'*100)," .
-		            " pay_points_3 = pay_points_3 + ('$fangan3')" .
+		            " SET fangan3 = fangan3 - ('$pay_points_100')," .
+		            " pay_points_3 = pay_points_3 + ('$pay_points')" .
 		            " WHERE user_id = ".$value['user_id'] ." LIMIT 1";
 			    $GLOBALS['db']->query($sql_update);
 		   	}
@@ -2285,11 +2295,11 @@ function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $ra
         $sum=$info['gold']+$gold;
         $bili=$sum/80000;
     }
-    $bili3=$info['bili3'];
-    if($fangan3>0){
-        $sum3=$info['gold3']+$fangan3;
-        $bili3=$sum3/72000;
-    }
+//  $bili3=$info['bili3'];
+//  if($fangan3>0){
+//      $sum3=$info['gold3']+$fangan3;
+//      $bili3=$sum3/72000;
+//  }
     
     /* 更新用户信息 */
     $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
@@ -2301,7 +2311,7 @@ function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $ra
             " pay_points = pay_points + ('$pay_points')," .
             " love = love + ('$love')," .
             " bili = '$bili'," .
-            " bili3 = '$bili3'," .
+//          " bili3 = '$bili3'," .
             " gold = gold + ('$gold')," .
             " fangan3 = fangan3 + ('$fangan3')," .
             " vr_points = vr_points + ('$vr_points')" .
