@@ -1399,11 +1399,8 @@ class UserController extends CommonController {
     			if($integral_3 <=0){
 	            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
 	            }
-	            if($integral_3%550 != 0){
-	            	show_message('积分兑换必须为550的倍数', L('back_page_up'), '', 'info');
-	            }
     			$jinjifen=$integral_3;
-    			$amount_sum=$integral_3;
+    			$amount_sum=$integral_3*0.87;
     			$amount_sum=round($amount_sum,2);
     			
 				$surplus['user_note'] = '方案三金积分：'.$integral_3.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		

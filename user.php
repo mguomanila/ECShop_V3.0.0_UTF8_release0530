@@ -2261,7 +2261,7 @@ elseif ($action == 'act_account')
 			$amount_sum=$integral_3*0.87;
 			$amount_sum=round($amount_sum,2);
 			
-			$surplus['user_note'] = '方案二金积分：'.$integral_3.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+			$surplus['user_note'] = '方案三金积分：'.$integral_3.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
 		}
 
