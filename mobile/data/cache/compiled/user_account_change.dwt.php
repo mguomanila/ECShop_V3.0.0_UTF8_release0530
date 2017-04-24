@@ -297,11 +297,12 @@ function submitSurplus() {
 	
 	$("#duihuan2_ip").keyup(function(){
 		
-		var a = $("#duihuan2_ip").val();
-		$(".duihuan2_ye").html(a)
+		var a = $("#duihuan2_ip").val()*.87;
+		var b=a.toFixed(2);
+		$(".duihuan2_ye").html(b)
 		var r = /^\+?[1-9][0-9]*$/;
 		if(r.test($("#duihuan2_ip").val())){
-			 if($("#duihuan2_ip").val() > <?php echo $this->_var['info']['pay_points_2']; ?>){
+			 if($("#duihuan2_ip").val() > <?php echo $this->_var['info']['pay_points_3']; ?>){
 			 	$("#duihuan2_ip").val("");
 			 	$(".duihuan2_ye").html("");
 				alert("输入积分大于剩余积分")
@@ -313,13 +314,6 @@ function submitSurplus() {
 			alert("请输入整数")
 		}
 		
-		if(a%550 != 0){
-			$("#duihuan2 p").css("display","block");
-			$("#duihuan2").find("div").css("height","20vw");
-		}else{
-			$("#duihuan2 p").css("display","none");
-			$("#duihuan2").find("div").css("height","10vw");
-		}
 	});
 	
 	
