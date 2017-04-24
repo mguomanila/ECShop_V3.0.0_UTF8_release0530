@@ -8,7 +8,7 @@
 
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
 <div class="form-div">
-<form method="post" action="account_log.php?act=user_account_list" name="searchForm">
+<form method="post" action="account_recycle.php?act=user_account_recycle_list" name="searchForm">
   	
   	<tr>
       <td>
@@ -132,26 +132,47 @@
           {$account.gold}
         {/if}
       </td>
-      <td align="center"> <a href="javascript:void(0)" onclick="onDelete(this)" id="soft_delete_{$account.log_id}"><img src="images/no.gif"></a> </td>
+      <td align="center"> 
+      	<a href="javascript:void(0)" onclick="onDeleteStrong(this)" id="soft_delete_{$account.log_id}"><img src="images/no.gif"></a>
+      	<a href="javascript:void(0)" onclick="onRestore(this)" id="soft_delete_{$account.log_id}"><img src="images/soft_03.png"></a>
+      </td>
     </tr>
     {foreachelse}
     <tr><td class="no-records" colspan="6">{$lang.no_records}</td></tr>
     {/foreach}
   </table>
   <script type="text/javascript">
-  	function onDelete(a){
-  		if(confirm('你确定要删除该条数据吗?')){
-			var soft = a.id.substr(12);
-			Ajax.call('account_log.php?act=soft_delete', 'status=' + soft,soft_status , 'GET', 'text', true, true );	
-			function soft_status(data){
+  	function onDeleteStrong(a){
+			if(confirm('你确定要将该条数据永久删除吗?')){
+				var soft = a.id.substr(12);
+				Ajax.call('account_recycle.php?act=strong_soft_delete', 'status=' + soft,soft_status , 'GET', 'text', true, true );	
+				function soft_status(data){
+					if(data == 1){
+						 window.location.reload();
+					}else{
+						alert('删除失败');
+					}
+				}
+			}else{
+				window.location.reload();
+			}
+		}
+  	
+  	function onRestore(b){
+  		if(confirm('你确定要还原该条数据吗?')){
+			var restore = b.id.substr(12);
+			Ajax.call('account_recycle.php?act=soft_restore', 'status=' + restore,soft_restore_status , 'GET', 'text', true, true );	
+			function soft_restore_status(data){
 				if(data == 1){
 					 window.location.reload();
-				}
+				}else{
+						alert('还原失败，请重新操作');
+					}
+			}		
+  		}else{
+				window.location.reload();
 			}
-		}else{
-			window.location.reload();
-		}
-	}
+  	}
   </script>
 <table id="page-table" cellspacing="0">
   <tr>
@@ -184,7 +205,7 @@
 function searchUser()
 {
 
-
+	listTable.filter['cause'] = document.forms['searchForm'].elements['cause'].value;
     listTable.filter['start_time'] = document.forms['searchForm'].elements['start_time'].value;
     listTable.filter['end_time'] = document.forms['searchForm'].elements['end_time'].value;
 

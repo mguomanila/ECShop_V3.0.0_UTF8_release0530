@@ -247,6 +247,7 @@ $_LANG['06_list_integrate'] = '会员整合';
 $_LANG['09_user_account'] = '充值和提现申请';
 $_LANG['10_user_account_manage'] = '资金管理';
 $_LANG['11_users_account_log'] = '上分管理';
+$_LANG['12_users_account_recycle_bin'] = '上分管理回收站';
 
 /* 权限管理 */
 $_LANG['admin_list'] = '管理员列表';
@@ -369,5 +370,8 @@ $_LANG['lead'] = '移动版';
 
 /* 代理商 */
 $_LANG['01_list'] = '经销商列表';
+
+
+
 
 ?>

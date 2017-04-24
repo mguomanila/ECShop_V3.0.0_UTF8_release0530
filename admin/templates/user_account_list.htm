@@ -98,11 +98,12 @@
     <th><a href="javascript:listTable.sort('user_name', 'DESC'); ">{$lang.user_id}</a>{$sort_user_name}</th>
     <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">{$lang.add_date}</a>{$sort_add_time}</th>
     <th><a href="javascript:listTable.sort('process_type', 'DESC'); ">{$lang.process_type}</a>{$sort_process_type}</th>
-    <th><a href="javascript:listTable.sort('amount', 'DESC'); ">{$lang.surplus_amount}</a></th>
     <th><a href="javascript:listTable.sort('integral', 'DESC'); ">{$lang.surplus_integral}</a>{$sort_user_name}</th>
+    <th><a href="javascript:listTable.sort('amount', 'DESC'); ">{$lang.surplus_amount}</a></th>
+    <th><a href="javascript:listTable.sort('user_name', 'DESC'); ">{$lang.admin_username}</a>{$sort_user_name}</th>
+    <th>{$lang.admin_bank_account}</th>
     <th><a href="javascript:listTable.sort('payment', 'DESC'); ">{$lang.pay_mothed}</a>{$sort_payment}</th>
     <th><a href="javascript:listTable.sort('is_paid', 'DESC'); ">{$lang.status}</a>{$sort_is_paid}</th>
-    <th>{$lang.admin_user}</th>
     <th>{$lang.handler}</th>
   </tr>
   {foreach from=$list item=item}
@@ -110,11 +111,12 @@
     <td>{if $item.user_name}{$item.user_name}{else}{$lang.no_user}{/if}</td>
     <td align="center">{$item.add_date}</td>
     <td align="center">{$item.process_type_name}</td>
-    <td align="right">{$item.surplus_amount}</td>
     <td align="right">{$item.integral_amount}</td>
+    <td align="right">{$item.surplus_amount}</td>
+    <td>{$item.bank_info.1.1}</td>
+    <td align="center">{$item.bank_info.0.1}</td>
     <td>{if $item.payment}{$item.payment}{else}N/A{/if}</td>
     <td align="center">{if $item.is_paid eq 1}{$lang.confirm}{elseif $item.is_paid eq 0}{$lang.unconfirm}{else}{$lang.cancel}{/if}</td>
-    <td align="center">{$item.admin_user}
     <td align="center">
     {if $item.is_paid}
     <a href="user_account.php?act=edit&id={$item.id}" title="{$lang.surplus}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>

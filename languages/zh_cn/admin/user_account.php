@@ -41,6 +41,8 @@ $_LANG['surplus_type_4'] = '升级金钻';
 $_LANG['surplus_type_5'] = '好友转账';
 $_LANG['surplus_type_7'] = '升级VIP';
 $_LANG['admin_user'] = '操作员';
+$_LANG['admin_username'] = '开户姓名';
+$_LANG['admin_bank_account'] = '银行卡账户';
 
 $_LANG['status'] = '到款状态';
 $_LANG['confirm'] = '已完成';

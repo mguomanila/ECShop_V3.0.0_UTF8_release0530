@@ -97,7 +97,7 @@ $modules['08_members']['08_unreply_msg']            = 'user_msg.php?act=list_all
 $modules['08_members']['09_user_account']           = 'user_account.php?act=list';
 $modules['08_members']['10_user_account_manage']    = 'user_account_manage.php?act=list';
 $modules['08_members']['11_users_account_log']      = 'account_log.php?act=user_account_list';
-
+$modules['08_members']['12_users_account_recycle_bin']      = 'account_recycle.php?act=user_account_recycle_list';
 
 $modules['10_priv_admin']['admin_logs']             = 'admin_logs.php?act=list';
 $modules['10_priv_admin']['admin_list']             = 'privilege.php?act=list';

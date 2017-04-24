@@ -58,6 +58,7 @@ $_LANG['js_languages']['frozen_money_not_number'] = '冻结资金不是数值';
 $_LANG['js_languages']['rank_points_not_int'] = '等级积分不是整数';
 $_LANG['js_languages']['pay_points_not_int'] = '消费积分不是整数';
 
-$_LANG['delete'] = '删除';
+$_LANG['delete'] = '操作';
+$_LANG['account_soft_list'] = '上分管理回收站';
 
 ?>

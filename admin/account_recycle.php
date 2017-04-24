@@ -22,7 +22,7 @@ include_once(ROOT_PATH . 'includes/lib_order.php');
 //-- 办事处列表
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list')
-{
+{	
     /* 检查参数 */
     $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
     if ($user_id <= 0)
@@ -47,7 +47,7 @@ if ($_REQUEST['act'] == 'list')
     }
     $smarty->assign('account_type', $account_type);
 
-    $smarty->assign('ur_here',      $_LANG['account_list']);
+    $smarty->assign('ur_here',      $_LANG['account_soft_list']);
     $smarty->assign('action_link',  array('text' => $_LANG['add_account'], 'href' => 'account_log.php?act=add&user_id=' . $user_id));
     $smarty->assign('full_page',    1);
 
@@ -66,7 +66,7 @@ if ($_REQUEST['act'] == 'list')
 /*------------------------------------------------------ */
 //-- 管理员上分记录
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'user_account_list')
+if ($_REQUEST['act'] == 'user_account_recycle_list')
 {
     admin_priv('users_shangfen');
 	
@@ -81,7 +81,7 @@ if ($_REQUEST['act'] == 'user_account_list')
     $smarty->assign('full_page',    1);
 
     $account_list = get_user_accountlist($user_id,$start_time,$end_time,$shop,$cause);
-	
+
 	$smarty->assign('cause', $_POST['cause']);
     $smarty->assign('start_time', $_POST['start_time']);
     $smarty->assign('end_time', $_POST['end_time']);
@@ -94,7 +94,7 @@ if ($_REQUEST['act'] == 'user_account_list')
     $smarty->assign('page_count',   $account_list['page_count']);
 
     assign_query_info();
-    $smarty->display('shangfen_account_list.htm');
+    $smarty->display('user_account_recycle_list.htm');
 }
 
 
@@ -138,24 +138,24 @@ elseif ($_REQUEST['act'] == 'query')
 	    make_json_result($smarty->fetch('account_list.htm'), '',
 	        array('filter' => $account_list['filter'], 'page_count' => $account_list['page_count']));
     }else{
-    	
+    	$cause = !empty($_REQUEST['cause']) ? $_REQUEST['cause'] : 0 ;
     	$start_time = !empty($_REQUEST['start_time'])?$_REQUEST['start_time']:0;
     	$end_time   = !empty($_REQUEST['end_time'])?$_REQUEST['end_time']:0;
     	$shop   = !empty($_REQUEST['shop'])?$_REQUEST['shop']:0;
     	
+    	$smarty->assign('cause', $_POST['cause']);
 	    $smarty->assign('start_time', $_POST['start_time']);
     	$smarty->assign('end_time', $_POST['end_time']);
     	$smarty->assign('shop', $_POST['shop']);
 	
-	    $account_list = get_user_accountlist($user_id, $start_time,$end_time,$shop);
-
+	    $account_list = get_user_accountlist($user_id,$start_time,$end_time,$shop,$cause);
 	    
 	    $smarty->assign('account_list', $account_list['account']);
 	    $smarty->assign('filter',       $account_list['filter']);
 	    $smarty->assign('record_count', $account_list['record_count']);
 	    $smarty->assign('page_count',   $account_list['page_count']);
 	
-	    make_json_result($smarty->fetch('shangfen_account_list.htm'), '',
+	    make_json_result($smarty->fetch('user_account_recycle_list.htm'), '',
 	        array('filter' => $account_list['filter'], 'page_count' => $account_list['page_count']));
     }
     
@@ -243,19 +243,30 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update')
     );
     sys_msg($_LANG['log_account_change_ok'], 0, $links);
 }
-/*软删除*/
-elseif ($_REQUEST['act'] == 'soft_delete')
+/*删除*/
+elseif ($_REQUEST['act'] == 'strong_soft_delete') 
 {
 	$log_id = $_GET['status'];
-	$sql = "UPDATE ".$ecs->table('account_log')." set soft_delete = 1 WHERE log_id = '".$log_id."'";  
-	$delete_info = $db->query($sql);
-	if($delete_info){
-		exit(true);
-	}else{
-	    exit(false);
-	} 
+	$sql = "DELETE FROM ".$ecs->table('account_log')." WHERE log_id = '".$log_id."'";  
+    $delete_info = $db->query($sql);
+    if($delete_info){
+	    exit(true);
+    }else{
+    	exit(false);
+    }
+  
 }
-
+elseif ($_REQUEST['act'] == 'soft_restore')
+{
+	$log_id = $_GET['status'];
+	$sql = "UPDATE ".$ecs->table('account_log')." set soft_delete = 0 WHERE log_id = '".$log_id."'";  
+    $delete_info = $db->query($sql);
+    if($delete_info){
+	    exit(true);
+    }else{
+    	exit(false);
+    } 
+}
 /**
  * 取得帐户明细
  * @param   int     $user_id    用户id
@@ -311,7 +322,7 @@ function get_user_accountlist($user_id,$start_time=0,$end_time=0, $shop=0,$cause
 {
     /* 检查参数 */
 
-    $where = " WHERE change_type = $change_type and soft_delete=0 ";
+    $where = " WHERE change_type = $change_type and soft_delete=1 ";
     if($cause){
     	$where .= " AND change_desc LIKE '%" . mysql_like_quote($cause) ."%'";
     }
@@ -328,6 +339,7 @@ function get_user_accountlist($user_id,$start_time=0,$end_time=0, $shop=0,$cause
     /* 初始化分页参数 */
     $filter = array(
         'user_id'       => $user_id,
+        'cause'   => $cause,
 		'start_time'   => $start_time,
 		'end_time'     => $end_time,
 		'shop'     => $shop,

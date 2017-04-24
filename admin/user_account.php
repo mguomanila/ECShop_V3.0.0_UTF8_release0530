@@ -17,6 +17,8 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
+/*加载自己封装的函数库*/
+include_once(ROOT_PATH."includes/lib_db.php");
 /* act操作项的初始化 */
 if (empty($_REQUEST['act']))
 {
@@ -70,8 +72,20 @@ if ($_REQUEST['act'] == 'list')
     $smarty->assign('action_link',   array('text' => $_LANG['surplus_add'], 'href'=>'user_account.php?act=add'));
 
     $list = account_list();
+
+	foreach($list['list'] as $key=>$val){
+		if($val['process_type'] == 1){
+			$arr = explode('|',$val['user_note']);
+			foreach($arr as $k => $v){
+				$a[$k] = explode('：',$v);
+			}
+		$list['list'][$key]['bank_info'] = $a;
+			
+		}
+	}
+
     $smarty->assign('sum',         $list['sum']);
-    
+
     $smarty->assign('list',         $list['list']);
     $smarty->assign('filter',       $list['filter']);
     $smarty->assign('record_count', $list['record_count']);
@@ -714,6 +728,15 @@ elseif ($_REQUEST['act'] == 'action')
 elseif ($_REQUEST['act'] == 'query')
 {
     $list = account_list();
+    foreach($list['list'] as $key=>$val){
+		if($val['process_type'] == 1){
+			$arr = explode('|',$val['user_note']);
+			foreach($arr as $k => $v){
+				$a[$k] = explode('：',$v);
+			}
+			$list['list'][$key]['bank_info'] = $a;
+		}
+	}
 //  if(isset($sum)){
    	 $smarty->assign('sum',         $list['sum']);
 
@@ -771,6 +794,8 @@ elseif ($_REQUEST['act'] == 'remove')
         make_json_error($db->error());
     }
 }
+
+
 
 /*------------------------------------------------------ */
 //-- 会员余额函数部分
@@ -958,7 +983,6 @@ function account_list()
             $GLOBALS['ecs']->table('user_account'). ' AS ua LEFT JOIN ' .
             $GLOBALS['ecs']->table('users'). ' AS u ON ua.user_id = u.user_id'.
             $where . "ORDER by " . $filter['sort_by'] . " " .$filter['sort_order']. " LIMIT ".$filter['start'].", ".$filter['page_size'];
-
         $filter['keywords'] = stripslashes($filter['keywords']);
         set_filter($filter, $sql);
         
@@ -970,6 +994,7 @@ function account_list()
     }
 
     $list = $GLOBALS['db']->getAll($sql);
+
     foreach ($list AS $key => $value)
     {
         $list[$key]['surplus_amount']       = price_format(abs($value['amount']), false);
