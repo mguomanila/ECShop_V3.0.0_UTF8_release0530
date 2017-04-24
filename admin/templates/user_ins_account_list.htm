@@ -98,7 +98,7 @@
     <td align="center">{$item.add_date}</td>
 
     <td align="center">{$item.process_type_name}</td>
-    <td align="right">{$item.goods_name}</td>
+    <td align="right">{$item.goods_name}【{$item.num}期】</td>
     <td align="right">{$item.order_sn}</td>
     <!--<td>{if $item.payment}{$item.payment}{else}N/A{/if}</td>-->
     <td align="center">{if $item.is_paid eq 1}{$lang.confirm}{elseif $item.is_paid eq 0}{$lang.unconfirm}{else}{$lang.cancel}{/if}</td>
