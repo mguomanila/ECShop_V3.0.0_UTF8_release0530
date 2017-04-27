@@ -706,7 +706,7 @@ function account_list()
         $filter = page_and_size($filter);
 
         /* 查询数据 */
-        $sql  = "SELECT ua.*, u.user_name,o.order_sn,r.content FROM(" .
+        $sql  = "SELECT ua.*, u.user_name,o.consignee,o.order_sn,r.content FROM(" .
             $GLOBALS['ecs']->table('installment_account'). ' AS ua LEFT JOIN ' .
             $GLOBALS['ecs']->table('users'). ' AS u ON ua.user_id = u.user_id) LEFT JOIN'.
             $GLOBALS['ecs']->table('order_info'). ' AS o ON o.order_id = ua.order_id LEFT JOIN'.

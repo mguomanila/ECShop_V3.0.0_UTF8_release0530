@@ -2094,9 +2094,11 @@ elseif ($action == 'act_account')
 	            if($surplus['precept'] == 1){
 	            $surplus['rec_id'] = insert_user_account_integral($surplus, $amount*(10000/15),$amount);
 	            	
-	            }else{
-	            $surplus['rec_id'] = insert_user_account_integral($surplus, $amount*(10000/21),$amount);
+	            }elseif($surplus['precept'] == 4){
+	            $surplus['rec_id'] = insert_user_account_integral($surplus, $amount*(10000/7),$amount);
 	            	
+	            }else{
+	            	$surplus['rec_id'] = insert_user_account_integral($surplus, $amount*(10000/21),$amount);
 	            }
 
 	        }
@@ -2135,6 +2137,8 @@ elseif ($action == 'act_account')
 	        $smarty->display('user_transaction.dwt');
 	    		
     	}else{
+	        show_message('暂不支持给自身充值');
+    		
     		if ($surplus['payment_id'] <= 0)
 	        {
 	            show_message($_LANG['select_payment_pls']);
@@ -2208,6 +2212,7 @@ elseif ($action == 'act_account')
     	$integral_1 = isset($_POST['integral_1']) ? floatval($_POST['integral_1']) : 0;
 		$integral_2 = isset($_POST['integral_2']) ? floatval($_POST['integral_2']) : 0;
 		$integral_3 = isset($_POST['integral_3']) ? floatval($_POST['integral_3']) : 0;
+		$integral_4 = isset($_POST['integral_4']) ? floatval($_POST['integral_4']) : 0;
 		
 		$change_type = isset($_POST['change_type']) ? $_POST['change_type'] : 1;
     	
@@ -2215,6 +2220,7 @@ elseif ($action == 'act_account')
         $sur_amount_1 = get_user_integral($user_id);
         $sur_amount_2 = get_user_integral_2($user_id);
         $sur_amount_3 = get_user_integral_3($user_id);
+        $sur_amount_4 = get_user_integral_4($user_id);
         
         if ($integral_1 > $sur_amount_1)
         {
@@ -2227,6 +2233,11 @@ elseif ($action == 'act_account')
             show_message($content, $_LANG['back_page_up'], '', 'info');
         }
         if ($integral_3 > $sur_amount_3)
+        {
+            $content = $_LANG['surplus_amount_error'];
+            show_message($content, $_LANG['back_page_up'], '', 'info');
+        }
+        if ($integral_4 > $sur_amount_4)
         {
             $content = $_LANG['surplus_amount_error'];
             show_message($content, $_LANG['back_page_up'], '', 'info');
@@ -2253,7 +2264,7 @@ elseif ($action == 'act_account')
 			
 			$surplus['user_note'] = '方案二金积分：'.$integral_2.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
-		}else{
+		}elseif($change_type==3){
 			if($integral_3 <=0){
             	show_message('请输入正确金额', $_LANG['back_page_up'], '', 'info');
             }
@@ -2262,6 +2273,16 @@ elseif ($action == 'act_account')
 			$amount_sum=round($amount_sum,2);
 			
 			$surplus['user_note'] = '方案三金积分：'.$integral_3.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+
+		}else{
+			if($integral_4 <=0){
+            	show_message('请输入正确金额', $_LANG['back_page_up'], '', 'info');
+            }
+			$jinjifen=$integral_4;
+			$amount_sum=$integral_4*0.87;
+			$amount_sum=round($amount_sum,2);
+			
+			$surplus['user_note'] = '方案四金积分：'.$integral_4.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
 		}
 
@@ -2276,11 +2297,14 @@ elseif ($action == 'act_account')
         	if($change_type==1){
         	log_account_change_vr($user_id, $amount_sum, 0, 0, $integral_1*(-1), 0,0,$_LANG['surplus_type_6'], ACT_CHANGE,0,0);
         		
-        	}elseif($change_type==1){
+        	}elseif($change_type==2){
         	log_account_change_vr($user_id, $amount_sum, 0, 0, 0,0,0, $_LANG['surplus_type_6'], ACT_CHANGE,0,$integral_2*(-1));
         		
-        	}else{
+        	}elseif($change_type==3){
         	log_account_change_vr($user_id, $amount_sum, 0, 0, 0,0,0, $_LANG['surplus_type_6'], ACT_CHANGE,0,0,0,$integral_3*(-1));
+        		
+        	}else{
+        	log_account_change_vr($user_id, $amount_sum, 0, 0, 0,0,0, $_LANG['surplus_type_6'], ACT_CHANGE,0,0,0,0,0,$integral_4*(-1));
         		
         	}
 

@@ -37,6 +37,8 @@
       <th>{$lang.gold}</th>
       <th>金积分三账户</th>
       <th>方案三账户</th>
+      <th>金积分四账户</th>
+      <th>方案四账户</th>
       
       
     </tr>
@@ -123,6 +125,24 @@
           <span style="color:#FF0000">{$account.fangan3}</span>
         {else}
           {$account.fangan3}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.pay_points_4 gt 0}
+          <span style="color:#0000FF">+{$account.pay_points_4}</span>
+        {elseif $account.pay_points_4 lt 0}
+          <span style="color:#FF0000">{$account.pay_points_4}</span>
+        {else}
+          {$account.pay_points_4}
+        {/if}
+      </td>
+      <td align="right">
+        {if $account.fangan4 gt 0}
+          <span style="color:#0000FF">+{$account.fangan4}</span>
+        {elseif $account.fangan4 lt 0}
+          <span style="color:#FF0000">{$account.fangan4}</span>
+        {else}
+          {$account.fangan4}
         {/if}
       </td>
     </tr>

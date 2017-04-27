@@ -528,7 +528,7 @@ class UserController extends CommonController {
         
         $size = I(C('page_size'), 5);
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
-        $where = 'user_id = ' . $this->user_id . ' AND (pay_points <> 0 OR pay_points_2 <> 0 OR pay_points_3 <> 0)';
+        $where = 'user_id = ' . $this->user_id . ' AND (pay_points <> 0 OR pay_points_2 <> 0 OR pay_points_3 <> 0 OR pay_points_4 <> 0)';
         $count = $this->model->table('account_log')->field('COUNT(*)')->where($where)->getOne();
         $this->pageLimit(url('user/account_points'), $size);
         $this->assign('pager', $this->pageShow($count));
@@ -1054,8 +1054,11 @@ class UserController extends CommonController {
 		            }else{
 		            	$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(11500/21),$amount);
 		            }
-            	}else{
+            	}elseif($surplus['precept'] == 3){
             		$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(10000/21),$amount);
+            	}else{
+            		$surplus['rec_id'] = model('ClipsBase')->insert_user_account_integral($surplus, $amount*(10000/7),$amount);
+            		
             	}
                 
                 
@@ -1346,6 +1349,7 @@ class UserController extends CommonController {
 			$integral_1 = isset($_POST['integral_1']) ? floatval($_POST['integral_1']) : 0;
 			$integral_2 = isset($_POST['integral_2']) ? floatval($_POST['integral_2']) : 0;
 			$integral_3 = isset($_POST['integral_3']) ? floatval($_POST['integral_3']) : 0;
+			$integral_4 = isset($_POST['integral_4']) ? floatval($_POST['integral_4']) : 0;
 			
 			$change_type = isset($_POST['change_type']) ? $_POST['change_type'] : 1;
         	
@@ -1353,6 +1357,8 @@ class UserController extends CommonController {
             $sur_amount = model('ClipsBase')->get_user_surplus_points($this->user_id);
             $sur_amount2 = model('ClipsBase')->get_user_surplus_points_2($this->user_id);
             $sur_amount3 = model('ClipsBase')->get_user_surplus_points_3($this->user_id);
+            $sur_amount4 = model('ClipsBase')->get_user_surplus_points_4($this->user_id);
+            
 //          echo $sur_amount;
 //              show_message('稍后开放', L('back_page_up'), '', 'info');
             
@@ -1367,6 +1373,10 @@ class UserController extends CommonController {
                 show_message($content, L('back_page_up'), '', 'info');
             }
             if($integral_3 > $sur_amount3){
+            	$content = L('surplus_amount_error');
+                show_message($content, L('back_page_up'), '', 'info');
+            }
+            if($integral_4 > $sur_amount4){
             	$content = L('surplus_amount_error');
                 show_message($content, L('back_page_up'), '', 'info');
             }
@@ -1395,7 +1405,7 @@ class UserController extends CommonController {
     			
 				$surplus['user_note'] = '方案二金积分：'.$integral_2.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
-    		}else{
+    		}elseif($change_type==3){
     			if($integral_3 <=0){
 	            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
 	            }
@@ -1404,6 +1414,16 @@ class UserController extends CommonController {
     			$amount_sum=round($amount_sum,2);
     			
 				$surplus['user_note'] = '方案三金积分：'.$integral_3.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
+
+    		}else{
+    			if($integral_4 <=0){
+	            	show_message('请输入正确金额', L('back_page_up'), '', 'info');
+	            }
+    			$jinjifen=$integral_4;
+    			$amount_sum=$integral_4*0.87;
+    			$amount_sum=round($amount_sum,2);
+    			
+				$surplus['user_note'] = '方案四金积分：'.$integral_4.' | 转换金额：'.$amount_sum.' | '.$surplus['user_note'];        		
 
     		}
     		
@@ -1429,8 +1449,11 @@ class UserController extends CommonController {
 				}elseif($integral_2>0){
         		model('ClipsBase')->log_account_change_vr($this->user_id,$amount_sum, 0, 0,0, 0,0,$change_desc,ACT_CHANGE,0,$integral_2*(-1));
 					
-				}else{
+				}elseif($integral_3>0){
         		model('ClipsBase')->log_account_change_vr($this->user_id,$amount_sum, 0, 0,0, 0,0,$change_desc,ACT_CHANGE,0,0,0,$integral_3*(-1));
+					
+				}else{
+				model('ClipsBase')->log_account_change_vr($this->user_id,$amount_sum, 0, 0,0, 0,0,$change_desc,ACT_CHANGE,0,0,0,0,0,$integral_4*(-1));
 					
 				}
 				

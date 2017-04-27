@@ -63,11 +63,13 @@
     
  <div id="jybfa">
 			<li><span><?php echo $this->_var['info']['vr_points']; ?></span><p>方案一金元宝</p></li>
+			<li><span><?php echo $this->_var['info']['integral']; ?></span><p>方案一金积分</p></li>
 			<li><span><?php echo $this->_var['info']['gold']; ?></span><p>方案二金元宝</p></li>
-			<li><span><?php if ($this->_var['info']['fangan3']): ?><?php echo $this->_var['info']['fangan3']; ?><?php else: ?>0<?php endif; ?></span><p>方案三金元宝</p></li>
-			<li style="border-top: 1px solid #ccc;"><span><?php echo $this->_var['info']['integral']; ?></span><p>方案一金积分</p></li>
-			<li style="border-top: 1px solid #ccc;"><span><?php echo $this->_var['info']['pay_points_2']; ?></span><p>方案二金积分</p></li>
-			<li style="border-top: 1px solid #ccc;"><span><?php if ($this->_var['info']['pay_points_3']): ?><?php echo $this->_var['info']['pay_points_3']; ?><?php else: ?>0<?php endif; ?></span><p>方案三金积分</p></li>
+			<li><span><?php echo $this->_var['info']['pay_points_2']; ?></span><p>方案二金积分</p></li>
+			<li><span><?php if ($this->_var['info']['fangan3']): ?><?php echo $this->_var['info']['fangan3']; ?><?php else: ?>0<?php endif; ?></span><p>方案三金元宝</p></li>	
+			<li><span><?php if ($this->_var['info']['pay_points_3']): ?><?php echo $this->_var['info']['pay_points_3']; ?><?php else: ?>0<?php endif; ?></span><p>方案三金积分</p></li>
+			<li><span><?php if ($this->_var['info']['fangan4']): ?><?php echo $this->_var['info']['fangan4']; ?><?php else: ?>0<?php endif; ?></span><p>方案四金元宝</p></li>
+			<li><span><?php if ($this->_var['info']['pay_points_4']): ?><?php echo $this->_var['info']['pay_points_4']; ?><?php else: ?>0<?php endif; ?></span><p>方案四金积分</p></li>
  </div>   
 <!--  
   <div id="jjffa">

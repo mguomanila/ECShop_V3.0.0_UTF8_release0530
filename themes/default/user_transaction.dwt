@@ -860,16 +860,20 @@
         
         <div style="width: 100%;border-left: 1px solid #ccc;box-sizing: border-box;border-right: 1px solid #ccc">
         	 <div width="45%" bgcolor="#ffffff" style="overflow: hidden;">
-        	 	<div style="width: 33.33%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案一转换 
+        	 	<div style="width: 25%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案一转换 
         	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz1" class="formSurplus_xz formSurplus_zxz">选择</a>
         	 	</div>
         	 	 
-        	 	<div style="width: 33.33%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案二转换 
+        	 	<div style="width: 25%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案二转换 
         	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz2" class="formSurplus_zxz">选择</a>
         	 	</div>
         	 	
-        	 	<div style="width: 33.33%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案三转换 
+        	 	<div style="width: 25%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案三转换 
         	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz3"class="formSurplus_zxz">选择</a>
+        	 	</div>
+        	 	
+        	 	<div style="width: 25%;box-sizing: border-box;float: left;padding: 15px 0;text-align: center;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;">方案三转换 
+        	 		<a href="javascript:" style="border: 1px solid #ccc; padding: 5px 15px;margin-left: 15px;border-radius: 5px;" id="formSurplus_xz4"class="formSurplus_zxz">选择</a>
         	 	</div>
         	 	
         	 	<div style="padding: 15px;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;" class="formSurplus_on">
@@ -930,6 +934,13 @@
        		$(".formSurplus_on span").html(0.00);
        		$("#change_type").val(3);
        })
+        $("#formSurplus_xz4").on("click",function(){
+       		$(".formSurplus_zxz").removeClass("formSurplus_xz");
+       		$(this).addClass("formSurplus_xz");
+       		$("#formSurplus_ov").attr({"name":"integral_4","placeholder":"金积分4"}).val("");
+       		$(".formSurplus_on span").html(0.00);
+       		$("#change_type").val(4);
+       })
        
        $(".formSurplus_on input").keyup(function(){
       
@@ -942,6 +953,10 @@
 				var b=a.toFixed(2);
 				$(".formSurplus_on span").html(b)
 			}else if($("#formSurplus_ov").attr("name") == "integral_3"){
+				var a = $(".formSurplus_on input").val()*.87;
+				var b=a.toFixed(2);
+				$(".formSurplus_on span").html(b)
+			}else if($("#formSurplus_ov").attr("name") == "integral_4"){
 				var a = $(".formSurplus_on input").val()*.87;
 				var b=a.toFixed(2);
 				$(".formSurplus_on span").html(b)
@@ -1273,7 +1288,9 @@
             	<td align="left" bgcolor="#ffffff">
             		<input type="radio" placeholder="" checked="checked"  name="precept" id="precept" class="precept" value="1"/>方案一
        				<input type="radio" placeholder=""   name="precept" class="precept" id="precept2" value="2"/>方案二
-       				<input type="radio" placeholder=""   name="precept" class="precept" value="3"/>方案三
+       				<input type="radio" placeholder=""   name="precept" class="precept" id="precept3" value="3"/>方案三
+       				<input type="radio" placeholder=""   name="precept" class="precept" id="precept4" value="4"/>方案四
+       				
        				
             	</td>	
             </tr>
@@ -1367,9 +1384,11 @@
 					var a= $("#vr").val()*0.15;
 				}else if($("#precept2").is(":checked")){
 					var a= $("#vr").val()*0.21;
-				}else{
+				}else if($("#precept3").is(":checked")){
 					var a= $("#vr").val()*0.21;
 					
+				}else{
+					var a= $("#vr").val()*0.3*0.07;
 				}
 				var b=a.toFixed(2);
   				$("#vr_user").val(b)
@@ -1396,8 +1415,13 @@
 //				"7、原定普通会员的推荐奖励全部取消。"+"<br />"+
 				"3、最终解释权归成都沃尔迅科技有限公司所有。"
 					)
-				}else{
+				}else if($(this).val() == 3){
 					var a= $("#vr").val()*0.21
+					$("#ms").html(
+						"暂无"
+					)
+				}else{
+					var a= $("#vr").val()*0.3*0.07
 					$("#ms").html(
 						"暂无"
 					)
@@ -1412,8 +1436,10 @@
 					var a= $("#vr").val()*0.15;
 				}else if($("#precept2").is(":checked")){
 					var a= $("#vr").val()*0.21;
-				}else{
+				}else if($("#precept3").is(":checked")){
 					var a= $("#vr").val()*0.21;
+				}else{
+					var a= $("#vr").val()*0.07;
 				}
 				var b=a.toFixed(2);
   				$("#vr_user").val(b)

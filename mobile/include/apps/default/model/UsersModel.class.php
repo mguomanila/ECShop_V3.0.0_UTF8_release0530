@@ -1976,7 +1976,7 @@ class UsersModel extends BaseModel {
         // 获取余额记录
         $account_log = array();
         
-        $sql = 'SELECT * FROM ' . $this->pre . "account_log WHERE user_id = " . $user_id . ' AND (pay_points <> 0 OR pay_points_2 <> 0 OR pay_points_3 <> 0) AND change_type IN (0,1,4,5,99,6)' .
+        $sql = 'SELECT * FROM ' . $this->pre . "account_log WHERE user_id = " . $user_id . ' AND (pay_points <> 0 OR pay_points_2 <> 0 OR pay_points_3 <> 0 OR pay_points_4 <> 0) AND change_type IN (0,1,4,5,99,6)' .
         " ORDER BY log_id DESC limit " . $start . ',' . $num;
 
         $res = $this->query($sql);
@@ -1994,9 +1994,11 @@ class UsersModel extends BaseModel {
             }elseif($v['pay_points_2'] != 0){
             	$res[$k]['type'] = $v['pay_points_2'] > 0 ? L('account_inc') : L('account_dec');
             	
-            }else{
+            }elseif($v['pay_points_3'] != 0){
             	$res[$k]['type'] = $v['pay_points_3'] > 0 ? L('account_inc') : L('account_dec');
             	
+            }else{
+            	$res[$k]['type'] = $v['pay_points_4'] > 0 ? L('account_inc') : L('account_dec');
             }
 
             $res[$k]['user_money'] = price_format(abs($v['user_money']), false);
@@ -2008,9 +2010,12 @@ class UsersModel extends BaseModel {
             $res[$k]['points'] = $v['pay_points'];
             $res[$k]['points_2'] = $v['pay_points_2'];
             $res[$k]['points_3'] = $v['pay_points_3'];
+            $res[$k]['points_4'] = $v['pay_points_4'];
             
             
+
         }
+//          print_r($res);
         
         return $res;
         

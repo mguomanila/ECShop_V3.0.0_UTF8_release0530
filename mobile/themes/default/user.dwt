@@ -63,11 +63,13 @@
     
  <div id="jybfa">
 			<li><span>{$info.vr_points}</span><p>方案一金元宝</p></li>
+			<li><span>{$info.integral}</span><p>方案一金积分</p></li>
 			<li><span>{$info.gold}</span><p>方案二金元宝</p></li>
-			<li><span>{if $info.fangan3}{$info.fangan3}{else}0{/if}</span><p>方案三金元宝</p></li>
-			<li style="border-top: 1px solid #ccc;"><span>{$info.integral}</span><p>方案一金积分</p></li>
-			<li style="border-top: 1px solid #ccc;"><span>{$info.pay_points_2}</span><p>方案二金积分</p></li>
-			<li style="border-top: 1px solid #ccc;"><span>{if $info.pay_points_3}{$info.pay_points_3}{else}0{/if}</span><p>方案三金积分</p></li>
+			<li><span>{$info.pay_points_2}</span><p>方案二金积分</p></li>
+			<li><span>{if $info.fangan3}{$info.fangan3}{else}0{/if}</span><p>方案三金元宝</p></li>	
+			<li><span>{if $info.pay_points_3}{$info.pay_points_3}{else}0{/if}</span><p>方案三金积分</p></li>
+			<li><span>{if $info.fangan4}{$info.fangan4}{else}0{/if}</span><p>方案四金元宝</p></li>
+			<li><span>{if $info.pay_points_4}{$info.pay_points_4}{else}0{/if}</span><p>方案四金积分</p></li>
  </div>   
 <!--  
   <div id="jjffa">

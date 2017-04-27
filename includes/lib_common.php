@@ -2201,6 +2201,61 @@ function sm_fx_integral(){
 		}
 	}
 	
+	
+	$sql_user="SELECT * FROM". $GLOBALS['ecs']->table('users')." WHERE fangan4<>0";
+	$user_row=$GLOBALS['db']->getAll($sql_user);
+	foreach ($user_row as $key => $value) {
+		$sql="SELECT * FROM". $GLOBALS['ecs']->table('account_log').
+		"WHERE user_id=".$value['user_id'] ."  AND change_desc = '方案4每日返积分'  AND change_time BETWEEN $start AND $change_time";
+
+		$row=$GLOBALS['db']->getAll($sql);
+		
+
+		if(!$row){
+			$type=ACT_SM_FX;
+			$sql_user_one="SELECT * FROM". $GLOBALS['ecs']->table('users').
+			"WHERE user_id=".$value['user_id'] ." LIMIT 1";
+			$user_row=$GLOBALS['db']->getAll($sql_user_one);
+			
+			if($user_row[0]['fangan3'] >=39800){
+				$pay_points=round($user_row[0]['fangan3']*0.00001,2);
+			}else{
+				$pay_points=0;
+			}
+			if($pay_points>0){
+				$pay_points_100=$pay_points*100;
+			}else{
+				$pay_points_100=0;
+			}
+			
+			if($pay_points != 0){
+//				$fangan3=$user_row[0]['bili3'];
+			    /* 插入帐户变动记录 */
+			    $account_log = array(
+			        'user_id'      	=> $value['user_id'],
+			        'user_money'    => 0,
+			        'frozen_money'  => 0,
+			        'rank_points'   => 0,
+			        'pay_points_4'    => $pay_points,
+			        'fangan4'    		=> (-1)*$pay_points_100,
+			        'change_time'   => gmtime(),
+			        'change_desc'   => '方案4每日返积分',
+			        'change_type'   => $type
+			    );
+			    $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
+				
+			    /* 更新用户信息 */
+			    $sql_update = "UPDATE " . $GLOBALS['ecs']->table('users') .
+		            " SET fangan4 = fangan4 - ('$pay_points_100')," .
+		            " pay_points_4 = pay_points_4 + ('$pay_points')" .
+		            " WHERE user_id = ".$value['user_id'] ." LIMIT 1";
+			    $GLOBALS['db']->query($sql_update);
+		   	}
+			
+
+		}
+	}
+	
 }
 
 
@@ -2260,7 +2315,7 @@ function log_account_change($user_id, $user_money = 0, $frozen_money = 0, $rank_
  * @param   int     $change_type    变动类型：参见常量文件
  * @return  void
  */
-function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0,$vr_points=0,$gold=0, $change_desc = '', $change_type = ACT_OTHER,$love=0,$pay_points_2=0,$fangan3=0,$pay_points_3=0)
+function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0,$vr_points=0,$gold=0, $change_desc = '', $change_type = ACT_OTHER,$love=0,$pay_points_2=0,$fangan3=0,$pay_points_3=0,$fangan4=0,$pay_points_4=0)
 {
 	if($_SESSION['admin_id']){
 		$admin_id=$_SESSION['admin_id'];
@@ -2277,9 +2332,11 @@ function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $ra
         'pay_points'    => $pay_points,
         'pay_points_2' => $pay_points_2,
         'pay_points_3' => $pay_points_3,
+        'pay_points_4' => $pay_points_4,
         'vr_points'    => $vr_points,
         'gold'    => $gold,
         'fangan3'    => $fangan3,
+        'fangan4'    => $fangan4,
         'change_time'   => gmtime(),
         'change_desc'   => $change_desc,
         'change_type'   => $change_type,
@@ -2308,12 +2365,14 @@ function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $ra
             " rank_points = rank_points + ('$rank_points')," .
 			" pay_points_2 = pay_points_2 + ('$pay_points_2')," .
 			" pay_points_3 = pay_points_3 + ('$pay_points_3')," .
+			" pay_points_4 = pay_points_4 + ('$pay_points_4')," .
             " pay_points = pay_points + ('$pay_points')," .
             " love = love + ('$love')," .
             " bili = '$bili'," .
 //          " bili3 = '$bili3'," .
             " gold = gold + ('$gold')," .
             " fangan3 = fangan3 + ('$fangan3')," .
+            " fangan4 = fangan4 + ('$fangan4')," .
             " vr_points = vr_points + ('$vr_points')" .
             " WHERE user_id = '$user_id' LIMIT 1";
 //          echo $sql;

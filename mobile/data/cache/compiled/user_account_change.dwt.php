@@ -21,69 +21,108 @@
 <form action="<?php echo url('user/act_account');?>" method="post" name="theForm" onSubmit="return submitSurplus()">
   <div class="ect-bg-colorf flow-consignee">
     <ul class="o-info">
-      <li>
-        <div class="input-text" style="text-align: center;">
-        	<b class="pull-left" style="line-height: 30px;margin-left: 15vw;">方案一金积分</b>
-          	<div class="integral_2_fa" id="integral_one">选择</div>
-        </div>
-      </li>
+    	
+    	<div class="fangan">
+    		 <li>
+		        <div class="input-text" style="text-align: center;">
+		        	<b class="pull-left" style="line-height: 30px;margin-left: 15vw;">方案一金积分</b>
+		          	<div class="integral_2_fa integral_on">选择</div>
+		          	<span style="display: none;">1</span>
+		        </div>
+		      </li>
+		      
+		       <li style="padding: 1em 0.6em 2.3em;" class="fangan_dh">
+		     	
+		     	<div class="input-text" style="height: 10vw;">
+		      	  <span  style="left: 15vw;">
+		      		<input name="integral_1" id="duihuan_ip"  placeholder="金积分" type="text" class="inputBg_touch" value="" style="width: 20%;border: 1px solid #ccc;padding: 5px;height: 8vw;margin-top: 3vw;"/>
+		          </span>
+		          <a style="display: inline-block;position:absolute ; left: 13%;top: 12vw;font-size: 12px;" class="integral_1_ye">总积分数：<?php echo $this->_var['info']['integral']; ?></a>
+		          <div style="display: inline-block;position:absolute ; right: 45%;"> <img src="themes/default/images/gt.png" alt="" />  </div>
+		          <div style="display: inline-block;position:absolute ; left: 63%;top: 4vw">余额:<a id="integral_1_ye" class="duihuan_ye fangan_yue"></a></div>
+		         
+		      	</div>
+		     	
+		     </li>
+    	</div>
+     	
+     	<div class="fangan">
+     		<li>
+		        <div class="input-text" style="text-align: center;">
+		        	<b class="pull-left" style="line-height: 30px;margin-left: 15vw;">方案二金积分</b>
+		          	<div class="integral_2_fa integral_on">选择</div>
+		          	<span style="display: none;">2</span>
+		        </div>
+		      </li>
+		    
+		     
+		     <li style="padding: 1em 0.6em 2.3em;" class="fangan_dh">
+		     	
+		     	<div class="input-text" style="height: 10vw;">
+		      	  <span style="left: 15vw;">
+		      		<input name="integral_2" id="duihuan1_ip"  placeholder="金积分" type="text" class="inputBg_touch" value="" style="width: 20%;border: 1px solid #ccc;height: 8vw;;padding: 5px;margin-top: 3vw;"/>
+		          </span>
+		          <a style="display: inline-block;position:absolute ; left: 13%;top:12vw;font-size: 12px;" class="integral_1_ye">总积分数：<?php echo $this->_var['info']['pay_points_2']; ?></a>
+		          <div style="display: inline-block;position:absolute ; right: 45%;"> <img src="themes/default/images/gt.png" alt="" />  </div>
+		          <div style="display: inline-block;position:absolute ; left: 63%;top: 4vw">余额:<a id="integral_1_ye" class="duihuan1_ye fangan_yue"></a></div>
+		         
+		      	</div>
+		     	
+		     </li>
+     	</div>
       
-       <li style="padding: 1em 0.6em 2.3em;" id="duihuan">
-     	
-     	<div class="input-text" style="height: 10vw;">
-      	  <span  style="left: 15vw;">
-      		<input name="integral_1" id="duihuan_ip"  placeholder="金积分" type="text" class="inputBg_touch" value="" style="width: 20%;border: 1px solid #ccc;padding: 5px;height: 8vw;margin-top: 3vw;"/>
-          </span>
-          <a style="display: inline-block;position:absolute ; left: 13%;top: 12vw;font-size: 12px;" class="integral_1_ye">总积分数：<?php echo $this->_var['info']['integral']; ?></a>
-          <div style="display: inline-block;position:absolute ; right: 45%;"> <img src="themes/default/images/gt.png" alt="" />  </div>
-          <div style="display: inline-block;position:absolute ; left: 63%;top: 4vw">余额:<a id="integral_1_ye" class="duihuan_ye"></a></div>
-         
-      	</div>
-     	
-     </li>
-      <li>
-        <div class="input-text" style="text-align: center;">
-        	<b class="pull-left" style="line-height: 30px;margin-left: 15vw;">方案二金积分</b>
-          	<div class="integral_2_fa"  id="integral_two">选择</div>
-        </div>
-      </li>
-    
-     
-     <li style="padding: 1em 0.6em 2.3em;" id="duihuan1">
-     	
-     	<div class="input-text" style="height: 10vw;">
-      	  <span style="left: 15vw;">
-      		<input name="integral_2" id="duihuan1_ip"  placeholder="金积分" type="text" class="inputBg_touch" value="" style="width: 20%;border: 1px solid #ccc;height: 8vw;;padding: 5px;margin-top: 3vw;"/>
-          </span>
-          <a style="display: inline-block;position:absolute ; left: 13%;top:12vw;font-size: 12px;" class="integral_1_ye">总积分数：<?php echo $this->_var['info']['pay_points_2']; ?></a>
-          <div style="display: inline-block;position:absolute ; right: 45%;"> <img src="themes/default/images/gt.png" alt="" />  </div>
-          <div style="display: inline-block;position:absolute ; left: 63%;top: 4vw">余额:<a id="integral_1_ye" class="duihuan1_ye"></a></div>
-         
-      	</div>
-     	
-     </li>
-     
-      <li>
-        <div class="input-text" style="text-align: center;">
-        	<b class="pull-left" style="line-height: 30px;margin-left: 15vw;">方案三金积分</b>
-          	<div class="integral_2_fa"  id="integral_sev">选择</div>
-        </div>
-      </li>
-    
-     
-     <li style="padding: 1em 0.6em 2.3em;" id="duihuan2">
-     	
-     	<div class="input-text" style="height: 10vw;">
-      	  <span style="left: 15vw;">
-      		<input name="integral_3" id="duihuan2_ip"  placeholder="金积分" type="text" class="inputBg_touch" value="" style="width: 20%;border: 1px solid #ccc;height: 8vw;;padding: 5px;margin-top: 3vw;"/>
-          </span>
-          <a style="display: inline-block;position:absolute ; left: 13%;top:12vw;font-size: 12px;" class="integral_1_ye">总积分数：<?php if ($this->_var['info']['pay_points_3']): ?><?php echo $this->_var['info']['pay_points_3']; ?><?php else: ?>0<?php endif; ?></a>
-          <div style="display: inline-block;position:absolute ; right: 45%;"> <img src="themes/default/images/gt.png" alt="" />  </div>
-          <div style="display: inline-block;position:absolute ; left: 63%;top: 4vw">余额:<a id="integral_1_ye" class="duihuan2_ye"></a></div>
-        
-      	</div>
-     	 <p style="text-align: center; color: red;font-size: 18px;font-weight: 700;display: none;">请输入550的倍数</p>
-     </li>
+	     <div class="fangan">
+	     	<li>
+		        <div class="input-text" style="text-align: center;">
+		        	<b class="pull-left" style="line-height: 30px;margin-left: 15vw;">方案三金积分</b>
+		          	<div class="integral_2_fa integral_on">选择</div>
+		          	<span style="display: none;">3</span>
+		        </div>
+		      </li>
+		    
+		     
+		     <li style="padding: 1em 0.6em 2.3em;" class="fangan_dh">
+		     	
+		     	<div class="input-text" style="height: 10vw;">
+		      	  <span style="left: 15vw;">
+		      		<input name="integral_3" id="duihuan2_ip"  placeholder="金积分" type="text" class="inputBg_touch" value="" style="width: 20%;border: 1px solid #ccc;height: 8vw;;padding: 5px;margin-top: 3vw;"/>
+		          </span>
+		          <a style="display: inline-block;position:absolute ; left: 13%;top:12vw;font-size: 12px;" class="integral_1_ye">总积分数：<?php if ($this->_var['info']['pay_points_3']): ?><?php echo $this->_var['info']['pay_points_3']; ?><?php else: ?>0<?php endif; ?></a>
+		          <div style="display: inline-block;position:absolute ; right: 45%;"> <img src="themes/default/images/gt.png" alt="" />  </div>
+		          <div style="display: inline-block;position:absolute ; left: 63%;top: 4vw">余额:<a id="integral_1_ye" class="duihuan2_ye fangan_yue"></a></div>
+		        
+		      	</div>
+		     	 <!--<p style="text-align: center; color: red;font-size: 18px;font-weight: 700;display: none;">请输入550的倍数</p>-->
+		     </li>
+	     
+	     </div>
+	     
+	     <div class="fangan">
+	     	<li>
+		        <div class="input-text" style="text-align: center;">
+		        	<b class="pull-left" style="line-height: 30px;margin-left: 15vw;">方案四金积分</b>
+		          	<div class="integral_2_fa integral_on">选择</div>
+		          	<span style="display: none;">4</span>
+		        </div>
+		      </li>
+		    
+		     
+		     <li style="padding: 1em 0.6em 2.3em;" class="fangan_dh">
+		     	
+		     	<div class="input-text" style="height: 10vw;">
+		      	  <span style="left: 15vw;">
+		      		<input name="integral_4" id="duihuan3_ip"  placeholder="金积分" type="text" class="inputBg_touch" value="" style="width: 20%;border: 1px solid #ccc;height: 8vw;;padding: 5px;margin-top: 3vw;"/>
+		          </span>
+		          <a style="display: inline-block;position:absolute ; left: 13%;top:12vw;font-size: 12px;" class="integral_1_ye">总积分数：<?php if ($this->_var['info']['pay_points_4']): ?><?php echo $this->_var['info']['pay_points_4']; ?><?php else: ?>0<?php endif; ?></a>
+		          <div style="display: inline-block;position:absolute ; right: 45%;"> <img src="themes/default/images/gt.png" alt="" />  </div>
+		          <div style="display: inline-block;position:absolute ; left: 63%;top: 4vw">余额:<a id="integral_1_ye" class="duihuan3_ye fangan_yue"></a></div>
+		        
+		      	</div>
+		     	
+		     </li>
+	     </div>
+      
+   
       	
       
      
@@ -199,61 +238,20 @@ function submitSurplus() {
 </script>
 <?php echo $this->fetch('library/nav.lbi'); ?>
 </body></html>
-
+  
 <script type="text/javascript">
-	$("#integral_one").on("click",function(){
-		$(this).toggleClass("integral_1_fa");	
-		if($("#duihuan").css("display") == "none"){
-			$("#duihuan").slideToggle("show");	
-			$("#duihuan1").slideUp("show");
-			$("#duihuan2").slideUp("show");
-			$("#integral_two").removeClass("integral_1_fa");
-			$("#integral_sev").removeClass("integral_1_fa");
-		}
-		$("#duihuan1_ip").val("");
-		$(".duihuan1_ye").html("");
-		$("#duihuan2_ip").val("");
-		$(".duihuan2_ye").html("");
-		
-		$("#change_type").val(1)
-	})
+
+		$(".integral_on").on("click",function(){
+			$(this).toggleClass("integral_1_fa");
+     		$(this).parents("li").siblings("li").slideToggle();
+     		$(this).parents(".fangan").siblings(".fangan").find("div").find(".integral_on").removeClass("integral_1_fa");
+     		$(this).parents(".fangan").siblings(".fangan").find(".fangan_dh").slideUp();
+     		$(this).parents(".fangan").siblings(".fangan").find(".fangan_dh").find("span").find("input").val("");
+     		$(this).parents(".fangan").siblings(".fangan").find(".fangan_dh").find(".fangan_yue").html("");
+     		$("#change_type").val($(this).next("span").html());
+     	})
 	
-	$("#integral_two").on("click",function(){
-		$(this).toggleClass("integral_1_fa");
-		
-		if($("#duihuan1").css("display") == "none"){
-			$("#duihuan1").slideToggle("show");	
-			$("#duihuan").slideUp("show");
-			$("#duihuan2").slideUp("show");
-			$("#integral_one").removeClass("integral_1_fa");
-			$("#integral_sev").removeClass("integral_1_fa");
-		}
-		
-		$("#duihuan_ip").val("");
-		$(".duihuan_ye").html("");
-		$("#duihuan2_ip").val("");
-		$(".duihuan2_ye").html("");
-		
-		$("#change_type").val(2)
-	})
 	
-	$("#integral_sev").on("click",function(){
-		$(this).toggleClass("integral_1_fa");
-		
-		if($("#duihuan2").css("display") == "none"){
-			$("#duihuan2").slideToggle("show");	
-			$("#duihuan1").slideUp("show");
-			$("#duihuan").slideUp("show");
-			$("#integral_one").removeClass("integral_1_fa");
-			$("#integral_two").removeClass("integral_1_fa");
-		}
-		$("#duihuan_ip").val("");
-		$(".duihuan_ye").html("");
-		$("#duihuan1_ip").val("");
-		$(".duihuan1_ye").html("");
-		
-		$("#change_type").val(3)
-	})
 	
 	
 	$("#duihuan_ip").keyup(function(){
@@ -311,6 +309,27 @@ function submitSurplus() {
 		}else{
 			$("#duihuan2_ip").val("");
 			$(".duihuan2_ye").html("");
+			alert("请输入整数")
+		}
+		
+	});
+	
+	$("#duihuan3_ip").keyup(function(){
+		
+		var a = $("#duihuan3_ip").val()*.87;
+		var b=a.toFixed(2);
+		$(".duihuan3_ye").html(b)
+		var r = /^\+?[1-9][0-9]*$/;
+		if(r.test($("#duihuan3_ip").val())){
+			 if($("#duihuan3_ip").val() > <?php echo $this->_var['info']['pay_points_4']; ?>){
+			 	$("#duihuan3_ip").val("");
+			 	$(".duihuan3_ye").html("");
+				alert("输入积分大于剩余积分")
+			}
+			
+		}else{
+			$("#duihuan3_ip").val("");
+			$(".duihuan3_ye").html("");
 			alert("请输入整数")
 		}
 		

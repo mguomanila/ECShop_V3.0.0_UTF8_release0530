@@ -737,6 +737,14 @@ function get_user_integral_3($user_id)
 
     return $GLOBALS['db']->getOne($sql);
 }
+function get_user_integral_4($user_id)
+{
+	
+    $sql = "SELECT SUM(pay_points_4) FROM " .$GLOBALS['ecs']->table('account_log').
+           " WHERE user_id = '$user_id'";
+
+    return $GLOBALS['db']->getOne($sql);
+}
 
 
 /**

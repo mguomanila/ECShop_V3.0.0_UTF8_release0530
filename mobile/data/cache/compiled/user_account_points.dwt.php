@@ -24,7 +24,7 @@
     foreach ($_from AS $this->_var['item']):
 ?>
     	<li>
-        	<p class="title"><span class="pull-left"><?php echo $this->_var['item']['change_time']; ?></span> <span class="pull-right"><?php if ($this->_var['item']['points'] != 0): ?><?php echo $this->_var['item']['points']; ?><?php elseif ($this->_var['item']['points_2'] != 0): ?><?php echo $this->_var['item']['points_2']; ?><?php else: ?><?php echo $this->_var['item']['points_3']; ?><?php endif; ?></span></p>
+        	<p class="title"><span class="pull-left"><?php echo $this->_var['item']['change_time']; ?></span> <span class="pull-right"><?php if ($this->_var['item']['points'] != 0): ?><?php echo $this->_var['item']['points']; ?><?php elseif ($this->_var['item']['points_2'] != 0): ?><?php echo $this->_var['item']['points_2']; ?><?php elseif ($this->_var['item']['points_3'] != 0): ?><?php echo $this->_var['item']['points_3']; ?><?php else: ?><?php echo $this->_var['item']['points_4']; ?><?php endif; ?></span></p>
             <p class="content"><span class="remark pull-left"><?php echo $this->_var['item']['short_change_desc']; ?></span> <span class="pull-right text-right type"><?php echo $this->_var['item']['type']; ?></span></p>
         </li>
 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>

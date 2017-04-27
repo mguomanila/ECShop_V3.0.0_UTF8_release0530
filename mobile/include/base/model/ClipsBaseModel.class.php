@@ -625,6 +625,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
         $condition['user_id'] = $user_id;
         return $this->field('SUM(pay_points_3)', $condition);
     }
+    public function get_user_surplus_points_4($user_id) {
+        $this->table = 'account_log';
+        $condition['user_id'] = $user_id;
+        return $this->field('SUM(pay_points_4)', $condition);
+    }
 
     /**
      * 查询会员的红包金额
@@ -654,7 +659,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
     public function get_user_default($user_id) {
         $user_bonus = $this->get_user_bonus();
 
-        $sql = "SELECT is_reg_a,reg_time,vip_type,pay_points_2,pay_points_3,fangan3,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
+        $sql = "SELECT is_reg_a,reg_time,vip_type,pay_points_4,fangan4,pay_points_2,pay_points_3,fangan3,mobile_phone,gold,pay_points,vr_points,love,user_type, user_money, credit_line, last_login, is_validated FROM " . $this->pre . "users WHERE user_id = '$user_id'";
         $row = $this->row($sql);
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
@@ -666,6 +671,8 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
         $info['pay_points_2'] =$row['pay_points_2']  ;
         $info['pay_points_3'] =$row['pay_points_3']  ;
         $info['fangan3'] =$row['fangan3']  ;
+        $info['pay_points_4'] =$row['pay_points_4']  ;
+        $info['fangan4'] =$row['fangan4']  ;
         
         $info['vr_points'] =  $row['vr_points'] ;
         $info['mobile_phone'] =  $row['mobile_phone'] ;
@@ -972,7 +979,7 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
      * @param   int     $change_type    变动类型：参见常量文件
      * @return  void
      */
-    function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $vr_points=0,$gold=0,$change_desc = '', $change_type = ACT_OTHER,$love=0,$pay_points_2=0,$fangan3=0,$pay_points_3=0) {
+    function log_account_change_vr($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $vr_points=0,$gold=0,$change_desc = '', $change_type = ACT_OTHER,$love=0,$pay_points_2=0,$fangan3=0,$pay_points_3=0,$fangan4=0,$pay_points_4=0) {
         /* 插入帐户变动记录 */
         $account_log = array(
             'user_id' => $user_id,
@@ -983,8 +990,10 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
             'vr_points' => $vr_points,
             'gold' => $gold,
             'fangan3' => $fangan3,
+            'fangan4' => $fangan4,
             'pay_points_2' => $pay_points_2,
             'pay_points_3' => $pay_points_3,
+            'pay_points_4' => $pay_points_4,
             'change_time' => gmtime(),
             'change_desc' => $change_desc,
             'change_type' => $change_type
@@ -1013,9 +1022,11 @@ public function insert_user_account_integral($surplus, $amount,$str=0,$paid=0)
                 " vr_points = vr_points + ('$vr_points')," .
                 " gold = gold + ('$gold')," .
                 " fangan3 = fangan3 + ('$fangan3')," .
+                " fangan4 = fangan4 + ('$fangan4')," .
                 " bili = '$bili'," .
 //              " bili3 = '$bili3'," .
                 " love = love + ('$love')," .
+                " pay_points_4 = pay_points_4 + ('$pay_points_4')," .
                 " pay_points_3 = pay_points_3 + ('$pay_points_3')," .
                 " pay_points_2 = pay_points_2 + ('$pay_points_2')," .
                 " pay_points = pay_points + ('$pay_points')" .

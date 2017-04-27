@@ -268,7 +268,7 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                     $GLOBALS['db']->query($sql);
 					
                     /* 取得添加预付款的用户以及金额 */
-                    $sql = "SELECT user_id, integral_amount,friend_id FROM " . $GLOBALS['ecs']->table('user_account') .
+                    $sql = "SELECT precept,user_id, integral_amount,friend_id FROM " . $GLOBALS['ecs']->table('user_account') .
                         " WHERE id = '$pay_log[order_id]'";
                     $arr = $GLOBALS['db']->getRow($sql);
 
@@ -286,30 +286,27 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
 						$surplus_type[3]='编号:'.$pay_log['order_id'].';好友积分充值;好友ID'.$userid;
 						$love=$arr['integral_amount']*0.005;
 						
-						if($arr['precept'] == 1){
-							$precept_val=0;
-							$fangan3 = 0;
-						}elseif($arr['precept'] == 2){
-							$precept_val=$arr['integral_amount'];
-							$arr['integral_amount']=0;
-							$fangan3 = 0;
-						}else{
-							$fangan3 = $arr['integral_amount'];
-							$precept_val= 0;
-							$arr['integral_amount']=0;
+						$fangan=array();
+						for ($i=1; $i < 5; $i++) { 
+							if($arr['precept'] == $i){
+								$fangan[$i] = $arr['integral_amount'];
+							}else{
+								$fangan[$i] = 0;
+							}
 						}
 						
-						$user_integral=$arr['integral_amount']*0.15;
-						$precept_val_integral=$precept_val*0.16;
-						$fangan3_integral=$fangan3*0.16;
 						
+						$fangan1_integral=$fangan['1']*0.15;
+						$fangan2_integral=$fangan['2']*0.16;
+						$fangan3_integral=$fangan['3']*0.16;
+						$fangan4_integral=$fangan['4']*0.07;
 						
 						$sql = "SELECT * FROM ". $GLOBALS['ecs']->table('users') ." WHERE user_id = '$userid'";
                     	$user_info =  $GLOBALS['db']->getRow($sql);
                     	$sql = "SELECT * FROM " . $GLOBALS['ecs']->table('users') ." WHERE user_id = '$user_info[parent_id]'";
                     	$userparent_info =  $GLOBALS['db']->getRow($sql);
 						if($userparent_info['usser_type'] != 1){
-                    		log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$user_integral*0.1,$precept_val_integral*0.1, $surplus_type[3], ACT_SAVING,0,0,$fangan3_integral*0.1);
+                    		log_account_change_vr($user_info['parent_id'], 0, 0, 0, 0,$fangan1_integral*0.1,$fangan2_integral*0.1, $surplus_type[3], ACT_SAVING,0,0,$fangan3_integral*0.1,0,$fangan4_integral*0.1);
 						}
 						
 						$arr['user_id']=$arr['friend_id'];
@@ -324,10 +321,10 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                     		$affiliate['item'][0]['level_money'] /= 100;
                     		$affiliate['item'][0]['level_point'] /= 100;
                     		if($parent_id_info['user_type'] != 1){
-                    			log_account_change_vr($userid_info['parent_id'],0,0,0,0,$arr['integral_amount']*$affiliate['item'][0]['level_money'],$precept_val*$affiliate['item'][0]['level_point'],$surplus_type[3], ACT_SAVING,0,0,$fangan3*$affiliate['item'][0]['level_point']);                    	
+                    			log_account_change_vr($userid_info['parent_id'],0,0,0,0,$fangan['1']*$affiliate['item'][0]['level_money'],$fangan['2']*$affiliate['item'][0]['level_point'],$surplus_type[3], ACT_SAVING,0,0,$fangan['3']*$affiliate['item'][0]['level_point'],0,$fangan['4']*$affiliate['item'][0]['level_point']);                    	
                     		}
 //                  		else{
-//                  			log_account_change_vr($userid_info['parent_id'],0,0,0,0,$arr['integral_amount']*$affiliate['item'][0]['level_money'],$precept_val*$affiliate['item'][0]['level_money']*0.5,$surplus_type[3], ACT_SAVING);                    	
+//                  			log_account_change_vr($userid_info['parent_id'],0,0,0,0,$fangan['1']*$affiliate['item'][0]['level_money'],$fangan['2']*$affiliate['item'][0]['level_money']*0.5,$surplus_type[3], ACT_SAVING);                    	
 //                  		}
 
                     	}
@@ -342,11 +339,11 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
 	                    		if($arr['precept'] == 1){
 		                    		if($parent_info['user_type'] != 1){
 		                    			
-		                    			log_account_change_vr($parent_id_info['parent_id'],0,0,0,0,$arr['integral_amount']*$affiliate['item'][1]['level_money'],0,$surplus_type[3], ACT_SAVING);                    	
+		                    			log_account_change_vr($parent_id_info['parent_id'],0,0,0,0,$fangan['1']*$affiliate['item'][1]['level_money'],0,$surplus_type[3], ACT_SAVING);                    	
 		                    				
 		                    		}
 		                    		else{
-		                    			log_account_change_vr($parent_id_info['parent_id'],0,0,0,0,$arr['integral_amount']*$affiliate['item'][1]['level_point'],0,$surplus_type[3], ACT_SAVING);                    	
+		                    			log_account_change_vr($parent_id_info['parent_id'],0,0,0,0,$fangan['1']*$affiliate['item'][1]['level_point'],0,$surplus_type[3], ACT_SAVING);                    	
 		                    		}
 								}
 	
@@ -354,20 +351,23 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                     	}	
                     	
                     	//商家所得积分
-						log_account_change_vr($userid,0,0,0,0,$arr['integral_amount']*0.15,$precept_val*0.16,$surplus_type[3], ACT_SAVING,0,0,$fangan3*0.16);						
+						log_account_change_vr($userid,0,0,0,0,$fangan['1']*0.15,$fangan['2']*0.16,$surplus_type[3], ACT_SAVING,0,0,$fangan['3']*0.16,0,$fangan['4']*0.07);						
 
 					}
 					
 
 					//客户所得积分 
 					if($arr['precept'] == 1){
-					log_account_change_vr($arr['user_id'], 0, 0, 0, 0, $arr['integral_amount']-$love,$precept_val,$surplus_type[3], ACT_SAVING,$love);
+					log_account_change_vr($arr['user_id'], 0, 0, 0, 0, $fangan['1']-$love,$fangan['2'],$surplus_type[3], ACT_SAVING,$love);
 						
 					}elseif($arr['precept'] == 2){
-					log_account_change_vr($arr['user_id'], 0, 0, 0, 0, $arr['integral_amount'],$precept_val-$love,$surplus_type[3], ACT_SAVING,$love);
+					log_account_change_vr($arr['user_id'], 0, 0, 0, 0, $fangan['1'],$fangan['2']-$love,$surplus_type[3], ACT_SAVING,$love);
+						
+					}elseif($arr['precept'] == 3){
+					log_account_change_vr($arr['user_id'], 0, 0, 0, 0, $fangan['1'],$fangan['2'],$surplus_type[3], ACT_SAVING,$love,0,$fangan['3']-$love);
 						
 					}else{
-					log_account_change_vr($arr['user_id'], 0, 0, 0, 0, $arr['integral_amount'],$precept_val,$surplus_type[3], ACT_SAVING,$love,0,$fangan3-$love);
+					log_account_change_vr($arr['user_id'], 0, 0, 0, 0, $fangan['1'],$fangan['2'],$surplus_type[3], ACT_SAVING,$love,0,$fangan['3'],0,$fangan['4']-$love);
 						
 					}
 
